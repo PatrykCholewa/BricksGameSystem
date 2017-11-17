@@ -2,36 +2,46 @@ package game;
 
 class Board {
 
-    private int [][]matrix;
+    private Character [][]matrix;
     private int matrixSize;
 
     Board( int size ){
         this.matrixSize = size;
-        this.matrix = new int[size][size];
+        this.matrix = new Character[size][size];
         clear();
     }
 
-    int [][]getMatrix(){
+    int getMatrixSize(){
+        return matrixSize;
+    }
+
+    Character getValue( int row , int column ){
+        try{
+            return matrix[row][column];
+        } catch( IndexOutOfBoundsException e ){
+            throw new IndexOutOfBoundsException( "DataCell(" + String.valueOf(row) + ";" + String.valueOf(column) + ")"
+                    + " is outside data matrix " + matrixSizeToString() + "." );
+        }
+    }
+
+    Character [][]getMatrix(){
         return matrix;
     }
 
     private void clear(){
         for(int i = 0; i < matrixSize; i++ ){
             for(int j = 0; j < matrixSize; j++ ){
-                matrix[i][j] = 0;
+                setValue(i,j,0);
             }
         }
     }
 
-    void addValue( int row , int column , int value ){
+    void setValue( int row , int column , char value ){
+        matrix[row][column] = value;
+    }
 
-        try{
-            matrix[row][column] = value;
-        } catch( IndexOutOfBoundsException e ){
-            throw new IllegalArgumentException( "DataCell(" + String.valueOf(row) + ";" + String.valueOf(column) + ")"
-                    + " is outside data matrix " + matrixSizeToString() + "." );
-        }
-
+    void setValue( int row , int column , int value ){
+        setValue( row , column , (char)(value + '0') );
     }
 
     private String matrixSizeToString(){

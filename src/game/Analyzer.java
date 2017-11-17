@@ -1,10 +1,10 @@
 package game;
 
-public class Validator {
+public class Analyzer {
 
     private Board board;
 
-    Validator( Board board ){
+    Analyzer(Board board ){
         this.board = board;
     }
 

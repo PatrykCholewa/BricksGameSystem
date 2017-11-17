@@ -1,69 +1,81 @@
 package game;
 
-class Board {
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
 
-    private Character [][]matrix;
-    private int matrixSize;
+public class Board {
 
-    Board( int size ){
-        this.matrixSize = size;
-        this.matrix = new Character[size][size];
-        clear();
+    Matrix matrix;
+
+    Board(int size) {
+        matrix = new Matrix( size );
     }
 
-    int getMatrixSize(){
-        return matrixSize;
+    int getMatrixSize() {
+        return matrix.getMatrixSize();
     }
 
-    Character getValue( int row , int column ){
-        try{
-            return matrix[row][column];
-        } catch( IndexOutOfBoundsException e ){
-            throw new IndexOutOfBoundsException( "DataCell(" + String.valueOf(row) + ";" + String.valueOf(column) + ")"
-                    + " is outside data matrix " + matrixSizeToString() + "." );
+    Character getValue(int row, int column) {
+        return matrix.getValue( row , column );
+    }
+
+    private void setValue(int row, int column, char value) {
+        matrix.setValue( row , column , value );
+    }
+
+    private void setValue(int row, int column, int value) {
+        matrix.setValue( row , column , (char)(value + '0') );
+    }
+
+    public ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
+
+        Random rndGen = new Random();
+        ArrayList<Point> listOfBoxes = new ArrayList<>();
+        Point box;
+
+        if( matrix.getMatrixSize()*matrix.getMatrixSize() <= numberOfRandomBoxes ){
+            throw new IllegalArgumentException( "Board is too small for so many boxes." );
         }
-    }
 
-    Character [][]getMatrix(){
-        return matrix;
-    }
+        matrix.clear();
 
-    private void clear(){
-        for(int i = 0; i < matrixSize; i++ ){
-            for(int j = 0; j < matrixSize; j++ ){
-                setValue(i,j,0);
+        for( int i = 0 ; i < numberOfRandomBoxes ; ){
+
+            box = new Point( rndGen.nextInt(matrix.getMatrixSize()) , rndGen.nextInt(matrix.getMatrixSize()) );
+
+            if( getValue( box.x , box.y ) != 'X' ) {
+                setValue( box.x , box.y , 'X');
+                i++;
+                listOfBoxes.add(box);
             }
+
+        }
+
+        return listOfBoxes;
+
+    }
+
+    public void addBoxes(ArrayList<Point> listOfBoxes) {
+        for( Point box : listOfBoxes ){
+            setValue( box.x , box.y , 'X' );
         }
     }
 
-    void setValue( int row , int column , char value ){
-        matrix[row][column] = value;
+    void addRectangle( int row1 , int column1 , int row2 , int column2 , Integer playerNumber ) throws IllegalArgumentException {
+
+        setValue( row1 , column1 , playerNumber );
+        setValue( row2 , column2 , playerNumber );
+
     }
 
-    void setValue( int row , int column , int value ){
-        setValue( row , column , (char)(value + '0') );
-    }
-
-    private String matrixSizeToString(){
-        return String.valueOf(matrixSize) + "x" + String.valueOf(matrixSize);
+    Character[][] getMatrix() {
+        return matrix.getMatrix();
     }
 
     @Override
     public String toString(){
-
-        StringBuilder ret = new StringBuilder("Board " + matrixSizeToString());
-        for( int i = 0 ; i < matrixSize ; i++ ){
-
-            ret.append("\n");
-
-            for( int j = 0 ; j < matrixSize ; j++ ){
-                ret.append(String.valueOf(matrix[i][j]));
-            }
-
-        }
-
-        return ret.toString();
-
+        return matrix.toString();
     }
 
 }

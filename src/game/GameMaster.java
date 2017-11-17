@@ -1,53 +1,30 @@
 package game;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class GameMaster{
 
     private Board board;
-    private Validator validator;
+    private Analyzer analyzer;
 
     public GameMaster( int size ){
         this.board = new Board(size);
-        this.validator = new Validator(board);
+        this.analyzer = new Analyzer(board);
     }
 
-    public ArrayList<Point> addRandomBoxes( int numberOfRandomBoxes ){
+    public GameMaster( int size , ArrayList<Point> listOfBoxes ){
+        this( size );
+        board.addBoxes( listOfBoxes );
+    }
 
-        Random rndGen = new Random();
-        ArrayList<Point> listOfBoxes = new ArrayList<>();
-        Point box;
-
-        if( board.getMatrixSize()*board.getMatrixSize() <= numberOfRandomBoxes ){
-            throw new IllegalArgumentException( "Board is too small for so many boxes." );
-        }
-
-        for( int i = 0 ; i < numberOfRandomBoxes ; ){
-
-            box = new Point( rndGen.nextInt(board.getMatrixSize()) , rndGen.nextInt(board.getMatrixSize()) );
-
-            if( board.getValue( box.x , box.y ) != 'X' ) {
-                board.setValue( box.x , box.y , 'X');
-                i++;
-                listOfBoxes.add(box);
-            }
-
-        }
-
-        return listOfBoxes;
-
+    public ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
+        return board.setRandomBoxesBoard(numberOfRandomBoxes);
     }
 
     public void addRectangle( int row1 , int column1 , int row2 , int column2 , Integer playerNumber ) throws IllegalArgumentException {
-
-        validator.validateAdding( row1 , column1 , row2 , column2 , playerNumber );
-
-        board.setValue( row1 , column1 , playerNumber );
-        board.setValue( row2 , column2 , playerNumber );
-
+        analyzer.validateAdding( row1 , column1 , row2 , column2 , playerNumber );
+        board.addRectangle( row1 , column1 , row2, column2 , playerNumber );
     }
 
     public Character [][]getBoard(){

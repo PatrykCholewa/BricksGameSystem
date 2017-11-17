@@ -18,6 +18,10 @@ public class GameMaster{
         board.addBoxes( listOfBoxes );
     }
 
+    public Boolean isFinished(){
+        return analyzer.isFinished();
+    }
+
     public ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
         return board.setRandomBoxesBoard(numberOfRandomBoxes);
     }

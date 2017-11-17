@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Board {
 
-    Matrix matrix;
+    private Matrix matrix;
 
     Board(int size) {
         matrix = new Matrix( size );
@@ -17,7 +17,11 @@ public class Board {
     }
 
     Character getValue(int row, int column) {
-        return matrix.getValue( row , column );
+        try {
+            return matrix.getValue(row, column);
+        } catch ( IndexOutOfBoundsException e ){
+            throw new IllegalArgumentException( e.getMessage() );
+        }
     }
 
     private void setValue(int row, int column, char value) {
@@ -25,10 +29,10 @@ public class Board {
     }
 
     private void setValue(int row, int column, int value) {
-        matrix.setValue( row , column , (char)(value + '0') );
+        setValue( row , column , (char)(value + '0') );
     }
 
-    public ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
+    ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
 
         Random rndGen = new Random();
         ArrayList<Point> listOfBoxes = new ArrayList<>();
@@ -56,7 +60,7 @@ public class Board {
 
     }
 
-    public void addBoxes(ArrayList<Point> listOfBoxes) {
+    void addBoxes(ArrayList<Point> listOfBoxes) {
         for( Point box : listOfBoxes ){
             setValue( box.x , box.y , 'X' );
         }

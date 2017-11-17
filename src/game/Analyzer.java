@@ -41,4 +41,49 @@ public class Analyzer {
 
     }
 
+    private Boolean isThereZero( int row , int col ){
+        Character c;
+        try{
+            c = board.getValue( row , col );
+        } catch ( IllegalArgumentException e ){
+            c = 'X';
+        }
+
+        if( c == '0' ){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    private Boolean hasANeighbourZero( int row , int col ){
+
+        if( isThereZero( row - 1, col )){
+            return true;
+        } else if( isThereZero( row + 1, col ) ){
+            return true;
+        } else if( isThereZero( row , col - 1 ) ){
+            return true;
+        } else if ( isThereZero( row , col + 1 ) ){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    Boolean isFinished(){
+
+        for( int i = 0 ; i < board.getMatrixSize() ; i++ ){
+            for( int j = 0 ; j < board.getMatrixSize() ; j++ ){
+                if( board.getValue( i , j ) == '0' && hasANeighbourZero( i , j ) ){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+    }
+
 }

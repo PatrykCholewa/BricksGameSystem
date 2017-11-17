@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Board {
+class Board {
 
     private Matrix matrix;
 

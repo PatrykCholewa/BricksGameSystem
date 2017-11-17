@@ -1,6 +1,6 @@
 package game;
 
-public class Analyzer {
+class Analyzer {
 
     private Board board;
 
@@ -49,11 +49,7 @@ public class Analyzer {
             c = 'X';
         }
 
-        if( c == '0' ){
-            return true;
-        } else {
-            return false;
-        }
+        return c == '0';
 
     }
 
@@ -65,11 +61,7 @@ public class Analyzer {
             return true;
         } else if( isThereZero( row , col - 1 ) ){
             return true;
-        } else if ( isThereZero( row , col + 1 ) ){
-            return true;
-        } else {
-            return false;
-        }
+        } else return isThereZero(row, col + 1);
     }
 
     Boolean isFinished(){

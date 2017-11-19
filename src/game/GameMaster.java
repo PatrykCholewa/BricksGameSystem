@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class GameMaster{
 
@@ -16,10 +15,14 @@ public class GameMaster{
 
     }
 
-    public GameMaster( int size , ArrayList<Point> listOfBoxes ) {
+    public GameMaster( Object board ) {
 
-        this( size );
-        board.addBoxes( listOfBoxes );
+        try {
+            this.board = (Board) board;
+        } catch ( ClassCastException e ){
+            throw new IllegalArgumentException( "This argument is not a board, but " + board.getClass() + "." );
+        }
+        this.rulesMaster = new RulesMaster(this.board);
 
     }
 
@@ -27,8 +30,12 @@ public class GameMaster{
         return rulesMaster.isFinished();
     }
 
-    public ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
-        return board.setRandomBoxesBoard(numberOfRandomBoxes);
+    public void addRandomBoxes(int numberOfRandomBoxes ){
+        board.addRandomBoxes(numberOfRandomBoxes);
+    }
+
+    public Object getBoardObjectCopy(){
+        return board.getCopy();
     }
 
     public void addRectangle( Point point1 , Point point2 , Integer playerNumber ) throws IllegalArgumentException {

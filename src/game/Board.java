@@ -1,7 +1,6 @@
 package game;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 class Board {
@@ -24,6 +23,14 @@ class Board {
         }
     }
 
+    public Object getCopy() {
+
+        Board boardCopy = new Board( getMatrixSize() );
+        boardCopy.setMatrix( matrix );
+        return boardCopy;
+
+    }
+
     private void setValue( Point p , char value) {
         matrix.setValue( p , value );
     }
@@ -32,10 +39,13 @@ class Board {
         setValue( p , (char)(value + '0') );
     }
 
-    ArrayList<Point> setRandomBoxesBoard( int numberOfRandomBoxes ){
+    private void setMatrix( Matrix matrix ){
+        this.matrix = matrix;
+    }
+
+    void addRandomBoxes( int numberOfRandomBoxes ){
 
         Random rndGen = new Random();
-        ArrayList<Point> listOfBoxes = new ArrayList<>();
         Point box;
 
         if( matrix.getMatrixSize()*matrix.getMatrixSize() <= numberOfRandomBoxes ){
@@ -51,19 +61,10 @@ class Board {
             if( getValue( box ) != 'X' ) {
                 setValue( box , 'X');
                 i++;
-                listOfBoxes.add(box);
             }
 
         }
 
-        return listOfBoxes;
-
-    }
-
-    void addBoxes(ArrayList<Point> listOfBoxes) {
-        for( Point box : listOfBoxes ){
-            setValue( box , 'X' );
-        }
     }
 
     void addRectangle( Point p1 , Point p2 , Integer playerNumber ) throws IllegalArgumentException {

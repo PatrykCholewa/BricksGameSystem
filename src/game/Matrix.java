@@ -30,6 +30,19 @@ class Matrix {
         return matrix;
     }
 
+    Matrix getCopy(){
+
+        Matrix mCopy = new Matrix(matrixSize);
+        for( int i = 0 ; i < matrixSize ; i++ ){
+            for( int j = 0 ; j < matrixSize ;j++ ){
+                mCopy.setValue( new Point( i , j ) , matrix[i][j] );
+            }
+        }
+
+        return mCopy;
+
+    }
+
     void clear(){
         for(int i = 0; i < matrixSize; i++ ){
             for(int j = 0; j < matrixSize; j++ ){
@@ -40,6 +53,10 @@ class Matrix {
 
     void setValue( Point p , char value ){
         matrix[p.x][p.y] = value;
+    }
+
+    void setMatrix( Character [][]matrix ){
+        this.matrix = matrix;
     }
 
     private String matrixSizeToString(){

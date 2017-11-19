@@ -23,10 +23,10 @@ class Board {
         }
     }
 
-    public Object getCopy() {
+    Board getCopy() {
 
         Board boardCopy = new Board( getMatrixSize() );
-        boardCopy.setMatrix( matrix );
+        boardCopy.setMatrix( matrix.getCopy() );
         return boardCopy;
 
     }

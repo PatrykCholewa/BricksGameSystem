@@ -6,20 +6,25 @@ import java.util.ArrayList;
 public class GameMaster{
 
     private Board board;
-    private Analyzer analyzer;
+    private RulesMaster rulesMaster;
 
-    public GameMaster( int size ){
+    public GameMaster( int size ) throws IllegalArgumentException {
+
+        RulesMaster.validateSize( size );
         this.board = new Board(size);
-        this.analyzer = new Analyzer(board);
+        this.rulesMaster = new RulesMaster(board);
+
     }
 
-    public GameMaster( int size , ArrayList<Point> listOfBoxes ){
+    public GameMaster( int size , ArrayList<Point> listOfBoxes ) {
+
         this( size );
         board.addBoxes( listOfBoxes );
+
     }
 
     public Boolean isFinished(){
-        return analyzer.isFinished();
+        return rulesMaster.isFinished();
     }
 
     public ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
@@ -27,7 +32,7 @@ public class GameMaster{
     }
 
     public void addRectangle( int row1 , int column1 , int row2 , int column2 , Integer playerNumber ) throws IllegalArgumentException {
-        analyzer.validateAdding( row1 , column1 , row2 , column2 , playerNumber );
+        rulesMaster.validateAddingRectangle( row1 , column1 , row2 , column2 , playerNumber );
         board.addRectangle( row1 , column1 , row2, column2 , playerNumber );
     }
 

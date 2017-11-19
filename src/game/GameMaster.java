@@ -15,12 +15,12 @@ public class GameMaster{
 
     }
 
-    public GameMaster( Object board ) {
+    public GameMaster( Object boardObjectCopy ) {
 
         try {
-            this.board = (Board) board;
+            this.board = (Board) boardObjectCopy;
         } catch ( ClassCastException e ){
-            throw new IllegalArgumentException( "This argument is not a board, but " + board.getClass() + "." );
+            throw new IllegalArgumentException( "This argument is not a board, but " + boardObjectCopy.getClass() + "." );
         }
         this.rulesMaster = new RulesMaster(this.board);
 

@@ -15,17 +15,6 @@ public class GameMaster{
 
     }
 
-    public GameMaster( Object boardObjectCopy ) {
-
-        try {
-            this.board = (Board) boardObjectCopy;
-        } catch ( ClassCastException e ){
-            throw new IllegalArgumentException( "This argument is not a board, but " + boardObjectCopy.getClass() + "." );
-        }
-        this.rulesMaster = new RulesMaster(this.board);
-
-    }
-
     public Boolean isFinished(){
         return rulesMaster.isFinished();
     }
@@ -34,8 +23,11 @@ public class GameMaster{
         board.addRandomBoxes(numberOfRandomBoxes);
     }
 
-    public Object getBoardObjectCopy(){
-        return board.getCopy();
+    public GameMaster getCopy(){
+        GameMaster gmCopy = new GameMaster( board.getMatrixSize() );
+        gmCopy.board = board.getCopy();
+        gmCopy.rulesMaster = new RulesMaster( board );
+        return gmCopy;
     }
 
     public void addRectangle( Point point1 , Point point2 , Integer playerNumber ) throws IllegalArgumentException {

@@ -16,23 +16,23 @@ class Board {
         return matrix.getMatrixSize();
     }
 
-    Character getValue(int row, int column) {
+    Character getValue( Point p ) {
         try {
-            return matrix.getValue(row, column);
+            return matrix.getValue( p );
         } catch ( IndexOutOfBoundsException e ){
             throw new IllegalArgumentException( e.getMessage() );
         }
     }
 
-    private void setValue(int row, int column, char value) {
-        matrix.setValue( row , column , value );
+    private void setValue( Point p , char value) {
+        matrix.setValue( p , value );
     }
 
-    private void setValue(int row, int column, int value) {
-        setValue( row , column , (char)(value + '0') );
+    private void setValue( Point p , int value) {
+        setValue( p , (char)(value + '0') );
     }
 
-    ArrayList<Point> setRandomBoxesBoard(int numberOfRandomBoxes ){
+    ArrayList<Point> setRandomBoxesBoard( int numberOfRandomBoxes ){
 
         Random rndGen = new Random();
         ArrayList<Point> listOfBoxes = new ArrayList<>();
@@ -48,8 +48,8 @@ class Board {
 
             box = new Point( rndGen.nextInt(matrix.getMatrixSize()) , rndGen.nextInt(matrix.getMatrixSize()) );
 
-            if( getValue( box.x , box.y ) != 'X' ) {
-                setValue( box.x , box.y , 'X');
+            if( getValue( box ) != 'X' ) {
+                setValue( box , 'X');
                 i++;
                 listOfBoxes.add(box);
             }
@@ -62,14 +62,14 @@ class Board {
 
     void addBoxes(ArrayList<Point> listOfBoxes) {
         for( Point box : listOfBoxes ){
-            setValue( box.x , box.y , 'X' );
+            setValue( box , 'X' );
         }
     }
 
-    void addRectangle( int row1 , int column1 , int row2 , int column2 , Integer playerNumber ) throws IllegalArgumentException {
+    void addRectangle( Point p1 , Point p2 , Integer playerNumber ) throws IllegalArgumentException {
 
-        setValue( row1 , column1 , playerNumber );
-        setValue( row2 , column2 , playerNumber );
+        setValue( p1 , playerNumber );
+        setValue( p2 , playerNumber );
 
     }
 

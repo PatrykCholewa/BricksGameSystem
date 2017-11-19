@@ -31,9 +31,9 @@ public class GameMaster{
         return board.setRandomBoxesBoard(numberOfRandomBoxes);
     }
 
-    public void addRectangle( int row1 , int column1 , int row2 , int column2 , Integer playerNumber ) throws IllegalArgumentException {
-        rulesMaster.validateAddingRectangle( row1 , column1 , row2 , column2 , playerNumber );
-        board.addRectangle( row1 , column1 , row2, column2 , playerNumber );
+    public void addRectangle( Point point1 , Point point2 , Integer playerNumber ) throws IllegalArgumentException {
+        rulesMaster.validateAddingRectangle( point1 , point2 , playerNumber );
+        board.addRectangle( point1 , point2 , playerNumber );
     }
 
     public Character [][]getBoard(){

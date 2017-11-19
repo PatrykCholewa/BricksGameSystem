@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.*;
+
 class RulesMaster {
 
     private final static int MAX_NUMBER_OF_PLAYERS = 2;
@@ -11,12 +13,12 @@ class RulesMaster {
         this.board = board;
     }
 
-    private void validateAddingBlock(Integer row , Integer column ) throws IndexOutOfBoundsException , IllegalArgumentException {
+    private void validateAddingBlock( Point p ) throws IndexOutOfBoundsException , IllegalArgumentException {
 
         try{
-            Character val = board.getValue( row , column );
+            Character val = board.getValue( p );
             if( val != '0' ){
-                throw new IllegalArgumentException( "Cell("+row+";"+column+") already has a value of " + val + "."  );
+                throw new IllegalArgumentException( "Cell("+p.x+";"+p.y+") already has a value of " + val + "."  );
             }
         } catch ( IndexOutOfBoundsException e ){
             throw new IndexOutOfBoundsException( e.getMessage() );
@@ -24,11 +26,11 @@ class RulesMaster {
     }
 
 
-    private Boolean isThereZero( int row , int col ){
+    private Boolean isThereZero( Point p ){
 
         Character c;
         try{
-            c = board.getValue( row , col );
+            c = board.getValue( p );
         } catch ( IllegalArgumentException e ){
             c = 'X';
         }
@@ -37,15 +39,15 @@ class RulesMaster {
 
     }
 
-    private Boolean hasANeighbourZero( int row , int col ){
+    private Boolean hasANeighbourZero( Point p ){
 
-        if( isThereZero( row - 1, col )){
+        if( isThereZero( new Point( p.x - 1 , p.y ) )){
             return true;
-        } else if( isThereZero( row + 1, col ) ){
+        } else if( isThereZero( new Point( p.x + 1 , p.y ) ) ){
             return true;
-        } else if( isThereZero( row , col - 1 ) ){
+        } else if( isThereZero( new Point( p.x , p.y - 1 ) ) ){
             return true;
-        } else return isThereZero(row, col + 1);
+        } else return isThereZero( new Point( p.x , p.y + 1 ) );
     }
 
     static void validateSize ( Integer size ){
@@ -54,12 +56,12 @@ class RulesMaster {
         }
     }
 
-    void validateAddingRectangle(Integer row1, Integer column1, Integer row2, Integer column2 , Integer playerNumber )
+    void validateAddingRectangle( Point p1 , Point p2 , Integer playerNumber )
             throws IllegalArgumentException {
 
         try {
-            validateAddingBlock( row1 , column1 );
-            validateAddingBlock( row2 , column2 );
+            validateAddingBlock( p1 );
+            validateAddingBlock( p2 );
         } catch ( IllegalArgumentException | IndexOutOfBoundsException e ){
             throw new IllegalArgumentException( e.getMessage() );
         }
@@ -68,9 +70,9 @@ class RulesMaster {
             throw new IllegalArgumentException( "Maximum allowed number of players is " + MAX_NUMBER_OF_PLAYERS + "!" );
         }
 
-        if( row1 != row2 + 1 && row1 != row2 - 1 && column1 != column2 + 1 && column1 != column2 - 1 ){
-            throw new IllegalArgumentException( "Blocks (" + row1 + ";" + column1 + ") and ("
-                    + row2 + ";" + column2 + ") are not neighbours!" );
+        if( p1.x != p2.x + 1 && p1.x != p2.x - 1 && p1.y != p2.y + 1 && p1.y != p2.y - 1 ){
+            throw new IllegalArgumentException( "Blocks (" + p1.x + ";" + p1.y + ") and ("
+                    + p2.x + ";" + p2.y + ") are not neighbours!" );
         }
 
     }
@@ -79,7 +81,7 @@ class RulesMaster {
 
         for( int i = 0 ; i < board.getMatrixSize() ; i++ ){
             for( int j = 0 ; j < board.getMatrixSize() ; j++ ){
-                if( board.getValue( i , j ) == '0' && hasANeighbourZero( i , j ) ){
+                if( board.getValue( new Point( i , j ) ) == '0' && hasANeighbourZero( new Point( i , j ) ) ){
                     return false;
                 }
             }

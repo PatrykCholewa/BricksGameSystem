@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.*;
+
 class Matrix {
 
     private Character [][]matrix;
@@ -15,11 +17,11 @@ class Matrix {
         return matrixSize;
     }
 
-    Character getValue( int row , int column ){
+    Character getValue( Point p ){
         try{
-            return matrix[row][column];
+            return matrix[p.x][p.y];
         } catch( IndexOutOfBoundsException e ){
-            throw new IndexOutOfBoundsException( "DataCell(" + String.valueOf(row) + ";" + String.valueOf(column) + ")"
+            throw new IndexOutOfBoundsException( "DataCell(" + String.valueOf(p.x) + ";" + String.valueOf(p.y) + ")"
                     + " is outside data matrix " + matrixSizeToString() + "." );
         }
     }
@@ -31,13 +33,13 @@ class Matrix {
     void clear(){
         for(int i = 0; i < matrixSize; i++ ){
             for(int j = 0; j < matrixSize; j++ ){
-                setValue(i,j,'0' );
+                setValue( new Point( i, j ) ,'0' );
             }
         }
     }
 
-    void setValue( int row , int column , char value ){
-        matrix[row][column] = value;
+    void setValue( Point p , char value ){
+        matrix[p.x][p.y] = value;
     }
 
     private String matrixSizeToString(){

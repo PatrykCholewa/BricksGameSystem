@@ -6,6 +6,7 @@ public class GameMaster{
 
     private Board board;
     private RulesMaster rulesMaster;
+    private int lastPlayer = 0;
 
     public GameMaster( int size ) throws IllegalArgumentException {
 
@@ -13,6 +14,10 @@ public class GameMaster{
         this.board = new Board(size);
         this.rulesMaster = new RulesMaster(board);
 
+    }
+
+    public int getLastPlayer(){
+        return lastPlayer;
     }
 
     public Boolean isFinished(){
@@ -31,6 +36,7 @@ public class GameMaster{
     }
 
     public void addRectangle( Point point1 , Point point2 , Integer playerNumber ) throws IllegalArgumentException {
+        lastPlayer = playerNumber;
         rulesMaster.validateAddingRectangle( point1 , point2 , playerNumber );
         board.addRectangle( point1 , point2 , playerNumber );
     }

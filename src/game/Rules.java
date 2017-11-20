@@ -2,14 +2,14 @@ package game;
 
 import java.awt.*;
 
-class RulesMaster {
+class Rules {
 
     private final static int MAX_NUMBER_OF_PLAYERS = 2;
     private final static int MAX_NUMBER_OF_SIZE = 999;
 
     private Board board;
 
-    RulesMaster(Board board ){
+    Rules( Board board ){
         this.board = board;
     }
 

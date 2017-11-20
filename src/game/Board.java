@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 class Board {
@@ -43,10 +44,11 @@ class Board {
         this.matrix = matrix;
     }
 
-    void addRandomBoxes( int numberOfRandomBoxes ){
+    ArrayList<Point> addRandomBoxes(int numberOfRandomBoxes ){
 
         Random rndGen = new Random();
         Point box;
+        ArrayList<Point> boxList = new ArrayList<>();
 
         if( matrix.getMatrixSize()*matrix.getMatrixSize() <= numberOfRandomBoxes ){
             throw new IllegalArgumentException( "Board is too small for so many boxes." );
@@ -60,10 +62,13 @@ class Board {
 
             if( getValue( box ) != 'X' ) {
                 setValue( box , 'X');
+                boxList.add(box);
                 i++;
             }
 
         }
+
+        return boxList;
 
     }
 

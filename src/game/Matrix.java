@@ -55,10 +55,6 @@ class Matrix {
         matrix[p.x][p.y] = value;
     }
 
-    void setMatrix( Character [][]matrix ){
-        this.matrix = matrix;
-    }
-
     private String matrixSizeToString(){
         return String.valueOf(matrixSize) + "x" + String.valueOf(matrixSize);
     }

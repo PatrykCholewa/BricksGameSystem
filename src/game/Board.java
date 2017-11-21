@@ -32,7 +32,7 @@ class Board {
 
     }
 
-    private void setValue( Point p , char value) {
+    void setValue( Point p , char value) {
         matrix.setValue( p , value );
     }
 

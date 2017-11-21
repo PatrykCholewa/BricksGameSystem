@@ -42,6 +42,14 @@ public class Referee {
         board.addRectangle( point1 , point2 , playerNumber );
     }
 
+    public void addBox( Point point ){
+        board.setValue( point ,'X' );
+    }
+
+    public void removeBox( Point point ){
+        board.setValue( point , '0' );
+    }
+
     @Override
     public String toString() {
         return board.toString();

@@ -3,6 +3,10 @@ package game;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ *@author Patryk Cholewa
+ */
+
 public class Referee {
 
     private Board board;

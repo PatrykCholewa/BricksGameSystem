@@ -49,6 +49,9 @@ To są właśnie zadania stworzonego przez nas program - __Programu Sędzioweski
 
 <h2> <li> Protokół komunikacji Gracz-Sędzia </h2>
 
+__Sędzia__ komunikuje się z __Graczami__ za pomocą ich standardowych wejść i wyjść 
+( _stdin_ , _stdout_ ).
+
 <ol>
 <li>
         <b>Sędzia</b> przesyła pierwszemu <b>graczowi</b> informację o rozmiarze 

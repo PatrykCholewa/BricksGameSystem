@@ -110,7 +110,8 @@ To są właśnie zadania stworzonego przez nas program - __Programu Sędzioweski
         przegrywa gracz, który miałby wykonywać następny ruch (<i>czyli ten,
         który nie może już wykonać ruchu</i>).
 </ol>
- 
+
+<br> 
 Po zakończonej rozgrywce <b>Sędzia</b> wysyła: 
     
     STOP

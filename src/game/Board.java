@@ -7,6 +7,7 @@ import java.util.Random;
 class Board {
 
     private Matrix matrix;
+    private int lastPlayer = 0;
 
     Board(int size) {
         matrix = new Matrix( size );
@@ -24,35 +25,21 @@ class Board {
         }
     }
 
-    Board getCopy() {
-
-        Board boardCopy = new Board( getMatrixSize() );
-        boardCopy.setMatrix( matrix.getCopy() );
-        return boardCopy;
-
+    int getLastPlayer(){
+        return lastPlayer;
     }
 
-    void setValue( Point p , char value) {
-        matrix.setValue( p , value );
-    }
+    ArrayList<Point> setInitialBoxesRandomly(int numberOfRandomBoxes ){
 
-    private void setValue( Point p , int value) {
-        setValue( p , (char)(value + '0') );
-    }
-
-    private void setMatrix( Matrix matrix ){
-        this.matrix = matrix;
-    }
-
-    ArrayList<Point> addRandomBoxes(int numberOfRandomBoxes ){
+        if( lastPlayer != 0 )
+            throw new UnsupportedOperationException( "There has already been a player's move." );
 
         Random rndGen = new Random();
         Point box;
         ArrayList<Point> boxList = new ArrayList<>();
 
-        if( matrix.getMatrixSize()*matrix.getMatrixSize() <= numberOfRandomBoxes ){
+        if( matrix.getMatrixSize()*matrix.getMatrixSize() <= numberOfRandomBoxes )
             throw new IllegalArgumentException( "Board is too small for so many boxes." );
-        }
 
         matrix.clear();
 
@@ -61,7 +48,7 @@ class Board {
             box = new Point( rndGen.nextInt(matrix.getMatrixSize()) , rndGen.nextInt(matrix.getMatrixSize()) );
 
             if( getValue( box ) != 'X' ) {
-                setValue( box , 'X');
+                matrix.setValue( box , 'X');
                 boxList.add(box);
                 i++;
             }
@@ -72,10 +59,23 @@ class Board {
 
     }
 
+    void setInitialBoxes(ArrayList<Point> listOfBoxes ){
+
+        if( lastPlayer != 0 ) throw new UnsupportedOperationException( "Player has already made move. ");
+
+        matrix.clear();
+
+        for( Point box : listOfBoxes ){
+            matrix.setValue( box, 'X' );
+        }
+
+    }
+
     void addRectangle( Point p1 , Point p2 , Integer playerNumber ) throws IllegalArgumentException {
 
-        setValue( p1 , playerNumber );
-        setValue( p2 , playerNumber );
+        lastPlayer = playerNumber;
+        matrix.setValue( p1 , playerNumber );
+        matrix.setValue( p2 , playerNumber );
 
     }
 
@@ -87,5 +87,15 @@ class Board {
     public String toString(){
         return matrix.toString();
     }
+
+    /*
+    Board getCopy() {
+
+        Board boardCopy = new Board( getMatrixSize() );
+        boardCopy.setMatrix( matrix.getCopy() );
+        return boardCopy;
+
+    }
+    */
 
 }

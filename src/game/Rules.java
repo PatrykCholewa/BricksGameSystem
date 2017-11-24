@@ -2,6 +2,10 @@ package game;
 
 import java.awt.*;
 
+/**
+ * @author Patryk Cholewa
+ */
+
 class Rules {
 
     private final static int MAX_NUMBER_OF_PLAYERS = 2;

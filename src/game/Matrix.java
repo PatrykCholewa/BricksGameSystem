@@ -2,6 +2,10 @@ package game;
 
 import java.awt.*;
 
+/**
+ * @author Patryk Cholewa
+ */
+
 class Matrix {
 
     private Character [][]matrix;

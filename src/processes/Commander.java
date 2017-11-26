@@ -7,6 +7,10 @@ import java.io.OutputStreamWriter;
 import java.net.ProtocolException;
 import java.util.Scanner;
 
+/**
+ * @author Patryk Cholewa
+ */
+
 class Commander {
 
     private Scanner witnessStdout;

@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * @author Patryk Cholewa
+ */
+
 public class Executioner implements Iterator{
 
     private File mainDir;

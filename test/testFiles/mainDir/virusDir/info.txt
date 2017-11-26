@@ -1,5 +1,5 @@
-java -jar "unnamed.jar"
+java -jar "virus.jar"
 PROCESS START TEST
 
 Copies input
-Never ends
+Ends after 10s

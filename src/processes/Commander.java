@@ -1,9 +1,6 @@
 package processes;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.ProtocolException;
 import java.util.Scanner;
 
@@ -13,8 +10,8 @@ import java.util.Scanner;
 
 class Commander {
 
-    private Scanner witnessStdout;
-    private BufferedWriter witnessStdin;
+    private BufferedReader witnessStdout;
+    private PrintWriter witnessStdin;
     private Witness witness;
 
     Commander( File witnessDir ) throws ProtocolException {
@@ -25,8 +22,8 @@ class Commander {
             throw new ProtocolException( e.getMessage() );
         }
 
-        witnessStdout = new Scanner( witness.getInputStream() );
-        witnessStdin = new BufferedWriter( new OutputStreamWriter( witness.getOutputStream() ) );
+        witnessStdout = new BufferedReader( new InputStreamReader( witness.getInputStream() ) );
+        witnessStdin = new PrintWriter( witness.getOutputStream() , true );
 
     }
 
@@ -34,28 +31,26 @@ class Commander {
         return witness.getNick();
     }
 
-    Boolean hasOutput(){
-        throw new UnsupportedOperationException();
-//        return witnessStdout.hasNext();
+    String getOutputLine() throws IOException{
+        return witnessStdout.readLine();
     }
 
-    String getOutputLine(){
-        return witnessStdout.nextLine();
-    }
-
-    void tellInputLine( String line){
-        throw new UnsupportedOperationException();
-//        witnessStdin.write(line);
+    void tellInputLine( String line ){
+        witnessStdin.println( line );
     }
 
     void killWitness(){
-/*
+
+        tellInputLine("STOP");
+
+        witnessStdin.close();
+
         try {
-            tellInputLine("STOP");
-        } catch ( IOException e ){
+            witnessStdout.close();
+        } catch (IOException e) {
             ;
         }
-*/
+
         witness.destroy();
 
     }

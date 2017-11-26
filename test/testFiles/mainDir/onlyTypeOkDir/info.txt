@@ -1,0 +1,6 @@
+java -jar "onlyCoutOK.jar"
+TEST TYPE OK
+
+Types OK
+
+

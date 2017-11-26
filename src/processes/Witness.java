@@ -1,7 +1,6 @@
 package processes;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,16 +20,9 @@ class Witness extends Process {
         FileReader fr = new FileReader( infoFile );
         BufferedReader bufferedReader = new BufferedReader( fr );
 
-        //PREPARE COMMAND
-        ArrayList<String> command = new ArrayList<>();
-        command.add( "cmd.exe" );
-        command.add( "/C" );
-        command.addAll( ( Arrays.asList( bufferedReader.readLine().split( " ") ) ) );
-
-
         //PROCESS SET
         ProcessBuilder pb = new ProcessBuilder();
-        pb.command( command );
+        pb.command( bufferedReader.readLine().split( " " ) );
         pb.directory( directory );
         process =  pb.start();
 

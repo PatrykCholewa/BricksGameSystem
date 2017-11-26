@@ -1,8 +1,10 @@
 package processes;
 
 import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.OutputStreamWriter;
+import java.net.ProtocolException;
 import java.util.Scanner;
 
 class Commander {
@@ -11,9 +13,14 @@ class Commander {
     private BufferedWriter witnessStdin;
     private Witness witness;
 
-    Commander( Witness witness ){
+    Commander( File witnessDir ) throws ProtocolException {
 
-        this.witness = witness;
+        try {
+            this.witness = new Witness(witnessDir);
+        } catch ( FileNotFoundException  | ProtocolException | RuntimeException e) {
+            throw new ProtocolException( e.getMessage() );
+        }
+
         witnessStdout = new Scanner( witness.getInputStream() );
         witnessStdin = new BufferedWriter( new OutputStreamWriter( witness.getOutputStream() ) );
 
@@ -32,7 +39,7 @@ class Commander {
         return witnessStdout.nextLine();
     }
 
-    void tellInputLine( String line) throws IOException{
+    void tellInputLine( String line){
         throw new UnsupportedOperationException();
 //        witnessStdin.write(line);
     }

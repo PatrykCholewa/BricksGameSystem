@@ -1,6 +1,7 @@
 package processes;
 
 import java.io.*;
+import java.net.ProtocolException;
 
 /**
  * @author Patryk Cholewa
@@ -11,7 +12,7 @@ class Witness extends Process {
     private final Process process;
     private final String nick;
 
-    Witness( File directory ) throws IOException {
+    Witness( File directory ) throws FileNotFoundException, ProtocolException {
 
         File infoFile = new File( directory.getPath() + "/info.txt" );
 
@@ -20,12 +21,26 @@ class Witness extends Process {
 
         //PROCESS SET
         ProcessBuilder pb = new ProcessBuilder();
-        pb.command( bufferedReader.readLine().split( " " ) );
+        try {
+            pb.command(bufferedReader.readLine().split(" "));
+        } catch ( IOException e ){
+            throw new ProtocolException( "Invalid info.txt file format!" );
+        }
         pb.directory( directory );
-        process =  pb.start();
 
         //NICK SET
-        this.nick = bufferedReader.readLine();
+        try {
+            this.nick = bufferedReader.readLine();
+        } catch ( IOException e ){
+            throw new ProtocolException( "Invalid info.txt file format!" );
+        }
+
+        try {
+            process =  pb.start();
+        } catch (IOException e) {
+            throw new RuntimeException( "Can't start program :\"" + nick + "\"." );
+        }
+
 
     }
 

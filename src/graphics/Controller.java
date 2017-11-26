@@ -12,6 +12,7 @@ import javafx.scene.shape.StrokeLineCap;
 import java.awt.*;
 
 public class Controller {
+    int scale=10;
     @FXML
     Button drawNet = new Button();
     @FXML
@@ -33,32 +34,32 @@ public class Controller {
         nickname1.setText("Player 1");
         nickname2.setText("Player too");
         clearBoard();
-        drawBoard(Integer.parseInt(tablesize.getText()));
+        drawBoard(Integer.parseInt(tablesize.getText()),scale);
     }
 
     @FXML
     void drawRectPressed(){
         status.setText("Draw");
-        drawCell(Integer.parseInt(tablesize.getText()),new Point(1,1),new Point(1,2),1);
-        drawCell(Integer.parseInt(tablesize.getText()),new Point(4,4),new Point(5,4),2);
-        drawCell(Integer.parseInt(tablesize.getText()),new Point(Integer.parseInt(tablesize.getText())-1,Integer.parseInt(tablesize.getText())-1),new Point(0,0),0);
+        drawCell(Integer.parseInt(tablesize.getText()),scale,1,new Point(1,1),new Point(1,2));
+        drawCell(Integer.parseInt(tablesize.getText()),scale,2,new Point(4,4),new Point(5,4));
+        drawCell(Integer.parseInt(tablesize.getText()),scale,0,new Point(Integer.parseInt(tablesize.getText())-1,Integer.parseInt(tablesize.getText())-1),new Point(0,0));
 
     }
 
-    void drawBoard(int n){
+    void drawBoard(int n, int scale){
+        board.setHeight(n*scale+1);
+        board.setWidth(n*scale+1);
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         gc.setLineCap(StrokeLineCap.SQUARE);
-        int size = (int) board.getHeight();
-        int cellsize = size/n;
         for (int i = 0; i<=n;i++) {
-            gc.strokeLine(snap(i*cellsize),0,snap(i*cellsize),size);
-            gc.strokeLine(0,snap(i*cellsize),size,snap(i*cellsize));
+            gc.strokeLine(snap(i*scale),0,snap(i*scale),scale*n);
+            gc.strokeLine(0,snap(i*scale),scale*n,snap(i*scale));
         }
     }
 
-    void drawCell(int n, Point b1, Point b2, int playerid) {
+    void drawCell(int n, int scale, int playerid, Point b1, Point b2) {
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
@@ -69,10 +70,9 @@ public class Controller {
         } else {
             gc.setFill(Color.GREY);
         }
-        int cellsize = (int) board.getHeight()/n;
-        gc.fillRect(b1.getX() * cellsize,b1.getY() * cellsize, cellsize,cellsize);
-        gc.fillRect(b2.getX() * cellsize,b2.getY() * cellsize, cellsize,cellsize);
-        drawBoard(n);
+        gc.fillRect(b1.getX() * scale,b1.getY() * scale, scale, scale);
+        gc.fillRect(b2.getX() * scale,b2.getY() * scale, scale, scale);
+        drawBoard(n,scale);
     }
 
     void clearBoard() {

@@ -14,6 +14,7 @@ public class Executioner implements Iterator{
 
     private File mainDir;
     private ArrayList<File> playerDirs;
+    private int pointer;
 
     Executioner( File mainDir ) throws NotDirectoryException {
 
@@ -26,18 +27,53 @@ public class Executioner implements Iterator{
         this.playerDirs = new ArrayList<>();
         playerDirs.addAll(Arrays.asList(mainDir.listFiles()));
 
+        pointer = 0;
+
+    }
+
+    private File []dirsOnPointer(){
+
+        File []dirs = new File[2];
+        dirs[0] = playerDirs.get(pointer / playerDirs.size());
+        dirs[1] = playerDirs.get(pointer % playerDirs.size());
+
+        return dirs;
+
+    }
+
+    private Boolean validatePointer(){
+        File []dirs;
+        while( pointer < playerDirs.size()*playerDirs.size() ) {
+            dirs = dirsOnPointer();
+            if (dirs[0] == dirs[1]) {
+                pointer++;
+            } else {
+                break;
+            }
+        }
+
+        return pointer < playerDirs.size()*playerDirs.size() ? true : false;
+
     }
 
     @Override
     public boolean hasNext() {
-        return !playerDirs.isEmpty();
+
+        return validatePointer();
+
     }
 
     @Override
-    public File next() {
-        File tmp = new File( playerDirs.get(0).getPath() );
-        playerDirs.remove(0);
-        return tmp;
+    public File []next() {
+
+        if( !validatePointer() ){
+            return null;
+        }
+
+        File []ret = dirsOnPointer();
+        pointer++;
+        return ret;
+
     }
 
 

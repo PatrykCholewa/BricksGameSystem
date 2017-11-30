@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 
@@ -27,28 +28,30 @@ public class Controller {
     TextField tablesize = new TextField();
     @FXML
     Canvas board = new Canvas();
+    @FXML
+    AnchorPane pane = new AnchorPane();
 
     @FXML
     void drawNetPressed(){
-        status.setText("Pressed");
+        status.setText(String.valueOf(pane.getHeight()));
         nickname1.setText("Player 1");
         nickname2.setText("Player too");
         clearBoard();
-        drawBoard(Integer.parseInt(tablesize.getText()),scale);
+        drawBoard(Integer.parseInt(tablesize.getText()));
     }
 
     @FXML
     void drawRectPressed(){
         status.setText("Draw");
-        drawCell(Integer.parseInt(tablesize.getText()),scale,1,new Point(1,1),new Point(1,2));
-        drawCell(Integer.parseInt(tablesize.getText()),scale,2,new Point(4,4),new Point(5,4));
-        drawCell(Integer.parseInt(tablesize.getText()),scale,0,new Point(Integer.parseInt(tablesize.getText())-1,Integer.parseInt(tablesize.getText())-1),new Point(0,0));
+        drawCell(Integer.parseInt(tablesize.getText()),1,new Point(1,1),new Point(1,2));
+        drawCell(Integer.parseInt(tablesize.getText()),2,new Point(4,4),new Point(5,4));
+        drawCell(Integer.parseInt(tablesize.getText()),0,new Point(Integer.parseInt(tablesize.getText())-1,Integer.parseInt(tablesize.getText())-1),new Point(0,0));
 
     }
 
-    void drawBoard(int n, int scale){
-        board.setHeight(n*scale+1);
-        board.setWidth(n*scale+1);
+    void drawBoard(int n){
+        calculateMaxScale(n);
+        System.out.println("Board size: "+ board.getHeight()+ " x " + board.getWidth());
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
@@ -59,7 +62,24 @@ public class Controller {
         }
     }
 
-    void drawCell(int n, int scale, int playerid, Point b1, Point b2) {
+    void calculateMaxScale (int n){
+        board.setHeight(pane.getHeight());
+        board.setWidth(pane.getWidth());
+        double width = board.getWidth();
+        double height = board.getHeight();
+        if (height < width) {
+            scale = (int)height/(n);
+        } else {
+            scale = (int) width / (n);
+        }
+        System.out.println("scale = " + scale);
+        if (scale < 3) {
+            nickname1.setText("Za małe okno!!!");
+        }
+    }
+
+    void drawCell(int n, int playerid, Point b1, Point b2) {
+        calculateMaxScale(n);
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
@@ -72,7 +92,7 @@ public class Controller {
         }
         gc.fillRect(b1.getX() * scale,b1.getY() * scale, scale, scale);
         gc.fillRect(b2.getX() * scale,b2.getY() * scale, scale, scale);
-        drawBoard(n,scale);
+        drawBoard(n);
     }
 
     void clearBoard() {

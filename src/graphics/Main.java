@@ -13,6 +13,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("bricks.fxml"));
         primaryStage.setTitle("BricksGameSystem");
         primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setMinWidth(816);
+        primaryStage.setMinHeight(639);
         primaryStage.setResizable(true);
         primaryStage.show();
 

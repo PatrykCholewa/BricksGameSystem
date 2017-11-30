@@ -27,5 +27,6 @@
          </font>
       </Label>
       <TextField fx:id="tablesize" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="561.0" text="20" />
+      <AnchorPane fx:id="pane" layoutX="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

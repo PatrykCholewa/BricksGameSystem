@@ -6,17 +6,18 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
-
 import java.awt.*;
 import java.util.IllegalFormatException;
 
 public class Controller {
     int scale=10;
     int n;
+    int i =1;
 
     @FXML
     Button startButton = new Button();
@@ -38,6 +39,8 @@ public class Controller {
     AnchorPane boardPane = new AnchorPane();
     @FXML
     Label statusLabel = new Label();
+    @FXML
+    TextArea logText = new TextArea();
 
 
     @FXML
@@ -56,6 +59,7 @@ public class Controller {
     @FXML
     void startPressed(){
         initialize();
+        logText.appendText("Text test x" + i++ + "\n");
     }
 
     @FXML

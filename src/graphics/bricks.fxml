@@ -8,14 +8,13 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller">
    <children>
-      <Canvas fx:id="board" height="600.0" layoutX="200.0" width="600.0" />
       <Rectangle arcWidth="5.0" fill="#9bceff" height="200.0" strokeType="INSIDE" width="200.0" />
       <Rectangle arcWidth="5.0" fill="#ffaaaa" height="200.0" layoutY="200.0" strokeType="INSIDE" width="200.0" />
-      <Button fx:id="drawNet" layoutX="65.0" layoutY="482.0" mnemonicParsing="false" onAction="#drawNetPressed" text="Draw net" />
-      <Label fx:id="status" layoutX="84.0" layoutY="450.0" text="Status" />
-      <Button fx:id="drawRect" layoutX="50.0" layoutY="520.0" mnemonicParsing="false" onAction="#drawRectPressed" text="Test Rectangle" />
+      <Button fx:id="drawTestButton" layoutX="116.0" layoutY="425.0" mnemonicParsing="false" onAction="#drawTestPressed" text="Test" />
+      <Label fx:id="status" layoutX="81.0" layoutY="469.0" prefWidth="38.0" text="Status" />
+      <Button fx:id="startButton" layoutX="50.0" layoutY="513.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="100.0" text="Start" />
       <Label fx:id="nickname1" layoutX="47.0" layoutY="87.0" text="Nickname#1">
          <font>
             <Font size="18.0" />
@@ -26,7 +25,16 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="tablesize" alignment="CENTER_RIGHT" layoutX="26.0" layoutY="561.0" text="20" />
-      <AnchorPane fx:id="pane" layoutX="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <TextField fx:id="tablesizeLabel" alignment="CENTER_RIGHT" layoutX="31.0" layoutY="425.0" prefHeight="25.0" prefWidth="33.0" text="20" />
+      <AnchorPane fx:id="boardPane" layoutX="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Canvas fx:id="board" height="600.0" width="600.0" />
+         </children></AnchorPane>
+      <AnchorPane layoutY="800.0" prefHeight="20.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Label fx:id="statusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="tablesizeButton" layoutX="62.0" layoutY="425.0" mnemonicParsing="false" onAction="#tablesizePressed" text="Ok" />
    </children>
 </AnchorPane>

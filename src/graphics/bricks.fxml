@@ -8,7 +8,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -18,8 +17,8 @@
       <Rectangle arcWidth="5.0" fill="#00ff3334" height="400.0" layoutY="225.0" strokeType="INSIDE" width="200.0" />
       <Rectangle arcWidth="5.0" fill="#9bceff" height="100.0" layoutY="25.0" strokeType="INSIDE" width="200.0" />
       <Rectangle arcWidth="5.0" fill="#ffaaaa" height="100.0" layoutY="125.0" strokeType="INSIDE" width="200.0" />
-      <Button fx:id="drawTestButton" layoutX="136.0" layoutY="496.0" mnemonicParsing="false" onAction="#drawTestPressed" text="Test" />
-      <Label fx:id="status" layoutX="81.0" layoutY="526.0" prefWidth="38.0" text="Status" />
+      <Button fx:id="drawTestButton" layoutX="109.0" layoutY="517.0" mnemonicParsing="false" onAction="#drawTestPressed" text="Test" />
+      <Label fx:id="status" layoutX="47.0" layoutY="521.0" prefWidth="38.0" text="Status" />
       <Button fx:id="startButton" layoutX="47.0" layoutY="557.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="100.0" text="Start" />
       <Label fx:id="nickname1" layoutX="47.0" layoutY="62.0" text="Nickname#1">
          <font>
@@ -31,7 +30,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="tablesizeLabel" alignment="CENTER_RIGHT" layoutX="31.0" layoutY="496.0" prefHeight="25.0" prefWidth="33.0" text="20" />
       <AnchorPane fx:id="boardPane" layoutX="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
             <Canvas fx:id="board" height="600.0" width="600.0" />
@@ -41,37 +39,36 @@
             <Label fx:id="statusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="800.0" text="Std Error " textFill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          </children>
       </AnchorPane>
-      <Button fx:id="tablesizeButton" layoutX="65.0" layoutY="496.0" mnemonicParsing="false" onAction="#tablesizePressed" text="Ok" />
       <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Program">
             <items>
-              <MenuItem mnemonicParsing="false" text="Select logging file" />
-                  <MenuItem mnemonicParsing="false" text="Display from log file" />
+              <MenuItem fx:id="selectLog" mnemonicParsing="false" onAction="#selectLogPressed" text="Select logging file" />
+                  <MenuItem fx:id="displayLog" mnemonicParsing="false" onAction="#displayLogPressed" text="Display from log file" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closePressed" text="Close" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Board">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Set size" />
+                  <MenuItem fx:id="setSize" mnemonicParsing="false" onAction="#setSizePressed" text="Set size" />
                   <Menu mnemonicParsing="false" text="Put barriers">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Random" />
-                        <MenuItem mnemonicParsing="false" text="Manual" />
+                        <MenuItem fx:id="randomBarrier" mnemonicParsing="false" onAction="#randomBarrierPressed" text="Random" />
+                        <MenuItem fx:id="manualBarrier" mnemonicParsing="false" onAction="#manualBarrierPressed" text="Manual" />
                      </items>
                   </Menu>
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Games">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Tournament" />
-              <MenuItem mnemonicParsing="false" text="DDDDDDDDuel    :)" />
+                  <MenuItem fx:id="tournament" mnemonicParsing="false" onAction="#tournamentPressed" text="Tournament" />
+              <MenuItem fx:id="duel" mnemonicParsing="false" onAction="#duelPressed" text="DDDDDDDDuel    xD" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutPressed" text="About" />
             </items>
           </Menu>
         </menus>

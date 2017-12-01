@@ -12,6 +12,7 @@ class Commander {
     private BufferedReader witnessStdout;
     private PrintWriter witnessStdin;
     private Witness witness;
+    private String gotNotShowedLine;
 
     Commander( File witnessDir ) throws ProtocolException , FileNotFoundException{
 
@@ -28,10 +29,23 @@ class Commander {
 
     String getWitnessNick(){
         return witness.getNick();
+
+    }
+
+    boolean hasOutputLine() throws IOException {
+        return gotNotShowedLine != null || (gotNotShowedLine = witnessStdout.readLine()) != null;
     }
 
     String getOutputLine() throws IOException{
-        return witnessStdout.readLine();
+        if( gotNotShowedLine == null ){
+            if( hasOutputLine() ){
+                return gotNotShowedLine;
+            } else {
+                throw new NullPointerException( "There's no line!" );
+            }
+        } else {
+            return gotNotShowedLine;
+        }
     }
 
     void tellInputLine( String line ){

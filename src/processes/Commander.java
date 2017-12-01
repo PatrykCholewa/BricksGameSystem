@@ -2,7 +2,6 @@ package processes;
 
 import java.io.*;
 import java.net.ProtocolException;
-import java.util.Scanner;
 
 /**
  * @author Patryk Cholewa
@@ -14,11 +13,11 @@ class Commander {
     private PrintWriter witnessStdin;
     private Witness witness;
 
-    Commander( File witnessDir ) throws ProtocolException {
+    Commander( File witnessDir ) throws ProtocolException , FileNotFoundException{
 
         try {
             this.witness = new Witness(witnessDir);
-        } catch ( FileNotFoundException  | ProtocolException | RuntimeException e) {
+        } catch ( RuntimeException e ) {
             throw new ProtocolException( e.getMessage() );
         }
 

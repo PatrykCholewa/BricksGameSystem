@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 class Rules {
 
-    private final static int MAX_NUMBER_OF_PLAYERS = 2;
+    private final static int MIN_NUMBER_OF_SIZE = 3;
     private final static int MAX_NUMBER_OF_SIZE = 999;
 
     private Board board;
@@ -56,12 +56,12 @@ class Rules {
     }
 
     static void validateSize ( Integer size ){
-        if( size < 3 || size > MAX_NUMBER_OF_SIZE || size % 2 == 0 ){
+        if( size < MIN_NUMBER_OF_SIZE || size > MAX_NUMBER_OF_SIZE || size % 2 == 0 ){
             throw new IllegalArgumentException( "Forbidden value of size of " + size + "." );
         }
     }
 
-    void validateAddingRectangle( Point []boxes, Integer playerNumber )
+    void validateAddingRectangle( Point []boxes )
             throws IllegalArgumentException {
 
         try {
@@ -69,10 +69,6 @@ class Rules {
             validateAddingBlock( boxes[1] );
         } catch ( IllegalArgumentException | IndexOutOfBoundsException e ){
             throw new IllegalArgumentException( e.getMessage() );
-        }
-
-        if( playerNumber > MAX_NUMBER_OF_PLAYERS ){
-            throw new IllegalArgumentException( "Maximum allowed number of players is " + MAX_NUMBER_OF_PLAYERS + "!" );
         }
 
         if( boxes[0].x != boxes[1].x + 1 &&

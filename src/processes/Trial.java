@@ -116,7 +116,7 @@ public class Trial {
             initPlayer( 1 );
 
             move("START");
-            referee.addRectangle(Translator.stringToBoxPair(lastMove), lastPlayer);
+            referee.addRectangle(Translator.stringToBoxPair(lastMove));
 
         } catch ( IllegalArgumentException | IOException | TimeoutException e ){
             throw new ProtocolException( "Player " + commanders[lastPlayer].getWitnessNick() + " : " + e.getMessage() );
@@ -145,7 +145,7 @@ public class Trial {
 
         try {
             move( lastMove );
-            referee.addRectangle(Translator.stringToBoxPair(lastMove), lastPlayer);
+            referee.addRectangle(Translator.stringToBoxPair(lastMove));
         } catch ( IOException | TimeoutException | IllegalArgumentException e ){
             throw new ProtocolException( "Player " + commanders[lastPlayer].getWitnessNick() + " : " + e.getMessage() );
         }

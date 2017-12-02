@@ -11,7 +11,6 @@ import java.util.Random;
 class Board {
 
     private Matrix matrix;
-    private int lastPlayer = 0;
 
     Board(int size) {
         matrix = new Matrix( size );
@@ -29,14 +28,7 @@ class Board {
         }
     }
 
-    int getLastPlayer(){
-        return lastPlayer;
-    }
-
     ArrayList<Point> setInitialBoxesRandomly(int numberOfRandomBoxes ){
-
-        if( lastPlayer != 0 )
-            throw new UnsupportedOperationException( "There has already been a player's move." );
 
         Random rndGen = new Random();
         Point box;
@@ -65,8 +57,6 @@ class Board {
 
     void setInitialBoxes(ArrayList<Point> listOfBoxes ){
 
-        if( lastPlayer != 0 ) throw new UnsupportedOperationException( "Player has already made move. ");
-
         matrix.clear();
 
         for( Point box : listOfBoxes ){
@@ -75,11 +65,10 @@ class Board {
 
     }
 
-    void addRectangle( Point []boxes , Integer playerNumber ) throws IllegalArgumentException {
+    void addRectangle( Point []boxes ) throws IllegalArgumentException {
 
-        lastPlayer = playerNumber;
-        matrix.setValue( boxes[0] , playerNumber );
-        matrix.setValue( boxes[1] , playerNumber );
+        matrix.setValue( boxes[0] , 'P' );
+        matrix.setValue( boxes[1] , 'P' );
 
     }
 

@@ -30,15 +30,6 @@ public class Referee {
     }
 
     /**
-     * Returns last player's number.
-     *
-     * @return last player's number ( or 0 if last move was committed by system
-     */
-    public int getLastPlayer(){
-        return board.getLastPlayer();
-    }
-
-    /**
      * Checks if there is any allowed next move.
      *
      * @return true if no next move is allowed on board
@@ -74,15 +65,14 @@ public class Referee {
      *
      * @param boxes Rectangle. Boxes must be stuck to each other
      *             and their indexes have to fit inside board.
-     * @param playerNumber Number of player
      * @throws IllegalArgumentException On playerNumber is greater than 2                   <br>
      *                                  or points are not stuck to each other               <br>
      *                                  or a box was already put                            <br>
      *                                  or a box does not fit into boundaries of the board.
      */
-    public void addRectangle( Point []boxes , Integer playerNumber ) throws IllegalArgumentException {
-        rules.validateAddingRectangle( boxes , playerNumber );
-        board.addRectangle( boxes , playerNumber );
+    public void addRectangle( Point []boxes ) throws IllegalArgumentException {
+        rules.validateAddingRectangle( boxes );
+        board.addRectangle( boxes );
     }
 
     @Override

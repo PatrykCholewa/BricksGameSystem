@@ -36,15 +36,21 @@ class Commander {
         return gotNotShowedLine != null || (gotNotShowedLine = witnessStdout.readLine()) != null;
     }
 
+    private String removeGotNotShowedLine(){
+        String tmp = gotNotShowedLine;
+        gotNotShowedLine = null;
+        return tmp;
+    }
+
     String getOutputLine() throws IOException{
         if( gotNotShowedLine == null ){
             if( hasOutputLine() ){
-                return gotNotShowedLine;
+                return removeGotNotShowedLine();
             } else {
                 throw new NullPointerException( "There's no line!" );
             }
         } else {
-            return gotNotShowedLine;
+            return removeGotNotShowedLine();
         }
     }
 

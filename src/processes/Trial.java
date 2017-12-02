@@ -1,5 +1,6 @@
 package processes;
 
+import game.Referee;
 import tools.Translator;
 
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ProtocolException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Patryk Cholewa
@@ -15,15 +17,18 @@ import java.util.ArrayList;
 
 public class Trial {
 
+    private Referee referee;
     private Commander []commanders = new Commander[2];
+    private File []playerFiles = new File[2];
     private Watch watch = new Watch();
     private int lastPlayer = -1;
     private String initData;
+    private String lastMove;
 
-    public Trial(File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
+    public Trial( File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
 
-        this.commanders[0] = new Commander( player1Dir );
-        this.commanders[1] = new Commander( player2Dir );
+        this.playerFiles[0] = player1Dir;
+        this.playerFiles[1] = player2Dir;
 
     }
 
@@ -35,30 +40,103 @@ public class Trial {
         return commanders[1].getWitnessNick();
     }
 
+    public String getLastPlayer(){
+        return commanders[lastPlayer].getWitnessNick();
+    }
+
+    public String getLastMove(){
+        return lastMove;
+    }
+
     private void nextPlayer( ){
         lastPlayer =  ( lastPlayer + 1 )%2;
     }
 
-    private void initPlayer( int player ) throws ProtocolException {
-        watch.initTimer();
+    private void initPlayer( int player ) throws IOException, TimeoutException {
+
+        nextPlayer();
+        commanders[player] = new Commander( playerFiles[player] );
         commanders[player].tellInputLine( initData );
-        try {
-            while( !commanders[player].hasOutputLine() ){
-                if( watch.exceededInitTime() ){
-                    throw new ProtocolException( "Player " + commanders[player].getWitnessNick() + " do not answer!" );
-                }
+        watch.initTimer();
+
+        while( !commanders[player].hasOutputLine() ){
+            if( watch.exceededInitTime() ){
+                throw new TimeoutException( "Player " + commanders[player].getWitnessNick() + " do not answer!" );
             }
-        } catch (IOException e) {
-            throw new ProtocolException( "Can't start a match!" );
+        }
+
+        lastMove = commanders[player].getOutputLine();
+        if( !lastMove.equals( "OK" ) ){
+            throw new ProtocolException( "Player " + commanders[player].getWitnessNick() + " should have given \"OK\", but gave \"" + lastMove + "\"!" );
+        }
+
+    }
+
+    public void resetBoard(){
+
+        referee = new Referee( Translator.getSizeFromInitString( initData ) );
+        referee.setInitialBoxes( Translator.boxesFromInitString( initData ) );
+
+    }
+
+    public void setBoard( int size , ArrayList<Point> listOfBoxes ){
+
+        initData = Translator.initToString( size , listOfBoxes );
+        referee = new Referee( size );
+        referee.setInitialBoxes( listOfBoxes );
+
+    }
+
+    public void setBoard( int size , int numberOfBoxes ){
+
+        referee = new Referee( size );
+        ArrayList<Point> boxes = referee.setInitialBoxesRandomly( numberOfBoxes );
+
+        initData = Translator.initToString( size , boxes );
+
+    }
+
+    public void start() throws ProtocolException {
+
+        try {
+
+            initPlayer( 0 );
+            initPlayer( 1 );
+
+            move("START");
+            referee.addRectangle(Translator.stringToBoxPair(lastMove), lastPlayer);
+
+        } catch ( IllegalArgumentException | IOException | TimeoutException e ){
+            throw new ProtocolException( "Player " + commanders[lastPlayer].getWitnessNick() + " : " + e.getMessage() );
         }
     }
 
-    public void start( int size , ArrayList<Point> listOfBoxes ) throws ProtocolException {
+    private void move( String playerInput ) throws TimeoutException, IOException {
 
-        initData = Translator.initToString( size , listOfBoxes );
+        nextPlayer();
+        commanders[lastPlayer].tellInputLine( playerInput );
 
-        initPlayer( 0 );
-        initPlayer( 1 );
+        watch.initTimer();
+        while ( !commanders[lastPlayer].hasOutputLine() ){
+            if( watch.exceededMoveTime() ){
+                throw new TimeoutException( "Player " + commanders[lastPlayer].getWitnessNick() + " timed out!" );
+            } else {
+                watch.waitCheckInterval();
+            }
+        }
+
+        lastMove = commanders[lastPlayer].getOutputLine();
+
+    }
+
+    public void nextMove() throws ProtocolException {
+
+        try {
+            move( lastMove );
+            referee.addRectangle(Translator.stringToBoxPair(lastMove), lastPlayer);
+        } catch ( IOException | TimeoutException | IllegalArgumentException e ){
+            throw new ProtocolException( "Player " + commanders[lastPlayer].getWitnessNick() + " : " + e.getMessage() );
+        }
 
     }
 

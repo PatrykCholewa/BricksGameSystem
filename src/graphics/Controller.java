@@ -105,7 +105,8 @@ public class Controller {
             Trial duel = new Trial(startingPlayer,followingPlayer);
             nickname1.setText(duel.getStartingPlayerNick());
             nickname2.setText(duel.getFollowingPlayerNick());
-            duel.start(size,new ArrayList<Point>());
+            duel.setBoard(size,new ArrayList<Point>());
+            duel.start();
         } catch (FileNotFoundException e) {
              showErrorDialog(e);
         } catch (ProtocolException e) {

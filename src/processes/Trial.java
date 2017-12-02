@@ -32,10 +32,20 @@ public class Trial {
 
     }
 
+    /**
+     * Return starting player nick.
+     * @return starting player nick
+     * @throws NullPointerException when game is not started.
+     */
     public String getStartingPlayerNick(){
         return commanders[0].getWitnessNick();
     }
 
+    /**
+     * Return following player nick.
+     * @return following player nick
+     * @throws NullPointerException when game is not started.
+     */
     public String getFollowingPlayerNick(){
         return commanders[1].getWitnessNick();
     }

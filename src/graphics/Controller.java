@@ -19,9 +19,14 @@ import java.awt.*;
 import java.io.File;
 import java.util.Optional;
 
+/**
+ * @author Paweł Zych
+ */
+
+
 public class Controller {
     int scale=10;
-    int size;
+    int size =17;
     int i =1;
 
     @FXML

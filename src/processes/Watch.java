@@ -1,26 +1,14 @@
 package processes;
 
 class Watch {
-
-    /**
-     * Watch constructor
-     */
-    Watch(){
-
-    }
+    private long begin;
+    private long elapsedTime;
 
     /**
      * Starts or restarts timer
      */
     void initTimer(){
-
-    }
-
-    /**
-     * Waits some time not worth to check a player before
-     */
-    void waitCheckInterval(){
-
+        begin = System.nanoTime();
     }
 
     /**
@@ -28,7 +16,11 @@ class Watch {
      * @return true if the player process init time has passed
      */
     boolean exceededInitTime(){
-        return false;
+        elapsedTime = (System.nanoTime() - begin);
+        if (elapsedTime < 1000000000)
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -36,7 +28,10 @@ class Watch {
      * @return true if the player process move time has passed
      */
     boolean exceededMoveTime(){
-        return false;
+        elapsedTime = (System.nanoTime() - begin);
+        if (elapsedTime < 500000000)
+            return true;
+        else
+            return false;
     }
-
 }

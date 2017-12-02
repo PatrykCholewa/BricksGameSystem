@@ -97,12 +97,14 @@ public class Trial {
 
     }
 
-    public void setBoard( int size , int numberOfBoxes ){
+    public ArrayList<Point> setBoard( int size , int numberOfBoxes ){
 
         referee = new Referee( size );
         ArrayList<Point> boxes = referee.setInitialBoxesRandomly( numberOfBoxes );
 
         initData = Translator.initToString( size , boxes );
+
+        return boxes;
 
     }
 

@@ -72,18 +72,17 @@ public class Referee {
     /**
      * Validates the player's move. Updates a state of the board.
      *
-     * @param box1 With box2 makes the rectangle. Boxes must be stuck to each other
+     * @param boxes Rectangle. Boxes must be stuck to each other
      *             and their indexes have to fit inside board.
-     * @param box2 Same as box1
      * @param playerNumber Number of player
      * @throws IllegalArgumentException On playerNumber is greater than 2                   <br>
      *                                  or points are not stuck to each other               <br>
      *                                  or a box was already put                            <br>
      *                                  or a box does not fit into boundaries of the board.
      */
-    public void addRectangle( Point box1 , Point box2 , Integer playerNumber ) throws IllegalArgumentException {
-        rules.validateAddingRectangle( box1 , box2 , playerNumber );
-        board.addRectangle( box1 , box2 , playerNumber );
+    public void addRectangle( Point []boxes , Integer playerNumber ) throws IllegalArgumentException {
+        rules.validateAddingRectangle( boxes , playerNumber );
+        board.addRectangle( boxes , playerNumber );
     }
 
     @Override

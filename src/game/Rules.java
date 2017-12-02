@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * @author Patryk Cholewa
@@ -60,12 +61,12 @@ class Rules {
         }
     }
 
-    void validateAddingRectangle( Point p1 , Point p2 , Integer playerNumber )
+    void validateAddingRectangle( Point []boxes, Integer playerNumber )
             throws IllegalArgumentException {
 
         try {
-            validateAddingBlock( p1 );
-            validateAddingBlock( p2 );
+            validateAddingBlock( boxes[0] );
+            validateAddingBlock( boxes[1] );
         } catch ( IllegalArgumentException | IndexOutOfBoundsException e ){
             throw new IllegalArgumentException( e.getMessage() );
         }
@@ -74,9 +75,12 @@ class Rules {
             throw new IllegalArgumentException( "Maximum allowed number of players is " + MAX_NUMBER_OF_PLAYERS + "!" );
         }
 
-        if( p1.x != p2.x + 1 && p1.x != p2.x - 1 && p1.y != p2.y + 1 && p1.y != p2.y - 1 ){
-            throw new IllegalArgumentException( "Blocks (" + p1.x + ";" + p1.y + ") and ("
-                    + p2.x + ";" + p2.y + ") are not neighbours!" );
+        if( boxes[0].x != boxes[1].x + 1 &&
+                boxes[0].x != boxes[1].x - 1 &&
+                boxes[0].y != boxes[1].y + 1 &&
+                boxes[0].y != boxes[1].y - 1 ){
+            throw new IllegalArgumentException( "Blocks (" + boxes[0].x + ";" + boxes[0].y + ") and ("
+                    + boxes[1].x + ";" + boxes[1].y + ") are not neighbours!" );
         }
 
     }

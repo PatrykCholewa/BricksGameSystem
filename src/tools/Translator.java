@@ -34,6 +34,25 @@ public class Translator {
 
     }
 
+    public static int getSizeFromInitString( String init ){
+
+        String []gotParts = init.split( "_" );
+        return Integer.valueOf( gotParts[0] );
+
+    }
+
+    public static ArrayList<Point> boxesFromInitString( String init ){
+
+        String []gotParts = init.split( "_" );
+        ArrayList<Point> boxes = new ArrayList<>();
+        for( int i = 1 ; i < gotParts.length ; i++ ){
+            boxes.add( stringToBox(gotParts[i]) );
+        }
+
+        return boxes;
+
+    }
+
     public static String rectangleToString(ArrayList<Point> boxes ){
 
         return boxToString( boxes.get(0) ) + "_" + boxToString( boxes.get(1) );

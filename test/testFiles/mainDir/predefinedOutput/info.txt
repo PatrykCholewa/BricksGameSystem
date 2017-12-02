@@ -1,4 +1,4 @@
-java -jar "virus.jar"
+java -jar "predefinedOutput.jar"
 PREDEFINED OUTPUT
 
 Returns inputs starting with letter "X", when got input without it.

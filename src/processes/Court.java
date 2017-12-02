@@ -23,10 +23,8 @@ public class Court {
     private Referee referee;
 
     public Court(File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
-
         this.playerFiles[0] = player1Dir;
         this.playerFiles[1] = player2Dir;
-
     }
 
     public String getStartingPlayerNick() {
@@ -38,10 +36,8 @@ public class Court {
     }
 
     public void resetBoard(){
-
         referee = new Referee( Translator.getSizeFromInitString( initData ) );
         referee.setInitialBoxes( Translator.boxesFromInitString( initData ) );
-
     }
 
     public void setBoard( int size , ArrayList<Point> listOfBoxes ){

@@ -1,8 +1,5 @@
 package processes;
 
-import game.Referee;
-import tools.Translator;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,7 +30,7 @@ public class Trial {
      * @throws NullPointerException when game is not started.
      */
     String getStartingPlayerNick(){
-        return commanders[0].getWitnessNick();
+        return commanders[0].getNick();
     }
 
     /**
@@ -42,11 +39,11 @@ public class Trial {
      * @throws NullPointerException when game is not started.
      */
     String getFollowingPlayerNick(){
-        return commanders[1].getWitnessNick();
+        return commanders[1].getNick();
     }
 
     String getLastPlayer(){
-        return commanders[lastPlayer].getWitnessNick();
+        return commanders[lastPlayer].getNick();
     }
 
     String getLastMove(){
@@ -60,18 +57,19 @@ public class Trial {
     void initPlayer( String initData , int player ) throws IOException, TimeoutException {
 
         nextPlayer();
-        commanders[player].tellInputLine( initData );
+        commanders[player].initProcess();
+        commanders[player].insertOutputLine( initData );
         watch.initTimer();
 
-        while( !commanders[player].hasOutputLine() ){
+        while( !commanders[player].hasInput() ){
             if( watch.exceededInitTime() ){
-                throw new TimeoutException( "Player " + commanders[player].getWitnessNick() + " do not answer!" );
+                throw new TimeoutException( "Player " + commanders[player].getNick() + " do not answer!" );
             }
         }
 
-        lastMove = commanders[player].getOutputLine();
+        lastMove = commanders[player].getInputLine();
         if( !lastMove.equals( "OK" ) ){
-            throw new ProtocolException( "Player " + commanders[player].getWitnessNick() + " should have given \"OK\", but gave \"" + lastMove + "\"!" );
+            throw new ProtocolException( "Player " + commanders[player].getNick() + " should have given \"OK\", but gave \"" + lastMove + "\"!" );
         }
 
     }
@@ -79,18 +77,18 @@ public class Trial {
     void move( String playerInput ) throws TimeoutException, IOException {
 
         nextPlayer();
-        commanders[lastPlayer].tellInputLine( playerInput );
+        commanders[lastPlayer].insertOutputLine( playerInput );
 
         watch.initTimer();
-        while ( !commanders[lastPlayer].hasOutputLine() ){
+        while ( !commanders[lastPlayer].hasInput() ){
             if( watch.exceededMoveTime() ){
-                throw new TimeoutException( "Player " + commanders[lastPlayer].getWitnessNick() + " timed out!" );
+                throw new TimeoutException( "Player " + commanders[lastPlayer].getNick() + " timed out!" );
             } else {
                 watch.waitCheckInterval();
             }
         }
 
-        lastMove = commanders[lastPlayer].getOutputLine();
+        lastMove = commanders[lastPlayer].getInputLine();
 
     }
 

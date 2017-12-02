@@ -1,5 +1,7 @@
 package processes;
 
+import tools.InfoReader;
+
 import java.io.*;
 import java.net.ProtocolException;
 
@@ -9,31 +11,42 @@ import java.net.ProtocolException;
 
 class Commander {
 
-    private BufferedReader witnessStdout;
-    private PrintWriter witnessStdin;
-    private Witness witness;
+    private ProcessBuilder processBuilder;
+    private String nick;
+
+    private BufferedReader input;
+    private PrintWriter output;
+    private Process process;
+
     private String gotNotShowedLine;
 
-    Commander( File witnessDir ) throws ProtocolException , FileNotFoundException{
+    Commander( File directory ) throws ProtocolException , FileNotFoundException{
 
-        try {
-            this.witness = new Witness(witnessDir);
-        } catch ( RuntimeException e ) {
-            throw new ProtocolException( e.getMessage() );
-        }
+        String []info = InfoReader.getLines( directory );
 
-        witnessStdout = new BufferedReader( new InputStreamReader( witness.getInputStream() ) );
-        witnessStdin = new PrintWriter( witness.getOutputStream() , true );
+        processBuilder = new ProcessBuilder();
+        processBuilder.command( info[0].split( " " ) );
+        processBuilder.directory(directory);
 
-    }
-
-    String getWitnessNick(){
-        return witness.getNick();
+        nick = info[1];
 
     }
 
-    boolean hasOutputLine() throws IOException {
-        return gotNotShowedLine != null || (gotNotShowedLine = witnessStdout.readLine()) != null;
+    void initProcess() throws IOException {
+
+        process = processBuilder.start();
+        input = new BufferedReader( new InputStreamReader( process.getInputStream() ) );
+        output = new PrintWriter( process.getOutputStream() , true );
+
+    }
+
+    String getNick(){
+        return nick;
+
+    }
+
+    boolean hasInput() throws IOException {
+        return gotNotShowedLine != null || (gotNotShowedLine = input.readLine()) != null;
     }
 
     private String removeGotNotShowedLine(){
@@ -42,9 +55,9 @@ class Commander {
         return tmp;
     }
 
-    String getOutputLine() throws IOException{
+    String getInputLine() throws IOException{
         if( gotNotShowedLine == null ){
-            if( hasOutputLine() ){
+            if( hasInput() ){
                 return removeGotNotShowedLine();
             } else {
                 throw new NullPointerException( "There's no line!" );
@@ -54,23 +67,25 @@ class Commander {
         }
     }
 
-    void tellInputLine( String line ){
-        witnessStdin.println( line );
+    void insertOutputLine(String line ){
+        output.println( line );
     }
 
     void killWitness(){
 
-        tellInputLine("STOP");
-
-        witnessStdin.close();
-
         try {
-            witnessStdout.close();
-        } catch (IOException e) {
+            insertOutputLine("STOP");
+            output.close();
+            input.close();
+        } catch ( NullPointerException | IOException e) {
             ;
         }
 
-        witness.destroy();
+        try {
+            process.destroy();
+        } catch ( NullPointerException e ){
+            ;
+        }
 
     }
 

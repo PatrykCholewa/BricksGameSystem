@@ -71,7 +71,7 @@ class Commander {
         output.println( line );
     }
 
-    void killWitness(){
+    void killProcess(){
 
         try {
             insertOutputLine("STOP");

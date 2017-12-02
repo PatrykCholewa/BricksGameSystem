@@ -24,20 +24,10 @@ public class Trial {
 
     }
 
-    /**
-     * Return starting player nick.
-     * @return starting player nick
-     * @throws NullPointerException when game is not started.
-     */
     String getStartingPlayerNick(){
         return commanders[0].getNick();
     }
 
-    /**
-     * Return following player nick.
-     * @return following player nick
-     * @throws NullPointerException when game is not started.
-     */
     String getFollowingPlayerNick(){
         return commanders[1].getNick();
     }
@@ -93,8 +83,8 @@ public class Trial {
     }
 
     void close(){
-        commanders[0].killWitness();
-        commanders[1].killWitness();
+        commanders[0].killProcess();
+        commanders[1].killProcess();
     }
 
 }

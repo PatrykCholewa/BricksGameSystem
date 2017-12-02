@@ -3,12 +3,10 @@ package processes;
 import game.Referee;
 import tools.Translator;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ProtocolException;
-import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -17,18 +15,15 @@ import java.util.concurrent.TimeoutException;
 
 public class Trial {
 
-    private Referee referee;
     private Commander []commanders = new Commander[2];
-    private File []playerFiles = new File[2];
     private Watch watch = new Watch();
     private int lastPlayer = -1;
-    private String initData;
     private String lastMove;
 
-    public Trial( File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
+    Trial( File []playerDirs ) throws FileNotFoundException, ProtocolException {
 
-        this.playerFiles[0] = player1Dir;
-        this.playerFiles[1] = player2Dir;
+        this.commanders[0] = new Commander( playerDirs[0] );
+        this.commanders[1] = new Commander( playerDirs[1] );
 
     }
 
@@ -37,7 +32,7 @@ public class Trial {
      * @return starting player nick
      * @throws NullPointerException when game is not started.
      */
-    public String getStartingPlayerNick(){
+    String getStartingPlayerNick(){
         return commanders[0].getWitnessNick();
     }
 
@@ -46,15 +41,15 @@ public class Trial {
      * @return following player nick
      * @throws NullPointerException when game is not started.
      */
-    public String getFollowingPlayerNick(){
+    String getFollowingPlayerNick(){
         return commanders[1].getWitnessNick();
     }
 
-    public String getLastPlayer(){
+    String getLastPlayer(){
         return commanders[lastPlayer].getWitnessNick();
     }
 
-    public String getLastMove(){
+    String getLastMove(){
         return lastMove;
     }
 
@@ -62,10 +57,9 @@ public class Trial {
         lastPlayer =  ( lastPlayer + 1 )%2;
     }
 
-    private void initPlayer( int player ) throws IOException, TimeoutException {
+    void initPlayer( String initData , int player ) throws IOException, TimeoutException {
 
         nextPlayer();
-        commanders[player] = new Commander( playerFiles[player] );
         commanders[player].tellInputLine( initData );
         watch.initTimer();
 
@@ -82,48 +76,7 @@ public class Trial {
 
     }
 
-    public void resetBoard(){
-
-        referee = new Referee( Translator.getSizeFromInitString( initData ) );
-        referee.setInitialBoxes( Translator.boxesFromInitString( initData ) );
-
-    }
-
-    public void setBoard( int size , ArrayList<Point> listOfBoxes ){
-
-        initData = Translator.initToString( size , listOfBoxes );
-        referee = new Referee( size );
-        referee.setInitialBoxes( listOfBoxes );
-
-    }
-
-    public ArrayList<Point> setBoard( int size , int numberOfBoxes ){
-
-        referee = new Referee( size );
-        ArrayList<Point> boxes = referee.setInitialBoxesRandomly( numberOfBoxes );
-
-        initData = Translator.initToString( size , boxes );
-
-        return boxes;
-
-    }
-
-    public void start() throws ProtocolException {
-
-        try {
-
-            initPlayer( 0 );
-            initPlayer( 1 );
-
-            move("START");
-            referee.addRectangle(Translator.stringToBoxPair(lastMove));
-
-        } catch ( IllegalArgumentException | IOException | TimeoutException e ){
-            throw new ProtocolException( "Player " + commanders[lastPlayer].getWitnessNick() + " : " + e.getMessage() );
-        }
-    }
-
-    private void move( String playerInput ) throws TimeoutException, IOException {
+    void move( String playerInput ) throws TimeoutException, IOException {
 
         nextPlayer();
         commanders[lastPlayer].tellInputLine( playerInput );
@@ -141,18 +94,7 @@ public class Trial {
 
     }
 
-    public void nextMove() throws ProtocolException {
-
-        try {
-            move( lastMove );
-            referee.addRectangle(Translator.stringToBoxPair(lastMove));
-        } catch ( IOException | TimeoutException | IllegalArgumentException e ){
-            throw new ProtocolException( "Player " + commanders[lastPlayer].getWitnessNick() + " : " + e.getMessage() );
-        }
-
-    }
-
-    public void close(){
+    void close(){
         commanders[0].killWitness();
         commanders[1].killWitness();
     }

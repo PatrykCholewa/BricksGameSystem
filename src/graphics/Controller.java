@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import processes.Trial;
+import processes.Court;
 
 
 import java.awt.*;
@@ -106,10 +106,10 @@ public class Controller {
         File followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
         try {
             Recorder rec = new Recorder(logFile);
-            rec.printToLog("Trial Start\n");
+            rec.printToLog("Court Start\n");
             rec.logClose();
 
-            Trial duel = new Trial(startingPlayer,followingPlayer);
+            Court duel = new Court(startingPlayer,followingPlayer);
             nickname1.setText(duel.getStartingPlayerNick());
             nickname2.setText(duel.getFollowingPlayerNick());
             duel.setBoard(size,new ArrayList<Point>());

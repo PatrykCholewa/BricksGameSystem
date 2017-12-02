@@ -36,12 +36,21 @@ public class Trial {
         return commanders[lastPlayer].getNick();
     }
 
+    String getNotLastPlayer(){
+        return commanders[(lastPlayer+1)%2].getNick();
+    }
+
     String getLastMove(){
         return lastMove;
     }
 
     private void nextPlayer( ){
         lastPlayer =  ( lastPlayer + 1 )%2;
+    }
+
+    void reset(){
+        lastPlayer = -1;
+        close();
     }
 
     void initPlayer( String initData , int player ) throws IOException, TimeoutException {

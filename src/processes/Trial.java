@@ -1,11 +1,17 @@
 package processes;
 
+import tools.Translator;
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ProtocolException;
 import java.util.ArrayList;
+
+/**
+ * @author Patryk Cholewa
+ */
 
 public class Trial {
 

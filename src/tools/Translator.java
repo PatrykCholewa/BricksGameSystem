@@ -1,4 +1,4 @@
-package processes;
+package tools;
 
 import java.awt.*;
 import java.net.ProtocolException;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author Patryk Cholewa
  */
 
-class Translator {
+public class Translator {
 
     private static String boxToString( Point box ){
         return (Integer)box.x + "x" + (Integer)box.y;
@@ -22,7 +22,7 @@ class Translator {
 
     }
 
-    static String initToString( Integer size , ArrayList<Point> listOfBoxes ){
+    public static String initToString( Integer size , ArrayList<Point> listOfBoxes ){
 
         String ret = size.toString();
 
@@ -34,13 +34,13 @@ class Translator {
 
     }
 
-    static String rectangleToString(ArrayList<Point> boxes ){
+    public static String rectangleToString(ArrayList<Point> boxes ){
 
         return boxToString( boxes.get(0) ) + "_" + boxToString( boxes.get(1) );
 
     }
 
-    static Point []stringToBoxPair( String command )
+    public static Point []stringToBoxPair( String command )
             throws ProtocolException{
 
         Point []boxes = new Point[2];

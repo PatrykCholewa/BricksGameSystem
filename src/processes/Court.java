@@ -35,6 +35,10 @@ public class Court {
         return trial.getFollowingPlayerNick();
     }
 
+    public String getLastMove(){
+        return trial.getLastMove();
+    }
+
     public void resetBoard(){
         referee = new Referee( Translator.getSizeFromInitString( initData ) );
         referee.setInitialBoxes( Translator.boxesFromInitString( initData ) );
@@ -75,7 +79,6 @@ public class Court {
             throw new ProtocolException( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
         }
     }
-
 
     void nextMove() throws ProtocolException {
 

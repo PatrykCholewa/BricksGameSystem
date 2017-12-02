@@ -25,6 +25,10 @@ public class Recorder {
         out.print(command + "\n");
     }
 
+    public void logClose(){
+        out.close();
+    }
+
     public boolean hasLogNextLine() {
         return in.hasNextLine();
     }

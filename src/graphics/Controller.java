@@ -1,5 +1,6 @@
 package graphics;
 
+import archiving.Recorder;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -19,6 +20,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import processes.Trial;
 
+
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +36,7 @@ import java.util.Optional;
 
 
 public class Controller {
+    File logFile;
     private int scale=10;
     private int size =17;
     private int i =1;
@@ -102,6 +105,10 @@ public class Controller {
         File startingPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
         File followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
         try {
+            Recorder rec = new Recorder(logFile);
+            rec.printToLog("Trial Start\n");
+            rec.logClose();
+
             Trial duel = new Trial(startingPlayer,followingPlayer);
             nickname1.setText(duel.getStartingPlayerNick());
             nickname2.setText(duel.getFollowingPlayerNick());
@@ -111,6 +118,8 @@ public class Controller {
              showErrorDialog(e);
         } catch (ProtocolException e) {
              showErrorDialog(e);
+        } catch (Exception e) {
+            showErrorDialog(e);
         }
     }
 
@@ -126,12 +135,12 @@ public class Controller {
 
     @FXML
     void displayLogPressed() {
-        System.out.println( showFileChooser("SelectLogFile",mainPane).toString());
+        System.out.println( showFileChooser("SelectLogFile",mainPane,false).toString());
     }
 
     @FXML
     void selectLogPressed() {
-        System.out.println( showFileChooser("SelectLogFile",mainPane).toString());
+        logFile = showFileChooser("CreateLogFile",mainPane,true);
     }
 
     @FXML
@@ -298,13 +307,18 @@ public class Controller {
         return null;
     }
 
-    File showFileChooser(String title, Pane component){
+    File showFileChooser(String title, Pane component, boolean save){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showOpenDialog(component.getScene().getWindow());
+        File selectedFile;
+        if (save)
+            selectedFile = fileChooser.showSaveDialog(component.getScene().getWindow());
+        else
+            selectedFile = fileChooser.showOpenDialog(component.getScene().getWindow());
+
         if (selectedFile != null) {
             return selectedFile;
         }

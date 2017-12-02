@@ -39,4 +39,16 @@ class Watch {
         else
             return false;
     }
+
+    /**
+     * Waits.
+     */
+
+    synchronized void waitCheckInterval(){
+        try {
+            wait( 10 );
+        } catch (InterruptedException e) {
+            ;
+        }
+    }
 }

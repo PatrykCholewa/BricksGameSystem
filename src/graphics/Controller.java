@@ -10,13 +10,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import processes.Trial;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.ProtocolException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -25,10 +34,12 @@ import java.util.Optional;
 
 
 public class Controller {
-    int scale=10;
-    int size =17;
-    int i =1;
+    private int scale=10;
+    private int size =17;
+    private int i =1;
 
+    @FXML
+    AnchorPane mainPane = new AnchorPane();
     @FXML
     Button startButton = new Button();
     @FXML
@@ -62,7 +73,7 @@ public class Controller {
     @FXML
     MenuItem tournament = new MenuItem();
     @FXML
-    MenuItem duel = new MenuItem();
+    MenuItem duelButton = new MenuItem();
     @FXML
     MenuItem about = new MenuItem();
 
@@ -83,54 +94,43 @@ public class Controller {
 
     @FXML
     void tournamentPressed() {
-        showWIP();
+         showWipDialog();
     }
 
     @FXML
     void duelPressed() {
-        showWIP();
+        File startingPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
+        File followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
+        try {
+            Trial duel = new Trial(startingPlayer,followingPlayer);
+            nickname1.setText(duel.getStartingPlayerNick());
+            nickname2.setText(duel.getFollowingPlayerNick());
+            duel.start(size,new ArrayList<Point>());
+        } catch (FileNotFoundException e) {
+             showErrorDialog(e);
+        } catch (ProtocolException e) {
+             showErrorDialog(e);
+        }
     }
 
     @FXML
     void manualBarrierPressed() {
-        showWIP();
+         showWipDialog();
     }
 
     @FXML
     void randomBarrierPressed() {
-        showWIP();
+         showWipDialog();
     }
 
     @FXML
     void displayLogPressed() {
-        System.out.println(selectLogFile(true,false).toString());
+        System.out.println( showFileChooser("SelectLogFile",mainPane).toString());
     }
 
     @FXML
     void selectLogPressed() {
-        System.out.println((selectLogFile(false,true)).toString());
-    }
-
-    File selectLogFile(boolean read,boolean write){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select log file");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile = fileChooser.showOpenDialog((Stage) boardPane.getScene().getWindow());
-        if (selectedFile != null) {
-            return selectedFile;
-        }
-        return null;
-    }
-
-    void showWIP(){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText("Work in progress");
-        alert.setContentText("");
-
-        alert.showAndWait();
+        System.out.println( showFileChooser("SelectLogFile",mainPane).toString());
     }
 
     @FXML
@@ -243,6 +243,71 @@ public class Controller {
 
     private double snap(double y) {
         return ((int) y) + .5;
+    }
+
+    void showErrorDialog(Exception ex){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception");
+        alert.setHeaderText("Oops! There was an exception.");
+        alert.setContentText("Exception Type: " + ex.getClass().getSimpleName());
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        Label label = new Label("Exception Stack Trace:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+    }
+
+    void showWipDialog(){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Work in progress");
+        alert.setContentText("");
+
+        alert.showAndWait();
+    }
+
+    File showDriectoryChooser(String title, Pane component){
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle(title);
+        File selectedDirectory = directoryChooser.showDialog(component.getScene().getWindow());
+
+        if(selectedDirectory == null){
+            return selectedDirectory;
+        }
+        return null;
+    }
+
+    File showFileChooser(String title, Pane component){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(component.getScene().getWindow());
+        if (selectedFile != null) {
+            return selectedFile;
+        }
+        return null;
     }
 }
 

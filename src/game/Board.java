@@ -75,11 +75,11 @@ class Board {
 
     }
 
-    void addRectangle( Point p1 , Point p2 , Integer playerNumber ) throws IllegalArgumentException {
+    void addRectangle( Point []boxes , Integer playerNumber ) throws IllegalArgumentException {
 
         lastPlayer = playerNumber;
-        matrix.setValue( p1 , playerNumber );
-        matrix.setValue( p2 , playerNumber );
+        matrix.setValue( boxes[0] , playerNumber );
+        matrix.setValue( boxes[1] , playerNumber );
 
     }
 

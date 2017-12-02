@@ -1,0 +1,16 @@
+java -jar "virus.jar"
+PREDEFINED OUTPUT
+
+Returns inputs starting with letter "X", when got input without it.
+Ends after 20s
+
+EXAMPLE:
+IN ->   X3
+IN ->   Xe
+IN ->   r
+OUT ->  3
+IN ->   Xw
+IN ->   q
+OUT ->  e
+IN ->   d
+OUT ->  w

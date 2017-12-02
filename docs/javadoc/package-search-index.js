@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"game"}]
+packageSearchIndex = [{"l":"game"},{"l":"graphics"},{"l":"management"},{"l":"processes"},{"l":"tools"}]

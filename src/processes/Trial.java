@@ -20,7 +20,7 @@ public class Trial {
     private int lastPlayer = -1;
     private String initData;
 
-    Trial(File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
+    public Trial(File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
 
         this.commanders[0] = new Commander( player1Dir );
         this.commanders[1] = new Commander( player2Dir );

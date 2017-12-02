@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller">
    <children>
       <Rectangle arcWidth="5.0" fill="#00ff3334" height="400.0" layoutY="225.0" strokeType="INSIDE" width="200.0" />
       <Rectangle arcWidth="5.0" fill="#9bceff" height="100.0" layoutY="25.0" strokeType="INSIDE" width="200.0" />
@@ -32,7 +32,7 @@
       </Label>
       <AnchorPane fx:id="boardPane" layoutX="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
-            <Canvas fx:id="board" height="600.0" width="600.0" />
+            <Canvas fx:id="board" height="600.0" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children></AnchorPane>
       <AnchorPane layoutY="800.0" prefHeight="25.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -63,7 +63,7 @@
           <Menu mnemonicParsing="false" text="Games">
             <items>
                   <MenuItem fx:id="tournament" mnemonicParsing="false" onAction="#tournamentPressed" text="Tournament" />
-              <MenuItem fx:id="duel" mnemonicParsing="false" onAction="#duelPressed" text="DDDDDDDDuel    xD" />
+              <MenuItem fx:id="duelButton" mnemonicParsing="false" onAction="#duelPressed" text="Duel" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

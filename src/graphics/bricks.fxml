@@ -43,7 +43,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Program">
             <items>
-              <MenuItem fx:id="selectLog" mnemonicParsing="false" onAction="#selectLogPressed" text="Select logging file" />
+              <MenuItem fx:id="selectLog" mnemonicParsing="false" onAction="#selectLogPressed" text="Create log file" />
                   <MenuItem fx:id="displayLog" mnemonicParsing="false" onAction="#displayLogPressed" text="Display from log file" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="close" mnemonicParsing="false" onAction="#closePressed" text="Close" />

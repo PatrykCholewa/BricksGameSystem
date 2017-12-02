@@ -1,5 +1,10 @@
 package processes;
 
+/**
+ * @author Paweł Zych
+ */
+
+
 class Watch {
     private long begin;
     private long elapsedTime;

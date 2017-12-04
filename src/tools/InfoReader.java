@@ -21,6 +21,10 @@ public class InfoReader {
             throw new ProtocolException( "Invalid info.txt file format in \"" + directory + "\"!" );
         }
 
+        if( ret[0] == null || ret[1] == null ){
+            throw new ProtocolException( "Invalid info.txt file format in \"" + directory + "\"!" );
+        }
+
         return ret;
 
     }

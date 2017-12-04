@@ -1,6 +1,7 @@
 package processes;
 
 import game.Referee;
+import tools.BoxGenerator;
 import tools.Translator;
 
 import java.awt.*;
@@ -99,7 +100,9 @@ public class Court {
     public ArrayList<Point> setBoard( int size , int numberOfBoxes ){
 
         referee = new Referee( size );
-        ArrayList<Point> boxes = referee.setInitialBoxesRandomly( numberOfBoxes );
+
+        ArrayList<Point> boxes = BoxGenerator.generateBoxes( size , numberOfBoxes );
+        referee.setInitialBoxes( boxes );
 
         initData = Translator.initToString( size , boxes );
 

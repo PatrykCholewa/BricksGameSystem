@@ -28,33 +28,6 @@ class Board {
         }
     }
 
-    ArrayList<Point> setInitialBoxesRandomly(int numberOfRandomBoxes ){
-
-        Random rndGen = new Random();
-        Point box;
-        ArrayList<Point> boxList = new ArrayList<>();
-
-        if( matrix.getMatrixSize()*matrix.getMatrixSize() <= numberOfRandomBoxes )
-            throw new IllegalArgumentException( "Board is too small for so many boxes." );
-
-        matrix.clear();
-
-        for( int i = 0 ; i < numberOfRandomBoxes ; ){
-
-            box = new Point( rndGen.nextInt(matrix.getMatrixSize()) , rndGen.nextInt(matrix.getMatrixSize()) );
-
-            if( getValue( box ) != 'X' ) {
-                matrix.setValue( box , 'X');
-                boxList.add(box);
-                i++;
-            }
-
-        }
-
-        return boxList;
-
-    }
-
     void setInitialBoxes(ArrayList<Point> listOfBoxes ){
 
         matrix.clear();

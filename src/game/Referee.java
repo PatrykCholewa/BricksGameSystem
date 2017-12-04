@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 /**
  * @author Patryk Cholewa
- * @since 24.11.2017
  */
 
 public class Referee {
@@ -36,18 +35,6 @@ public class Referee {
      */
     public Boolean isFinished(){
         return rules.isFinished();
-    }
-
-    /**
-     * Sets a board with random boxes.
-     *
-     * @param numberOfRandomBoxes number of boxes to generate
-     * @return list of generated boxes
-     * @throws IllegalArgumentException         If numberOfRandomBoxes is bigger or equals capacity of the board.
-     * @throws UnsupportedOperationException    If any rectangle was added.
-     */
-    public ArrayList<Point> setInitialBoxesRandomly(int numberOfRandomBoxes ){
-        return board.setInitialBoxesRandomly(numberOfRandomBoxes);
     }
 
     /**

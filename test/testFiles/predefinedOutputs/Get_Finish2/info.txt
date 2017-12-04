@@ -1,0 +1,2 @@
+java -jar "predefinedOutput.jar" OK 0x2_1x2 2x0_1x0
+PREDEFINED OUTPUT FINISH2

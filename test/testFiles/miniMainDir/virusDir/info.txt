@@ -1,0 +1,5 @@
+java -jar "unnamed.jar"
+PROCESS START TEST
+
+Copies input
+Never ends

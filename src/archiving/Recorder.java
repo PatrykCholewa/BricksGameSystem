@@ -22,7 +22,7 @@ public class Recorder {
     }
 
     public void printToLog(String command) throws FileNotFoundException {
-        out.print(command + "\n");
+        out.print(command);
     }
 
     public void logClose(){

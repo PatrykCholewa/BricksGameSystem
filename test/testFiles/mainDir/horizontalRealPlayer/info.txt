@@ -1,2 +1,2 @@
-java -jar verticalRealPlayer.jar
+java -jar verticalRealPlayer.jar 2
 HORIZONTAL REAL PLAYER

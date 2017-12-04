@@ -181,7 +181,7 @@ public class Court {
 
     }
 
-    void close() {
+    public void close() {
         trial.close();
     }
 

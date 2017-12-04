@@ -19,6 +19,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import processes.Court;
+import tools.Translator;
 
 
 import java.awt.*;
@@ -97,27 +98,63 @@ public class Controller {
 
     @FXML
     void tournamentPressed() {
-         showWipDialog();
+        showWipDialog();
     }
 
     @FXML
     void duelPressed() {
         File startingPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
         File followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
+        System.out.println("startingPlayer = " + startingPlayer);
+        System.out.println("followingPlayer = " + followingPlayer);
         try {
+            final  File get1Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish1" );
+            final  File get2Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish2" );
             Recorder rec = new Recorder(logFile);
-            rec.printToLog("Court Start\n");
+            Court court = new Court( get1Dir , get2Dir );
+            court.setBoard( 3 , new ArrayList<>() );
+            nickname1.setText(court.getStartingPlayerNick());
+            nickname2.setText(court.getFollowingPlayerNick());
+            court.start();
+            Translator t = new Translator();
+            int player = 1;
+
+            while (court.getMessage() == "OK") {
+                String move = court.getLastMove();
+                logText.appendText(move+'\n');
+                rec.printToLog(move+'\n');
+                Point[] points;
+                points = Translator.stringToBoxPair(move);
+                if (player == 2) {
+                    drawSingleCell(1, points[0], points[1]);
+                    player = 1;
+                }
+                else if (player == 1) {
+                    drawSingleCell(2, points[0], points[1]);
+                    player = 2;
+                }
+                court.nextMove();
+            }
+            String move = court.getLastMove();
+            logText.appendText(move+'\n');
+            rec.printToLog(move+'\n');
+            Point[] points;
+            points = Translator.stringToBoxPair(move);
+            if (player == 2) {
+                drawSingleCell(1, points[0], points[1]);
+                player = 1;
+            }
+            else if (player == 1) {
+                drawSingleCell(2, points[0], points[1]);
+                player = 2;
+            }
+            court.close();
             rec.logClose();
 
-            Court duel = new Court(startingPlayer,followingPlayer);
-            nickname1.setText(duel.getStartingPlayerNick());
-            nickname2.setText(duel.getFollowingPlayerNick());
-            duel.setBoard(size,new ArrayList<Point>());
-            duel.start();
         } catch (FileNotFoundException e) {
-             showErrorDialog(e);
+            showErrorDialog(e);
         } catch (ProtocolException e) {
-             showErrorDialog(e);
+            showErrorDialog(e);
         } catch (Exception e) {
             showErrorDialog(e);
         }
@@ -125,12 +162,12 @@ public class Controller {
 
     @FXML
     void manualBarrierPressed() {
-         showWipDialog();
+        showWipDialog();
     }
 
     @FXML
     void randomBarrierPressed() {
-         showWipDialog();
+        showWipDialog();
     }
 
     @FXML
@@ -325,5 +362,3 @@ public class Controller {
         return null;
     }
 }
-
-

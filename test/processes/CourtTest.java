@@ -95,7 +95,6 @@ class CourtTest {
         box.add( new Point (0 , 1 ) );
         court.setBoard( 3 , box );
         court.start();
-        System.out.println( court.getLastMove() );
         assertTrue( court.isFinished() );
 
     }

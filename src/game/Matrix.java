@@ -74,20 +74,4 @@ class Matrix {
 
     }
 
-
-    /*
-    Matrix getCopy(){
-
-        Matrix mCopy = new Matrix(matrixSize);
-        for( int i = 0 ; i < matrixSize ; i++ ){
-            for( int j = 0 ; j < matrixSize ;j++ ){
-                mCopy.setValue( new Point( i , j ) , matrix[i][j] );
-            }
-        }
-
-        return mCopy;
-
-    }
-    */
-
 }

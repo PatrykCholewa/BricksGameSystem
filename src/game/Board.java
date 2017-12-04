@@ -81,14 +81,4 @@ class Board {
         return matrix.toString();
     }
 
-    /*
-    Board getCopy() {
-
-        Board boardCopy = new Board( getMatrixSize() );
-        boardCopy.setMatrix( matrix.getCopy() );
-        return boardCopy;
-
-    }
-    */
-
 }

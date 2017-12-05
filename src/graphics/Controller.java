@@ -138,8 +138,14 @@ public class Controller {
             statusLabel.setText("");
             startButton.setVisible(false);
             nextButton.setVisible(true);
-            nickname1.setText("UNKNOWN P1");
-            nickname2.setText("UNKNOWN P2");
+
+            reader.readHeader();
+            size = reader.size;
+            nickname1.setText(reader.nickname1);
+            nickname2.setText(reader.nickname2);
+
+            clearBoard();
+            drawNet();
         } catch (FileNotFoundException e) {
             showErrorDialog(e,"Log File Not Found");
         }
@@ -205,6 +211,7 @@ public class Controller {
         try {
             Court court = new Court( firstPlayer , followingPlayer);
             court.setBoard( size , new ArrayList<>() );
+            rec.printHeader(size,court.getStartingPlayerNick(),court.getFollowingPlayerNick());
             court.start();
             int no=0;
             while (court.getMessage() == "OK") {

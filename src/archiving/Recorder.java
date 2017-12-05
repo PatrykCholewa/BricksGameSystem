@@ -3,7 +3,6 @@ package archiving;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
 /**
  * @author Paweł Zych
@@ -13,12 +12,10 @@ import java.util.Scanner;
 public class Recorder {
     private File logFile;
     private PrintWriter out;
-    private Scanner in;
 
     public Recorder(File logFile) throws FileNotFoundException {
         this.logFile = logFile;
         this.out = new PrintWriter(logFile);
-        this.in = new Scanner(logFile);
     }
 
     public void printToLog(String command) {
@@ -27,13 +24,5 @@ public class Recorder {
 
     public void logClose(){
         out.close();
-    }
-
-    public boolean hasLogNextLine() {
-        return in.hasNextLine();
-    }
-
-    public String readLineFromLog() {
-        return in.nextLine();
     }
 }

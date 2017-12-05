@@ -1,5 +1,6 @@
 package graphics;
 
+import archiving.Reader;
 import archiving.Recorder;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -37,9 +38,10 @@ import java.util.Optional;
 
 
 public class Controller {
-    File logFile;
+    Recorder rec;
+    Reader reader;
     File firstPlayer;
-    File secondPlayer;
+    File followingPlayer;
     private int scale=10;
     private int size =17;
     private int i =1;
@@ -48,6 +50,8 @@ public class Controller {
     AnchorPane mainPane = new AnchorPane();
     @FXML
     Button startButton = new Button();
+    @FXML
+    Button nextButton = new Button();
     @FXML
     Label nickname1 = new Label();
     @FXML
@@ -101,24 +105,19 @@ public class Controller {
 
     @FXML
     void duelPressed() {
+        startButton.setVisible(true);
+        nextButton.setVisible(false);
         firstPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
-        secondPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
+        followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
         try {
-            Court court = new Court( firstPlayer , secondPlayer );
+            Court court = new Court( firstPlayer , followingPlayer);
             nickname1.setText(court.getStartingPlayerNick());
             nickname2.setText(court.getFollowingPlayerNick());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            showErrorDialog(e,"Player Directory Not Found");
         } catch (ProtocolException e) {
-            e.printStackTrace();
+            showErrorDialog(e,"Can't Read Player Name");
         }
-    }
-
-    void logAndPrint(String move, Recorder rec, int player) throws Exception {
-        logText.appendText(move+'\n');
-        rec.printToLog(move+'\n');
-        Point[] points = Translator.stringToBoxPair(move);
-        drawSingleCell(player, points[0], points[1]);
     }
 
     @FXML
@@ -133,12 +132,45 @@ public class Controller {
 
     @FXML
     void displayLogPressed() {
-        System.out.println( showFileChooser("SelectLogFile",mainPane,false).toString());
+        try {
+            reader = new Reader(showFileChooser("SelectLogFile",mainPane,false));
+            logText.clear();
+            statusLabel.setText("");
+            startButton.setVisible(false);
+            nextButton.setVisible(true);
+            nickname1.setText("UNKNOWN P1");
+            nickname2.setText("UNKNOWN P2");
+        } catch (FileNotFoundException e) {
+            showErrorDialog(e,"Log File Not Found");
+        }
+    }
+
+    @FXML
+    void nextPressed()  {
+        String nextLine;
+        try {
+            nextLine = reader.readNext();
+            if (nextLine != null) {
+                String[] split = nextLine.split(" ");
+                Point[] points;
+                points = Translator.stringToBoxPair(split[0]);
+                drawSingleCell(reader.getPlayer(), points[0], points[1]);
+                logText.appendText(nextLine + "\n");
+            } else {
+                statusLabel.setText("END OF FILE");
+            }
+        } catch (ProtocolException e) {
+            showErrorDialog(e,"Wrong File Format");
+        }
     }
 
     @FXML
     void selectLogPressed() {
-        logFile = showFileChooser("CreateLogFile",mainPane,true);
+        try {
+            rec = new Recorder(showFileChooser("CreateLogFile",mainPane,true));
+        } catch (FileNotFoundException e) {
+            showErrorDialog(e,"Log File Not Found");
+        }
     }
 
     @FXML
@@ -171,8 +203,7 @@ public class Controller {
     void startPressed(){
         initialize();
         try {
-            Recorder rec = new Recorder(logFile);
-            Court court = new Court( firstPlayer , secondPlayer );
+            Court court = new Court( firstPlayer , followingPlayer);
             court.setBoard( size , new ArrayList<>() );
             court.start();
             int no=0;
@@ -182,17 +213,28 @@ public class Controller {
             }
             logAndPrint(court.getLastMove(),rec,((no++)%2)+1);
 
-            statusLabel.setText(court.getWinner());
-            court.close();
+            statusLabel.setText(court.getMessage());
             rec.logClose();
+            court.close();
+
 
         } catch (FileNotFoundException e) {
-            showErrorDialog(e);
+            showErrorDialog(e,null);
         } catch (ProtocolException e) {
-            showErrorDialog(e);
-        } catch (Exception e) {
-            showErrorDialog(e);
+            showErrorDialog(e,"Comunication Protocol Error");
+        } catch (IllegalArgumentException e) {
+            showErrorDialog(e,"Wrong Size of Board");
+        } catch (NullPointerException e) {
+            showErrorDialog(e,"Log File Not Found");
         }
+
+    }
+
+    void logAndPrint(String move, Recorder rec, int player) throws ProtocolException {
+        Point[] points = Translator.stringToBoxPair(move);
+        drawSingleCell(player, points[0], points[1]);
+        logText.appendText(move+" :P"+player+'\n');
+        rec.printToLog(move+" :P"+player+'\n');
     }
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) ->
@@ -262,10 +304,13 @@ public class Controller {
         return ((int) y) + .5;
     }
 
-    void showErrorDialog(Exception ex){
+    void showErrorDialog(Exception ex, String myMessage){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception");
-        alert.setHeaderText("Oops! There was an exception.");
+        if (myMessage == null)
+            alert.setHeaderText("Oops! There was an exception.");
+        else
+            alert.setHeaderText(myMessage);
         alert.setContentText("Exception Type: " + ex.getClass().getSimpleName());
 
         StringWriter sw = new StringWriter();

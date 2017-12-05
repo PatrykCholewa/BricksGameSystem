@@ -3,6 +3,7 @@ package archiving;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.ProtocolException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -32,7 +33,7 @@ public class Reader {
         nickname2 = split[3];
     }
 
-    public String readNext() throws ProtocolException {
+    public String readNext() {
             if (scn.hasNextLine()) {
                 no++;
                 return scn.nextLine();

@@ -38,13 +38,13 @@ import java.util.Optional;
 
 
 public class Controller {
-    Recorder rec;
-    Reader reader;
-    File firstPlayer;
-    File followingPlayer;
+    private Recorder rec;
+    private Reader reader;
+    private File firstPlayer;
+    private File followingPlayer;
     private int scale=10;
     private int size =17;
-    private int i =1;
+    private int genRandom= 0;
 
     @FXML
     AnchorPane mainPane = new AnchorPane();
@@ -127,7 +127,27 @@ public class Controller {
 
     @FXML
     void randomBarrierPressed() {
-        showWipDialog();
+        TextInputDialog dialog = new TextInputDialog("17");
+        dialog.setTitle("Set random");
+        dialog.setHeaderText("Set % of random");
+        dialog.setContentText("(int)");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            try {
+                genRandom = Integer.parseInt(result.get());
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(result.get()+" is not an number!!!");
+                alert.setContentText("");
+                alert.showAndWait();
+                statusLabel.setText("Wrong Number");
+            }
+            System.out.println("genRandom: " + result.get());
+            clearBoard();
+            drawNet();
+        }
     }
 
     @FXML
@@ -158,10 +178,17 @@ public class Controller {
             nextLine = reader.readNext();
             if (nextLine != null) {
                 String[] split = nextLine.split(" ");
-                Point[] points;
-                points = Translator.stringToBoxPair(split[0]);
-                drawSingleCell(reader.getPlayer(), points[0], points[1]);
-                logText.appendText(nextLine + "\n");
+                if(split[0].equals("G")){
+                    String []split2 = split[1].split( "x" );
+                    drawGenCell(new Point(Integer.parseInt(split2[0]),Integer.parseInt(split2[1])));
+                    nextButton.fire();
+                }
+                else {
+                    Point[] points;
+                    points = Translator.stringToBoxPair(split[0]);
+                    drawCells(reader.getPlayer(), points[0], points[1]);
+                    logText.appendText(nextLine + "\n");
+                }
             } else {
                 statusLabel.setText("END OF FILE");
             }
@@ -210,8 +237,14 @@ public class Controller {
         initialize();
         try {
             Court court = new Court( firstPlayer , followingPlayer);
-            court.setBoard( size , new ArrayList<>() );
             rec.printHeader(size,court.getStartingPlayerNick(),court.getFollowingPlayerNick());
+            if(genRandom != 0) {
+                ArrayList<Point> boxes = court.setBoard(size, size * size * genRandom/100);
+                drawGenCells(boxes);
+                rec.printGenCells(boxes);
+            } else {
+                court.setBoard( size , new ArrayList<>() );
+            }
             court.start();
             int no=0;
             while (court.getMessage() == "OK") {
@@ -239,7 +272,7 @@ public class Controller {
 
     void logAndPrint(String move, Recorder rec, int player) throws ProtocolException {
         Point[] points = Translator.stringToBoxPair(move);
-        drawSingleCell(player, points[0], points[1]);
+        drawCells(player, points[0], points[1]);
         logText.appendText(move+" :P"+player+'\n');
         rec.printToLog(move+" :P"+player+'\n');
     }
@@ -285,17 +318,37 @@ public class Controller {
         }
     }
 
-    void drawSingleCell(int playerid, Point b1, Point b2) {
+    void drawGenCells(ArrayList<Point> generatedPoints) {
+        calculateMaxScale();
+        GraphicsContext gc = board.getGraphicsContext2D();
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(1);
+        gc.setFill(Color.GREY);
+        for (Point p: generatedPoints) {
+            gc.fillRect(p.getX() * scale,p.getY() * scale, scale, scale);
+        }
+        drawNet();
+    }
+
+    void drawGenCell(Point g) {
+        calculateMaxScale();
+        GraphicsContext gc = board.getGraphicsContext2D();
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(1);
+        gc.setFill(Color.GREY);
+        gc.fillRect(g.getX() * scale,g.getY() * scale, scale, scale);
+        drawNet();
+    }
+
+    void drawCells(int playerid, Point b1, Point b2) {
         calculateMaxScale();
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         if(playerid ==1) {
             gc.setFill(Color.BLUE);
-        } else if (playerid == 2) {
-            gc.setFill(Color.RED);
         } else {
-            gc.setFill(Color.GREY);
+            gc.setFill(Color.RED);
         }
         gc.fillRect(b1.getX() * scale,b1.getY() * scale, scale, scale);
         gc.fillRect(b2.getX() * scale,b2.getY() * scale, scale, scale);

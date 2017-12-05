@@ -15,13 +15,13 @@ public class Recorder {
     private PrintWriter out;
     private Scanner in;
 
-    public Recorder(File logFile)throws Exception{
+    public Recorder(File logFile) throws FileNotFoundException {
         this.logFile = logFile;
         this.out = new PrintWriter(logFile);
         this.in = new Scanner(logFile);
     }
 
-    public void printToLog(String command) throws FileNotFoundException {
+    public void printToLog(String command) {
         out.print(command);
     }
 

@@ -14,22 +14,25 @@
 
 <AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller">
    <children>
-      <Rectangle arcWidth="5.0" fill="#00ff3334" height="400.0" layoutY="225.0" strokeType="INSIDE" width="200.0" />
-      <Rectangle arcWidth="5.0" fill="#9bceff" height="100.0" layoutY="25.0" strokeType="INSIDE" width="200.0" />
-      <Rectangle arcWidth="5.0" fill="#ffaaaa" height="100.0" layoutY="125.0" strokeType="INSIDE" width="200.0" />
-      <Button fx:id="drawTestButton" layoutX="109.0" layoutY="517.0" mnemonicParsing="false" onAction="#drawTestPressed" text="Test" />
-      <Label fx:id="status" layoutX="47.0" layoutY="521.0" prefWidth="38.0" text="Status" />
-      <Button fx:id="startButton" layoutX="47.0" layoutY="557.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="100.0" text="Start" />
-      <Label fx:id="nickname1" layoutX="47.0" layoutY="62.0" text="Nickname#1">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label fx:id="nickname2" layoutX="47.0" layoutY="162.0" text="Nickname#2">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <Rectangle arcWidth="5.0" fill="#00ff3334" height="400.0" layoutX="6.0" layoutY="27.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0" />
+            <Rectangle arcWidth="5.0" fill="#9bceff" height="100.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Rectangle arcWidth="5.0" fill="#ffaaaa" height="100.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="100.0" />
+            <Button fx:id="startButton" layoutX="45.0" layoutY="502.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="100.0" text="Start" />
+            <Label fx:id="nickname1" layoutX="5.0" layoutY="20.0" prefHeight="60.0" prefWidth="190.0" text="Nickname#1" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="nickname2" layoutY="120.0" prefHeight="60.0" prefWidth="190.0" text="Nickname#2" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="logText" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="230.0" />
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="boardPane" layoutX="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
             <Canvas fx:id="board" height="600.0" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -73,6 +76,5 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea fx:id="logText" layoutX="5.0" layoutY="230.0" prefHeight="248.0" prefWidth="189.0" />
    </children>
 </AnchorPane>

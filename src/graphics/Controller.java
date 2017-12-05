@@ -38,6 +38,8 @@ import java.util.Optional;
 
 public class Controller {
     File logFile;
+    File firstPlayer;
+    File secondPlayer;
     private int scale=10;
     private int size =17;
     private int i =1;
@@ -46,10 +48,6 @@ public class Controller {
     AnchorPane mainPane = new AnchorPane();
     @FXML
     Button startButton = new Button();
-    @FXML
-    Button drawTestButton = new Button();
-    @FXML
-    Label status = new Label();
     @FXML
     Label nickname1 = new Label();
     @FXML
@@ -103,61 +101,24 @@ public class Controller {
 
     @FXML
     void duelPressed() {
-        File startingPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
-        File followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
-        System.out.println("startingPlayer = " + startingPlayer);
-        System.out.println("followingPlayer = " + followingPlayer);
+        firstPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
+        secondPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
         try {
-            final  File get1Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish1" );
-            final  File get2Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish2" );
-            Recorder rec = new Recorder(logFile);
-            Court court = new Court( get1Dir , get2Dir );
-            court.setBoard( 3 , new ArrayList<>() );
+            Court court = new Court( firstPlayer , secondPlayer );
             nickname1.setText(court.getStartingPlayerNick());
             nickname2.setText(court.getFollowingPlayerNick());
-            court.start();
-            Translator t = new Translator();
-            int player = 1;
-
-            while (court.getMessage() == "OK") {
-                String move = court.getLastMove();
-                logText.appendText(move+'\n');
-                rec.printToLog(move+'\n');
-                Point[] points;
-                points = Translator.stringToBoxPair(move);
-                if (player == 2) {
-                    drawSingleCell(1, points[0], points[1]);
-                    player = 1;
-                }
-                else if (player == 1) {
-                    drawSingleCell(2, points[0], points[1]);
-                    player = 2;
-                }
-                court.nextMove();
-            }
-            String move = court.getLastMove();
-            logText.appendText(move+'\n');
-            rec.printToLog(move+'\n');
-            Point[] points;
-            points = Translator.stringToBoxPair(move);
-            if (player == 2) {
-                drawSingleCell(1, points[0], points[1]);
-                player = 1;
-            }
-            else if (player == 1) {
-                drawSingleCell(2, points[0], points[1]);
-                player = 2;
-            }
-            court.close();
-            rec.logClose();
-
         } catch (FileNotFoundException e) {
-            showErrorDialog(e);
+            e.printStackTrace();
         } catch (ProtocolException e) {
-            showErrorDialog(e);
-        } catch (Exception e) {
-            showErrorDialog(e);
+            e.printStackTrace();
         }
+    }
+
+    void logAndPrint(String move, Recorder rec, int player) throws Exception {
+        logText.appendText(move+'\n');
+        rec.printToLog(move+'\n');
+        Point[] points = Translator.stringToBoxPair(move);
+        drawSingleCell(player, points[0], points[1]);
     }
 
     @FXML
@@ -209,16 +170,29 @@ public class Controller {
     @FXML
     void startPressed(){
         initialize();
-        logText.appendText("Text test x" + i++ + "\n");
-    }
+        try {
+            Recorder rec = new Recorder(logFile);
+            Court court = new Court( firstPlayer , secondPlayer );
+            court.setBoard( size , new ArrayList<>() );
+            court.start();
+            int no=0;
+            while (court.getMessage() == "OK") {
+                logAndPrint(court.getLastMove(),rec,((no++)%2)+1);
+                court.nextMove();
+            }
+            logAndPrint(court.getLastMove(),rec,((no++)%2)+1);
 
-    @FXML
-    void drawTestPressed(){
-        status.setText("Test draw");
-        drawSingleCell(1,new Point(1,1),new Point(1,2));
-        drawSingleCell(2,new Point(4,4),new Point(5,4));
-        drawSingleCell(0,new Point(size-1,size-1),new Point(0,0));
+            statusLabel.setText(court.getWinner());
+            court.close();
+            rec.logClose();
 
+        } catch (FileNotFoundException e) {
+            showErrorDialog(e);
+        } catch (ProtocolException e) {
+            showErrorDialog(e);
+        } catch (Exception e) {
+            showErrorDialog(e);
+        }
     }
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) ->
@@ -227,8 +201,6 @@ public class Controller {
     void initialize(){
         boardPane.widthProperty().addListener(boardPaneSizeListener);
         boardPane.heightProperty().addListener(boardPaneSizeListener);
-        nickname1.setText("Player 1");
-        nickname2.setText("Player 2");
     }
 
     void redrawNet(){
@@ -239,7 +211,6 @@ public class Controller {
 
     void drawNet(){
         calculateMaxScale();
-        System.out.println("Board size: "+ board.getHeight()+ " x " + board.getWidth());
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
@@ -260,7 +231,6 @@ public class Controller {
         } else {
             scale = (int) width / (size);
         }
-        System.out.println("scale = " + scale);
         if (scale < 3) {
             statusLabel.setText("Okno zbyt małe by poprawnie narysować");
         }
@@ -272,9 +242,9 @@ public class Controller {
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         if(playerid ==1) {
-            gc.setFill(Color.RED);
-        } else if (playerid == 2) {
             gc.setFill(Color.BLUE);
+        } else if (playerid == 2) {
+            gc.setFill(Color.RED);
         } else {
             gc.setFill(Color.GREY);
         }
@@ -336,9 +306,10 @@ public class Controller {
     File showDriectoryChooser(String title, Pane component){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(title);
+        directoryChooser.setInitialDirectory(new File("./test/testFiles"));
         File selectedDirectory = directoryChooser.showDialog(component.getScene().getWindow());
 
-        if(selectedDirectory == null){
+        if(selectedDirectory != null){
             return selectedDirectory;
         }
         return null;
@@ -347,6 +318,8 @@ public class Controller {
     File showFileChooser(String title, Pane component, boolean save){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
+        fileChooser.setInitialDirectory(new File("./src/archiving"));
+        fileChooser.setInitialFileName("defaultLog.txt");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));

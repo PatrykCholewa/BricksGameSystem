@@ -60,7 +60,7 @@ public class Arena {
     }
 
     Boolean isFinished(){
-        return isFinished();
+        return court.isFinished();
     }
 
     void start(){

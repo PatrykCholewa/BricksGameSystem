@@ -21,7 +21,6 @@ public class Court {
     private Trial trial;
     private Referee referee;
 
-    private File []playerFiles = new File[2];
     private String initData;
 
     private String winner;
@@ -34,9 +33,10 @@ public class Court {
      * @throws ProtocolException if interrupted in the other way
      */
     public Court( File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
-        this.playerFiles[0] = player1Dir;
-        this.playerFiles[1] = player2Dir;
-        trial = new Trial( playerFiles );
+        File[] playerFiles = new File[2];
+        playerFiles[0] = player1Dir;
+        playerFiles[1] = player2Dir;
+        trial = new Trial(playerFiles);
     }
 
     public String getStartingPlayerNick() {
@@ -70,18 +70,6 @@ public class Court {
      */
     public String getMessage(){
         return message;
-    }
-
-    /**
-     * The starting player becomes the following one and the following player becomes the starting one.
-     * @throws FileNotFoundException if info file cannot be found
-     * @throws ProtocolException if interrupted in the other way
-     */
-    public void switchPlayers() throws FileNotFoundException, ProtocolException {
-        File tmp = playerFiles[0];
-        playerFiles[0] = playerFiles[1];
-        playerFiles[1] = tmp;
-        trial = new Trial( playerFiles );
     }
 
     /**

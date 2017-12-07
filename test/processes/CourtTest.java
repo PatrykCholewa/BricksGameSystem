@@ -59,21 +59,6 @@ class CourtTest {
     }
 
     @Test
-    void switchPlayers() throws FileNotFoundException, ProtocolException {
-
-        Court court = new Court( get1Dir , get2Dir );
-
-        assertEquals( "PREDEFINED OUTPUT FINISH1" , court.getStartingPlayerNick() );
-        assertEquals( "PREDEFINED OUTPUT FINISH2" , court.getFollowingPlayerNick() );
-
-        court.switchPlayers();
-
-        assertEquals( "PREDEFINED OUTPUT FINISH2" , court.getStartingPlayerNick() );
-        assertEquals( "PREDEFINED OUTPUT FINISH1" , court.getFollowingPlayerNick() );
-
-    }
-
-    @Test
     void isFinished() throws ProtocolException, FileNotFoundException {
 
         Court court = new Court( get1Dir , get2Dir );

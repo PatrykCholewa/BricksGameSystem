@@ -6,45 +6,35 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import processes.Court;
 import tools.Translator;
-
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.ProtocolException;
 import java.util.ArrayList;
-import java.util.Optional;
 
 /**
  * @author Paweł Zych
  */
 
-
 public class Controller {
+    private Dialogs dialog = new Dialogs();
     private Recorder rec;
     private Reader reader;
     private File firstPlayer;
     private File followingPlayer;
-    private int scale=10;
-    private int size =17;
-    private int genRandom= 0;
+    private int scale = 10;
+    private int boardSize = 21;
+    private int randBoxPercent = 0;
 
     @FXML
     AnchorPane mainPane = new AnchorPane();
@@ -85,12 +75,7 @@ public class Controller {
 
     @FXML
     void aboutPressed() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About");
-        alert.setHeaderText("Autorzy:");
-        alert.setContentText("Patryk \nPaweł");
-
-        alert.showAndWait();
+        dialog.showAbout();
     }
 
     @FXML
@@ -100,74 +85,58 @@ public class Controller {
 
     @FXML
     void tournamentPressed() {
-        showWipDialog();
+        dialog.showWipDialog();
     }
 
     @FXML
     void duelPressed() {
         startButton.setVisible(true);
         nextButton.setVisible(false);
-        firstPlayer =  showDriectoryChooser("Select Starting Player Folder",boardPane);
-        followingPlayer =  showDriectoryChooser("Select Following Player Folder",boardPane);
+
+        firstPlayer =  dialog.showDriectoryChooser("Select Starting Player Folder",boardPane);
+        followingPlayer =  dialog.showDriectoryChooser("Select Following Player Folder",boardPane);
         try {
             Court court = new Court( firstPlayer , followingPlayer);
             nickname1.setText(court.getStartingPlayerNick());
             nickname2.setText(court.getFollowingPlayerNick());
         } catch (FileNotFoundException e) {
-            showErrorDialog(e,"Player Directory Not Found");
+            dialog.showErrorDialogWithStack(e,"Player Directory Not Found");
         } catch (ProtocolException e) {
-            showErrorDialog(e,"Can't Read Player Name");
+            dialog.showErrorDialogWithStack(e,"Can't Read Player Name");
         }
     }
 
     @FXML
     void manualBarrierPressed() {
-        showWipDialog();
+        dialog.showWipDialog();
     }
 
     @FXML
     void randomBarrierPressed() {
-        TextInputDialog dialog = new TextInputDialog("17");
-        dialog.setTitle("Set random");
-        dialog.setHeaderText("Set % of random");
-        dialog.setContentText("(int)");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            try {
-                genRandom = Integer.parseInt(result.get());
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(result.get()+" is not an number!!!");
-                alert.setContentText("");
-                alert.showAndWait();
-                statusLabel.setText("Wrong Number");
-            }
-            System.out.println("genRandom: " + result.get());
-            clearBoard();
-            drawNet();
-        }
+        randBoxPercent = dialog.showIntValueSelectDialog("Set random","Set percentage of random boxes",25,0,50);
+        System.out.println("randBoxPercent: " + randBoxPercent);
+        clearBoard();
+        drawNet();
     }
 
     @FXML
     void displayLogPressed() {
         try {
-            reader = new Reader(showFileChooser("SelectLogFile",mainPane,false));
+            reader = new Reader(dialog.showFileChooser("SelectLogFile",mainPane,false));
             logText.clear();
             statusLabel.setText("");
             startButton.setVisible(false);
             nextButton.setVisible(true);
 
             reader.readHeader();
-            size = reader.size;
+            boardSize = reader.size;
             nickname1.setText(reader.nickname1);
             nickname2.setText(reader.nickname2);
 
             clearBoard();
             drawNet();
         } catch (FileNotFoundException e) {
-            showErrorDialog(e,"Log File Not Found");
+            dialog.showErrorDialogWithStack(e,"Log File Not Found");
         }
     }
 
@@ -193,43 +162,26 @@ public class Controller {
                 statusLabel.setText("END OF FILE");
             }
         } catch (ProtocolException e) {
-            showErrorDialog(e,"Wrong File Format");
+            dialog.showErrorDialogWithStack(e,"Wrong File Format");
         }
     }
 
     @FXML
     void selectLogPressed() {
         try {
-            rec = new Recorder(showFileChooser("CreateLogFile",mainPane,true));
+            rec = new Recorder(dialog.showFileChooser("CreateLogFile",mainPane,true));
         } catch (FileNotFoundException e) {
-            showErrorDialog(e,"Log File Not Found");
+            dialog.showErrorDialogWithStack(e,"Log File Not Found");
         }
     }
 
     @FXML
     void setSizePressed(){
         initialize();
-        TextInputDialog dialog = new TextInputDialog("17");
-        dialog.setTitle("Set board size");
-        dialog.setHeaderText("Set board size");
-        dialog.setContentText("size");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            try {
-                size = Integer.parseInt(result.get());
-            } catch (NumberFormatException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(result.get()+" is not an number!!!");
-                alert.setContentText("");
-                alert.showAndWait();
-                statusLabel.setText("Wrong Number");
-            }
-            System.out.println("Size: " + result.get());
-            clearBoard();
-            drawNet();
-        }
+        boardSize = dialog.showIntValueSelectDialog("Set board size","Set board size",21,3,1000);
+        System.out.println("Size: " + boardSize);
+        clearBoard();
+        drawNet();
     }
 
     @FXML
@@ -237,13 +189,13 @@ public class Controller {
         initialize();
         try {
             Court court = new Court( firstPlayer , followingPlayer);
-            rec.printHeader(size,court.getStartingPlayerNick(),court.getFollowingPlayerNick());
-            if(genRandom != 0) {
-                ArrayList<Point> boxes = court.setBoard(size, size * size * genRandom/100);
+            rec.printHeader(boardSize,court.getStartingPlayerNick(),court.getFollowingPlayerNick());
+            if(randBoxPercent != 0) {
+                ArrayList<Point> boxes = court.setBoard(boardSize, boardSize * boardSize * randBoxPercent /100);
                 drawGenCells(boxes);
-                rec.printGenCells(size, boxes);
+                rec.printGenCells(boardSize, boxes);
             } else {
-                court.setBoard( size , new ArrayList<>() );
+                court.setBoard(boardSize, new ArrayList<>() );
             }
             court.start();
             int no=0;
@@ -259,13 +211,13 @@ public class Controller {
 
 
         } catch (FileNotFoundException e) {
-            showErrorDialog(e,null);
+            dialog.showErrorDialogWithStack(e,null);
         } catch (ProtocolException e) {
-            showErrorDialog(e,"Comunication Protocol Error");
+            dialog.showErrorDialogWithStack(e,"Comunication Protocol Error");
         } catch (IllegalArgumentException e) {
-            showErrorDialog(e,"Wrong Size of Board");
+            dialog.showErrorDialogWithStack(e,"Wrong Size of Board");
         } catch (NullPointerException e) {
-            showErrorDialog(e,"Log File Not Found");
+            dialog.showErrorDialogWithStack(e,"Log File Not Found");
         }
 
     }
@@ -297,9 +249,9 @@ public class Controller {
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         gc.setLineCap(StrokeLineCap.SQUARE);
-        for (int i = 0; i<= size; i++) {
-            gc.strokeLine(snap(i*scale),0,snap(i*scale),scale* size);
-            gc.strokeLine(0,snap(i*scale),scale* size,snap(i*scale));
+        for (int i = 0; i<= boardSize; i++) {
+            gc.strokeLine(snap(i*scale),0,snap(i*scale),scale* boardSize);
+            gc.strokeLine(0,snap(i*scale),scale* boardSize,snap(i*scale));
         }
     }
 
@@ -309,9 +261,9 @@ public class Controller {
         double width = boardPane.getWidth();
         double height = boardPane.getHeight();
         if (height < width) {
-            scale = (int)height/(size);
+            scale = (int)height/(boardSize);
         } else {
-            scale = (int) width / (size);
+            scale = (int) width / (boardSize);
         }
         if (scale < 3) {
             statusLabel.setText("Okno zbyt małe by poprawnie narysować");
@@ -362,81 +314,5 @@ public class Controller {
 
     private double snap(double y) {
         return ((int) y) + .5;
-    }
-
-    void showErrorDialog(Exception ex, String myMessage){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Exception");
-        if (myMessage == null)
-            alert.setHeaderText("Oops! There was an exception.");
-        else
-            alert.setHeaderText(myMessage);
-        alert.setContentText("Exception Type: " + ex.getClass().getSimpleName());
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        String exceptionText = sw.toString();
-
-        Label label = new Label("Exception Stack Trace:");
-
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
-    }
-
-    void showWipDialog(){
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Warning");
-        alert.setHeaderText("Work in progress");
-        alert.setContentText("");
-
-        alert.showAndWait();
-    }
-
-    File showDriectoryChooser(String title, Pane component){
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle(title);
-        directoryChooser.setInitialDirectory(new File("./test/testFiles"));
-        File selectedDirectory = directoryChooser.showDialog(component.getScene().getWindow());
-
-        if(selectedDirectory != null){
-            return selectedDirectory;
-        }
-        return null;
-    }
-
-    File showFileChooser(String title, Pane component, boolean save){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(title);
-        fileChooser.setInitialDirectory(new File("./src/archiving"));
-        fileChooser.setInitialFileName("defaultLog.txt");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                new FileChooser.ExtensionFilter("All Files", "*.*"));
-        File selectedFile;
-        if (save)
-            selectedFile = fileChooser.showSaveDialog(component.getScene().getWindow());
-        else
-            selectedFile = fileChooser.showOpenDialog(component.getScene().getWindow());
-
-        if (selectedFile != null) {
-            return selectedFile;
-        }
-        return null;
     }
 }

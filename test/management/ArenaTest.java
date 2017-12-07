@@ -17,6 +17,7 @@ class ArenaTest {
     final static File get1Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish1" );
     final static File get2Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish2" );
     final static File logWriteFile = new File( "./test/testFiles/logFiles/logWrite.txt" );
+    final static File logSample = new File( "./test/testFiles/logFiles/logWrite.txt" );
 
     @Test
     void finish() throws IOException {
@@ -35,6 +36,9 @@ class ArenaTest {
         arena.finish();
 
         assertTrue( arena.isFinished() );
+
+        assertEquals( 0 , logSample.compareTo( logWriteFile ) );
+        logWriteFile.delete();
 
     }
 

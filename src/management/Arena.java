@@ -87,7 +87,7 @@ public class Arena {
 
         if( recorder != null ){
 
-            recorder.printToLog( court.getLastMove() );
+            recorder.printToLog( court.getLastMove() + " :" + court.getLastPlayer() );
 
             if( court.isFinished() ){
 

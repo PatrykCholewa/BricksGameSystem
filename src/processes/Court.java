@@ -72,6 +72,10 @@ public class Court {
         return message;
     }
 
+    public String getLastPlayer(){
+        return trial.getLastPlayer();
+    }
+
     /**
      * Sets board with params got from initData
      * @param initData can be got from getInitData() method

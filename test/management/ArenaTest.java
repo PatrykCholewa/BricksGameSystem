@@ -35,6 +35,7 @@ class ArenaTest {
         arena.finish();
 
         assertTrue( arena.isFinished() );
+
     }
 
 }

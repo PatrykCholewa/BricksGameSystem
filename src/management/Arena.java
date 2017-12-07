@@ -75,7 +75,7 @@ public class Arena {
                     court.getStartingPlayerNick(),
                     court.getFollowingPlayerNick());
 
-            recorder.printGenCells( Translator.boxesFromInitString( court.getInitData() ) );
+            recorder.printToLog( court.getInitData() );
         }
 
         court.start();

@@ -22,18 +22,16 @@ class ArenaTest {
 
         Arena arena = new Arena( get1Dir , get2Dir );
         arena.setLogFile( logWriteFile );
-        arena.setBoard( 3 , new ArrayList<>() );
+
+        ArrayList<Point> list= new ArrayList<>();
+        list.add( new Point( 1 , 1) );
+
+        arena.setBoard( 3 , list );
+
         arena.start();
         arena.finish();
 
         assertTrue( arena.isFinished() );
-    }
-
-    @Test
-    void setLogFile() {
-
-
-
     }
 
 }

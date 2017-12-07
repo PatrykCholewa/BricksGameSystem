@@ -59,6 +59,10 @@ public class Arena {
         return court.setBoard( size , numberOfBoxes );
     }
 
+    void setBoard( String initData ){
+        court.setBoard( initData );
+    }
+
     Boolean isFinished(){
         return court.isFinished();
     }
@@ -90,6 +94,7 @@ public class Arena {
                 recorder.printToLog( "---" );
                 recorder.printToLog( court.getWinner() );
                 recorder.printToLog( court.getMessage() );
+                close();
 
             }
 
@@ -102,6 +107,12 @@ public class Arena {
         court.nextMove();
         updateRecorder();
 
+    }
+
+    void finish(){
+        while( !isFinished() ){
+            nextMove();
+        }
     }
 
     void close(){

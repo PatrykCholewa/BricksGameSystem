@@ -241,7 +241,7 @@ public class Controller {
             if(genRandom != 0) {
                 ArrayList<Point> boxes = court.setBoard(size, size * size * genRandom/100);
                 drawGenCells(boxes);
-                rec.printGenCells(boxes);
+                rec.printGenCells(size, boxes);
             } else {
                 court.setBoard( size , new ArrayList<>() );
             }

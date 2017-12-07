@@ -6,6 +6,7 @@ import processes.Court;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.ProtocolException;
 import java.util.ArrayList;
 
@@ -18,7 +19,9 @@ class ArenaTest {
     final static File logWriteFile = new File( "./test/testFiles/logFiles/logWrite.txt" );
 
     @Test
-    void finish() throws FileNotFoundException, ProtocolException {
+    void finish() throws IOException {
+
+        logWriteFile.createNewFile();
 
         Arena arena = new Arena( get1Dir , get2Dir );
         arena.setLogFile( logWriteFile );

@@ -1,7 +1,5 @@
 package archiving;
 
-import sun.jvm.hotspot.types.WrongTypeException;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -20,10 +18,7 @@ public class Reader {
     public String nickname2;
 
 
-    public Reader(File input) throws FileNotFoundException , WrongTypeException{
-        if( input.isDirectory() ){
-            throw new WrongTypeException( "This is a directory!" );
-        }
+    public Reader(File input) throws FileNotFoundException{
         this.inputFile = input;
         this.scn = new Scanner(inputFile);
         this.no = 1;

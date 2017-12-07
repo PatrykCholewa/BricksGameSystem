@@ -87,7 +87,7 @@ class CourtTest {
         court.nextMove();
         assertTrue( court.isFinished() );
 
-        court.resetBoard();
+        court.setBoard( court.getInitData() );
         court.start();
         assertFalse( court.isFinished() );
 
@@ -113,7 +113,7 @@ class CourtTest {
         court.nextMove();
         assertEquals( "2x0_1x0" , court.getLastMove() );
 
-        court.resetBoard();
+        court.setBoard( court.getInitData() );
         court.start();
         assertEquals( "0x0_0x1" , court.getLastMove() );
 
@@ -139,7 +139,7 @@ class CourtTest {
         court.nextMove();
         assertTrue( court.getMessage().contains( "normally") );
 
-        court.resetBoard();
+        court.setBoard( court.getInitData() );
         court.start();
         assertEquals( "OK" , court.getMessage() );
 

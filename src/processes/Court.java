@@ -33,7 +33,7 @@ public class Court {
      * @throws FileNotFoundException if info.txt cannot be found
      * @throws ProtocolException if interrupted in the other way
      */
-    public Court(File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
+    public Court( File player1Dir , File player2Dir ) throws FileNotFoundException, ProtocolException {
         this.playerFiles[0] = player1Dir;
         this.playerFiles[1] = player2Dir;
         trial = new Trial( playerFiles );
@@ -45,6 +45,10 @@ public class Court {
 
     public String getFollowingPlayerNick() {
         return trial.getFollowingPlayerNick();
+    }
+
+    public String getInitData(){
+        return initData;
     }
 
     /**
@@ -81,10 +85,11 @@ public class Court {
     }
 
     /**
-     * Board returns to the primary state,
-     * Primary state is the last one got from setBoard()
+     * Sets board with params got from initData
+     * @param initData can be got from getInitData() method
      */
-    public void resetBoard(){
+    public void setBoard( String initData ){
+        this.initData = initData;
         referee = new Referee( Translator.getSizeFromInitString( initData ) );
         referee.setInitialBoxes( Translator.boxesFromInitString( initData ) );
     }

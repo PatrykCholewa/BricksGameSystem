@@ -77,9 +77,8 @@ __Sędzia__ komunikuje się z __Graczami__ za pomocą ich standardowych wejść 
         
     START
 <li>
-        <b>Gracz</b> ma 0.5s na odpowiedź jaki ruch zamierza wykonać.
-        np. Wstawienie na <b>plaszę</b> prostokąta na <b>komórki</b>
-        (1,2) , (2,2).
+        <b>Gracz</b> ma 0.5s na odpowiedź jaki ruch ( wstawienie prostokąta 2x1 ) zamierza wykonać.
+        np. wstawienie na <b>plaszę</b> prostokąta na <b>komórki</b> (1,2) , (2,2).
           
     1x2_2x2
 <li>

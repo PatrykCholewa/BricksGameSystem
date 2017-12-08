@@ -38,9 +38,11 @@ public class Dialogs {
             }
             if (value > max){
                 showErrorValueBound(value,true,false);
+                value = defaultValue;
             }
             if (value < min){
                 showErrorValueBound(value,false,true);
+                value = defaultValue;
             }
         }
         return value;

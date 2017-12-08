@@ -10,15 +10,15 @@ import java.util.ArrayList;
 
 public class LogReader {
 
-    final int size;
-    final String startingPlayer;
-    final String followingPlayer;
-    final String initData;
+    private int size;
+    private String startingPlayer;
+    private String followingPlayer;
+    private String initData;
     private ArrayList<String> moves;
-    final String winner;
-    final String finishMessage;
+    private String winner;
+    private String finishMessage;
 
-    LogReader( File infoFile ) throws FileNotFoundException, ProtocolException {
+    LogReader(File infoFile) throws FileNotFoundException, ProtocolException {
 
             BufferedReader bufferedReader = new BufferedReader( new FileReader( infoFile ) );
             String []stringList;
@@ -45,6 +45,8 @@ public class LogReader {
             winner = bufferedReader.readLine();
             finishMessage = bufferedReader.readLine();
 
+            bufferedReader.close();
+
         } catch (IOException | IndexOutOfBoundsException e ) {
             throw new ProtocolException( "Can't read logFile!" );
         }
@@ -53,6 +55,30 @@ public class LogReader {
 
     ArrayList<String> getMoves( ){
         return moves;
+    }
+
+    int getSize() {
+        return size;
+    }
+
+    String getStartingPlayer() {
+        return startingPlayer;
+    }
+
+    String getFollowingPlayer() {
+        return followingPlayer;
+    }
+
+    String getInitData() {
+        return initData;
+    }
+
+    String getWinner() {
+        return winner;
+    }
+
+    String getFinishMessage() {
+        return finishMessage;
     }
 
 }

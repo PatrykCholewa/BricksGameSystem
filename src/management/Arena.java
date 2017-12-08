@@ -109,10 +109,13 @@ public class Arena {
 
     }
 
-    void finish(){
+    ArrayList<String> finish(){
+        ArrayList<String> furtherMoves = new ArrayList<>();
         while( !isFinished() ){
             nextMove();
+            furtherMoves.add( getLastMove() );
         }
+        return furtherMoves;
     }
 
     void close(){

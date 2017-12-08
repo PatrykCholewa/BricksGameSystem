@@ -27,17 +27,19 @@ class ArenaTest {
         Arena arena = new Arena( get1Dir , get2Dir );
         arena.setLogFile( logWriteFile );
 
-        ArrayList<Point> list= new ArrayList<>();
-        list.add( new Point( 1 , 1) );
+        ArrayList<String> moves = new ArrayList<>();
+        moves.add( "0x2_1x2" );
+        moves.add( "2x2_2x1" );
+        moves.add( "2x0_1x0" );
 
-        arena.setBoard( 3 , list );
+        arena.setBoard( "3_1x1" );
 
         arena.start();
-        arena.finish();
 
+        assertEquals( moves , arena.finish() );
         assertTrue( arena.isFinished() );
-
         assertEquals( 0 , logSample.compareTo( logWriteFile ) );
+
         logWriteFile.delete();
 
     }

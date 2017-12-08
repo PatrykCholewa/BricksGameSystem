@@ -18,13 +18,13 @@ class LogReaderTest {
 
         LogReader logReader = new LogReader( logSample );
 
-        assertEquals( 3 , logReader.size );
-        assertEquals( "PREDEFINED OUTPUT FINISH1" , logReader.startingPlayer );
-        assertEquals( "PREDEFINED OUTPUT FINISH2" , logReader.followingPlayer );
-        assertEquals( "3_1x1" , logReader.initData );
-        assertEquals( "PREDEFINED OUTPUT FINISH2" , logReader.winner );
+        assertEquals( 3 , logReader.getSize() );
+        assertEquals( "PREDEFINED OUTPUT FINISH1" , logReader.getStartingPlayer() );
+        assertEquals( "PREDEFINED OUTPUT FINISH2" , logReader.getFollowingPlayer() );
+        assertEquals( "3_1x1" , logReader.getInitData() );
+        assertEquals( "PREDEFINED OUTPUT FINISH2" , logReader.getWinner() );
 
-        assertTrue( logReader.finishMessage.contains( "normally" ) );
+        assertTrue( logReader.getFinishMessage().contains( "normally" ) );
 
         ArrayList<String> moves = new ArrayList<>();
         moves.add( "0x0_0x1" );

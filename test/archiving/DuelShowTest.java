@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.ProtocolException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,6 +77,23 @@ class DuelShowTest {
 
         duelShow.start();
         assertEquals( "OK" , duelShow.getMessage() );
+
+    }
+
+    @Test
+    void finish() throws FileNotFoundException, ProtocolException {
+
+        DuelShow duelShow = new DuelShow( logSample );
+
+        ArrayList<String> moves = new ArrayList<>();
+        moves.add( "0x2_1x2" );
+        moves.add( "2x2_2x1" );
+        moves.add( "2x0_1x0" );
+
+        duelShow.start();
+
+        assertEquals( moves , duelShow.finish() );
+        assertTrue( duelShow.isFinished() );
 
     }
 

@@ -54,6 +54,12 @@ public class Duel {
         return readable ? duelShow.lastMove() : arena.getLastMove();
     }
 
+    /**
+     * Returns the game status.
+     * "OK" if the game hasn't finished.
+     * End cause if the game has finished.
+     * @return game status
+     */
     public String getMessage(){
         return readable ? duelShow.getMessage() : arena.getMessage();
     }
@@ -92,6 +98,9 @@ public class Duel {
         return readable ? duelShow.isFinished() : arena.isFinished();
     }
 
+    /**
+     * Initializes a game and makes an initial move.
+     */
     public void start(){
         if( readable ){
             duelShow.start();
@@ -108,12 +117,12 @@ public class Duel {
         }
     }
 
-    public void finish(){
-        if( readable ){
-            duelShow.finish();
-        } else {
-            arena.finish();
-        }
+    /**
+     * Pushes to the end of the game.
+     * @return further moves
+     */
+    public ArrayList<String> finish(){
+        return readable ? duelShow.finish() : arena.finish();
     }
 
     public void close(){

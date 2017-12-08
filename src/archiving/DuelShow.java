@@ -3,6 +3,7 @@ package archiving;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.ProtocolException;
+import java.util.ArrayList;
 
 /**
  * @author Patryk Cholewa
@@ -53,8 +54,13 @@ public class DuelShow {
         moveCounter++;
     }
 
-    public void finish(){
-        moveCounter = logReader.getMoves().size();
+    public ArrayList<String> finish(){
+        ArrayList<String> furtherMoves = new ArrayList<>();
+        while( !isFinished() ){
+            nextMove();
+            furtherMoves.add( lastMove() );
+        }
+        return furtherMoves;
     }
 
 }

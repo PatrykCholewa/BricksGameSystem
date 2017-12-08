@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import management.Duel;
 import processes.Court;
 import tools.Translator;
 
@@ -61,9 +62,9 @@ public class Controller {
     @FXML
     MenuItem about = new MenuItem();
 
-    private Recorder rec;
     private Reader reader;
 
+    private File logFile;
     private File firstPlayer;
     private File followingPlayer;
 
@@ -175,11 +176,7 @@ public class Controller {
 
     @FXML
     void selectLogPressed() {
-        try {
-            rec = new Recorder(dialog.showFileChooser("CreateLogFile",mainPane,true));
-        } catch (FileNotFoundException e) {
-            dialog.showErrorDialogWithStack(e,"Log File Not Found");
-        }
+        logFile = dialog.showFileChooser("CreateLogFile",mainPane,true);
     }
 
     @FXML
@@ -193,48 +190,45 @@ public class Controller {
 
     @FXML
     void startPressed(){
-        initialize();
         try {
-            Court court = new Court( firstPlayer , followingPlayer);
-            rec.printHeader(draw.getBoardSize(),court.getStartingPlayerNick(),court.getFollowingPlayerNick());
-            if(randBoxPercent != 0) {
-                ArrayList<Point> boxes = court.setBoard(draw.getBoardSize(), draw.getBoardSize() * draw.getBoardSize() * randBoxPercent /100);
+            draw.redrawNet(board,boardPane);
+            logText.clear();
+            Duel duel = new Duel(firstPlayer,followingPlayer,logFile);
+            if(randBoxPercent != 0 ){
+                ArrayList<Point> boxes = duel.setBoard(draw.getBoardSize(), draw.getBoardSize()*draw.getBoardSize()*randBoxPercent/100);
                 draw.drawGenCells(board,boardPane,boxes);
-                rec.printGenCells(draw.getBoardSize(), boxes);
-            } else {
-                court.setBoard(draw.getBoardSize(), new ArrayList<>() );
             }
-            court.start();
-            int no=0;
-            while (court.getMessage() == "OK") {
-                logAndPrint(court.getLastMove(),rec,((no++)%2)+1);
-                court.nextMove();
+            else {
+                duel.setBoard(draw.getBoardSize(), new ArrayList<>() );
             }
-            logAndPrint(court.getLastMove(),rec,((no++)%2)+1);
-
-            statusLabel.setText(court.getMessage());
-            rec.logClose();
-            court.close();
-
-
+            int i=0;
+            duel.start();
+            while (duel.getMessage() == "OK") {
+                logAndPrint(duel.lastMove(),getPlayerID(i++));
+                duel.nextMove();
+            }
+            logAndPrint(duel.lastMove(),getPlayerID(i++));
+            statusLabel.setText(duel.getMessage());
+            duel.close();
         } catch (FileNotFoundException e) {
-            dialog.showErrorDialogWithStack(e,null);
+            dialog.showErrorDialogWithStack(e,"Log File Not Found");
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e,"Comunication Protocol Error");
-        } catch (IllegalArgumentException e) {
-            dialog.showErrorDialogWithStack(e,"Wrong Size of Board");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e){
             dialog.showErrorDialogWithStack(e,"Log File Not Found");
         } catch (Exception e) {
-            e.printStackTrace();
+            dialog.showErrorDialogWithStack(e);
         }
     }
 
-    void logAndPrint(String move, Recorder rec, int player) throws Exception {
+    private int getPlayerID (int counter){
+        return ((counter)%2)+1;
+    }
+
+    private void logAndPrint(String move, int player) throws Exception {
+        logText.appendText(move+" :P"+player+'\n');
         Point[] points = Translator.stringToBoxPair(move);
         draw.drawCells(board,boardPane,player, points[0], points[1]);
-        logText.appendText(move+" :P"+player+'\n');
-        rec.printToLog(move+" :P"+player+'\n');
     }
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {

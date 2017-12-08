@@ -67,6 +67,10 @@ public class Dialogs {
         alert.showAndWait();
     }
 
+    public void showErrorDialogWithStack(Exception ex){
+        showErrorDialogWithStack(ex,ex.getMessage());
+    }
+
     public void showErrorDialogWithStack(Exception ex, String myMessage){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Exception");

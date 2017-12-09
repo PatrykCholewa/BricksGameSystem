@@ -50,7 +50,7 @@ public class Duel {
         return readable ? duelShow.getWinner() : arena.getWinner();
     }
 
-    public String lastMove(){
+    public String getLastMove(){
         return readable ? duelShow.lastMove() : arena.getLastMove();
     }
 

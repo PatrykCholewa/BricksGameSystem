@@ -1,7 +1,6 @@
 package graphics;
 
 import archiving.Reader;
-import archiving.Recorder;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -207,10 +206,10 @@ public class Controller {
             duel.start();
             while (duel.getMessage() == "OK") {                             //TODO Jeśli już to użyj metody Duel.finish()
                                                                             //TODO Pamiętaj, że musisz dawać możliwość ręcznego przewijania.
-                logAndPrint(duel.lastMove(),getPlayerID(i++));
+                logAndPrint(duel.getLastMove(),getPlayerID(i++));
                 duel.nextMove();
             }
-            logAndPrint(duel.lastMove(),getPlayerID(i++));
+            logAndPrint(duel.getLastMove(),getPlayerID(i++));
             statusLabel.setText(duel.getMessage());
             duel.close();
         } catch (FileNotFoundException e) {
@@ -230,8 +229,13 @@ public class Controller {
 
     private void logAndPrint(String move, int player) throws Exception {
         logText.appendText(move+" :P"+player+'\n');
-        Point[] points = Translator.stringToBoxPair(move);              //TODO Użyj Duel.getLastMove()
-        draw.drawCells(board,boardPane,player, points[0], points[1]);
+        try {
+            Point[] points = Translator.stringToBoxPair(move);
+            draw.drawCells(board,boardPane,player, points[0], points[1]);
+        } catch ( ProtocolException e ){
+            ;
+        }
+
     }
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {

@@ -109,8 +109,10 @@ public class Arena {
         if( court.getWinner() != null ){
             throw new NullPointerException( "The game has ended!" );
         }
-            court.nextMove();
-            updateRecorder();
+
+        court.nextMove();
+        updateRecorder();
+
     }
 
     ArrayList<String> finish(){

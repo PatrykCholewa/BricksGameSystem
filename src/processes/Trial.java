@@ -81,6 +81,7 @@ public class Trial {
         watch.initTimer();
         while ( !commanders[lastPlayer].hasInput() ){
             if( watch.exceededMoveTime() ){
+                lastMove = "NORESPONSE";
                 throw new TimeoutException( "Player " + commanders[lastPlayer].getNick() + " timed out!" );
             } else {
                 watch.waitCheckInterval();

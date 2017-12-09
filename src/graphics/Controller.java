@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import management.Duel;
@@ -67,7 +68,9 @@ public class Controller {
     private File firstPlayer;
     private File followingPlayer;
 
-    private int randBoxPercent = 0;
+    private int randBoxNumber = 0;
+    private ArrayList<Point> manBoxes = new ArrayList<>();
+
     private Drawing draw = new Drawing();
     private Dialogs dialog = new Dialogs();
 
@@ -111,18 +114,27 @@ public class Controller {
     }
 
     @FXML
-    void boardMousePressedDragged(MouseEvent event){
-        System.out.println("X:" + event.getX()+ "  Y:"+ event.getY());
-        System.out.println("X:" + event.getX()/draw.getScale() + "  Y:"+ event.getY()/draw.getScale());
-
+    void boardMousePressedDragged(MouseEvent event) throws Exception {
+        int x_pos = draw.convertToPos(event.getX());
+        int y_pos = draw.convertToPos(event.getY());
+        if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
+        {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), false);
+                if (!manBoxes.contains(new Point(x_pos,y_pos)))
+                        manBoxes.add(new Point(x_pos,y_pos));
+            }
+            if (event.getButton() == MouseButton.SECONDARY) {
+                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), true);
+                manBoxes.remove(new Point(x_pos,y_pos));
+            }
+        }
     }
 
 
     @FXML
     void randomBarrierPressed() {
-        randBoxPercent = dialog.showIntValueSelectDialog("Set random", "Set percentage of random boxes", 25, 0, 50);
-        //TODO Jak ustawić np. n=3 przy planszy 100x100?
-        System.out.println("randBoxPercent: " + randBoxPercent);
+        System.out.println("randBoxNumber: " + randBoxNumber);
         draw.clearBoard(board);
         try {
             draw.drawNet(board, boardPane);
@@ -202,11 +214,12 @@ public class Controller {
             draw.redrawNet(board, boardPane);
             logText.clear();
             Duel duel = new Duel(firstPlayer, followingPlayer, logFile);
-            if (randBoxPercent != 0) {
-                ArrayList<Point> boxes = duel.setBoard(draw.getBoardSize(), draw.getBoardSize() * draw.getBoardSize() * randBoxPercent / 100);
-                draw.drawGenCells(board, boardPane, boxes);
+            if (randBoxNumber != 0) {
+                ArrayList<Point> randBoxes = duel.setBoard(draw.getBoardSize(), randBoxNumber);
+                draw.drawGenCells(board, boardPane, randBoxes);
             } else {
-                duel.setBoard(draw.getBoardSize(), new ArrayList<>());
+                duel.setBoard(draw.getBoardSize(), manBoxes);
+                draw.drawGenCells(board, boardPane, manBoxes);
             }
             int i = 0;
             duel.start();

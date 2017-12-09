@@ -1,4 +1,4 @@
-package management;
+package tournaments;
 
 import java.io.File;
 import java.nio.file.NotDirectoryException;
@@ -52,7 +52,7 @@ public class Executioner implements Iterator{
             }
         }
 
-        return pointer < playerDirs.size()*playerDirs.size() ? true : false;
+        return pointer < playerDirs.size() * playerDirs.size();
 
     }
 

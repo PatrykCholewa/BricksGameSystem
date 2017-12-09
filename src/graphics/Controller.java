@@ -113,7 +113,7 @@ public class Controller {
     @FXML
     void randomBarrierPressed() {
         randBoxPercent = dialog.showIntValueSelectDialog("Set random", "Set percentage of random boxes", 25, 0, 50);
-        //TODO Max to nie 50 tylko size*size (ale to są procenty //PZ)
+        //TODO Jak ustawić np. n=3 przy planszy 100x100?
         System.out.println("randBoxPercent: " + randBoxPercent);
         draw.clearBoard(board);
         try {
@@ -193,7 +193,6 @@ public class Controller {
             Duel duel = new Duel(firstPlayer, followingPlayer, logFile);
             if (randBoxPercent != 0) {
                 ArrayList<Point> boxes = duel.setBoard(draw.getBoardSize(), draw.getBoardSize() * draw.getBoardSize() * randBoxPercent / 100);
-                //TODO Wartość MUSI być zczytywana od użytkownika.
                 draw.drawGenCells(board, boardPane, boxes);
             } else {
                 duel.setBoard(draw.getBoardSize(), new ArrayList<>());
@@ -224,6 +223,7 @@ public class Controller {
     }
 
     private void logAndPrint(String move, int player) throws Exception {
+        //TODO Rozważ move + " :" + getLastPlayer to będzie można wywalić metodę wyżej.
         logText.appendText(move + " :P" + player + '\n');
         try {
             draw.drawCells(board, boardPane, player, Translator.stringToBoxPair(move));

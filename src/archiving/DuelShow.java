@@ -47,7 +47,7 @@ public class DuelShow {
     }
 
     public Boolean isFinished(){
-        return moveCounter > logReader.getMoves().size() - 1;  //TODO zmieniłem 2 na 1, nie wiem czy to bezpieczne
+        return moveCounter > logReader.getMoves().size() - 2;
     }
 
     public void start(){

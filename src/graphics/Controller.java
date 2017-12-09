@@ -62,7 +62,7 @@ public class Controller {
     @FXML
     MenuItem about = new MenuItem();
 
-    private Reader reader;
+    private Reader reader;                      //TODO Illegal Instance
 
     private File logFile;
     private File firstPlayer;
@@ -96,9 +96,9 @@ public class Controller {
         firstPlayer =  dialog.showDriectoryChooser("Select Starting Player Folder",boardPane);
         followingPlayer =  dialog.showDriectoryChooser("Select Following Player Folder",boardPane);
         try {
-            Court court = new Court( firstPlayer , followingPlayer);
-            nickname1.setText(court.getStartingPlayerNick());
-            nickname2.setText(court.getFollowingPlayerNick());
+            Court court = new Court( firstPlayer , followingPlayer);    //TODO Illegal Instance
+            nickname1.setText(court.getStartingPlayerNick());           //TODO Illegal Instance
+            nickname2.setText(court.getFollowingPlayerNick());          //TODO Illegal Instance
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e,"Player Directory Not Found");
         } catch (ProtocolException e) {
@@ -114,6 +114,7 @@ public class Controller {
     @FXML
     void randomBarrierPressed() {
         randBoxPercent = dialog.showIntValueSelectDialog("Set random","Set percentage of random boxes",25,0,50);
+                                                    //TODO Max to nie 50 tylko size*size.
         System.out.println("randBoxPercent: " + randBoxPercent);
         draw.clearBoard(board);
         try {
@@ -126,16 +127,16 @@ public class Controller {
     @FXML
     void displayLogPressed() {
         try {
-            reader = new Reader(dialog.showFileChooser("SelectLogFile",mainPane,false));
+            reader = new Reader(dialog.showFileChooser("SelectLogFile",mainPane,false));  //TODO Illegal Instance
             logText.clear();
             statusLabel.setText("");
             startButton.setVisible(false);
             nextButton.setVisible(true);
 
-            reader.readHeader();
-            draw.setBoardSize(reader.size);
-            nickname1.setText(reader.nickname1);
-            nickname2.setText(reader.nickname2);
+            reader.readHeader();                                    //TODO Illegal Instance Use
+            draw.setBoardSize(reader.size);                         //TODO Illegal Instance Use
+            nickname1.setText(reader.nickname1);                    //TODO Illegal Instance Use
+            nickname2.setText(reader.nickname2);                    //TODO Illegal Instance Use
 
             draw.clearBoard(board);
             draw.drawNet(board,boardPane);
@@ -150,7 +151,7 @@ public class Controller {
     void nextPressed()  {
         String nextLine;
         try {
-            nextLine = reader.readNext();
+            nextLine = reader.readNext();                           //TODO Illegal Instance Use
             if (nextLine != null) {
                 String[] split = nextLine.split(" ");
                 if(split[0].equals("G")){
@@ -161,7 +162,7 @@ public class Controller {
                 else {
                     Point[] points;
                     points = Translator.stringToBoxPair(split[0]);
-                    draw.drawCells(board,boardPane,reader.getPlayer(), points[0], points[1]);
+                    draw.drawCells(board,boardPane,reader.getPlayer(), points[0], points[1]); //TODO Illegal Instance Use
                     logText.appendText(nextLine + "\n");
                 }
             } else {
@@ -196,6 +197,7 @@ public class Controller {
             Duel duel = new Duel(firstPlayer,followingPlayer,logFile);
             if(randBoxPercent != 0 ){
                 ArrayList<Point> boxes = duel.setBoard(draw.getBoardSize(), draw.getBoardSize()*draw.getBoardSize()*randBoxPercent/100);
+                                                                            //TODO Wartość MUSI być zczytywana od użytkownika.
                 draw.drawGenCells(board,boardPane,boxes);
             }
             else {
@@ -203,7 +205,8 @@ public class Controller {
             }
             int i=0;
             duel.start();
-            while (duel.getMessage() == "OK") {
+            while (duel.getMessage() == "OK") {                             //TODO Jeśli już to użyj metody Duel.finish()
+                                                                            //TODO Pamiętaj, że musisz dawać możliwość ręcznego przewijania.
                 logAndPrint(duel.lastMove(),getPlayerID(i++));
                 duel.nextMove();
             }
@@ -221,13 +224,13 @@ public class Controller {
         }
     }
 
-    private int getPlayerID (int counter){
+    private int getPlayerID (int counter){                              //TODO Takie metody nie w kontrolerze.
         return ((counter)%2)+1;
     }
 
     private void logAndPrint(String move, int player) throws Exception {
         logText.appendText(move+" :P"+player+'\n');
-        Point[] points = Translator.stringToBoxPair(move);
+        Point[] points = Translator.stringToBoxPair(move);              //TODO Użyj Duel.getLastMove()
         draw.drawCells(board,boardPane,player, points[0], points[1]);
     }
 

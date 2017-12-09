@@ -54,6 +54,10 @@ public class Duel {
         return readable ? duelShow.lastMove() : arena.getLastMove();
     }
 
+    public int getMoveCounter() {
+        return duelShow.getMoveCounter();
+    }
+
     /**
      * Returns the game status.
      * "OK" if the game hasn't finished.
@@ -111,7 +115,7 @@ public class Duel {
 
     public void nextMove(){
         if( readable ){
-            duelShow.start();
+            duelShow.nextMove();
         } else {
             arena.nextMove();
         }

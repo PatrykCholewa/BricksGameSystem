@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class DuelShow {
 
     private LogReader logReader;
-    int moveCounter = 0;
+    private int moveCounter = 0;
 
     public DuelShow( File logFile ) throws FileNotFoundException, ProtocolException {
         logReader = new LogReader( logFile );
@@ -38,12 +38,16 @@ public class DuelShow {
         return logReader.getMoves().get(moveCounter);
     }
 
+    public int getMoveCounter() {
+        return moveCounter;
+    }
+
     public String getMessage(){
         return isFinished() ? logReader.getFinishMessage() : "OK" ;
     }
 
     public Boolean isFinished(){
-        return moveCounter > logReader.getMoves().size() - 2;
+        return moveCounter > logReader.getMoves().size() - 1;  //TODO zmieniłem 2 na 1, nie wiem czy to bezpieczne
     }
 
     public void start(){

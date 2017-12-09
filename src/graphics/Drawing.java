@@ -55,17 +55,7 @@ public class Drawing { ;
         drawNet(board,boardPane);
     }
 
-    void drawGenCell(Canvas board, AnchorPane boardPane, Point g) throws Exception {
-        calculateMaxScale(board,boardPane);
-        GraphicsContext gc = board.getGraphicsContext2D();
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(1);
-        gc.setFill(Color.GREY);
-        gc.fillRect(g.getX() * scale,g.getY() * scale, scale, scale);
-        drawNet(board,boardPane);
-    }
-
-    void drawCells(Canvas board, AnchorPane boardPane, int playerid, Point b1, Point b2) throws Exception {
+    void drawCells(Canvas board, AnchorPane boardPane, int playerid, Point[] points) throws Exception {
         calculateMaxScale(board,boardPane);
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
@@ -75,8 +65,9 @@ public class Drawing { ;
         } else {
             gc.setFill(Color.RED);
         }
-        gc.fillRect(b1.getX() * scale,b1.getY() * scale, scale, scale);
-        gc.fillRect(b2.getX() * scale,b2.getY() * scale, scale, scale);
+        for (Point p:points) {
+            gc.fillRect(p.getX() * scale,p.getY() * scale, scale, scale);
+        }
         drawNet(board,boardPane);
     }
 

@@ -2,6 +2,10 @@ package tournaments;
 
 import java.io.*;
 
+/**
+ * @author Patryk Cholewa
+ */
+
 public class DuelSaver {
 
     private BufferedWriter bufferedWriter;

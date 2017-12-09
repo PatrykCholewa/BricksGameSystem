@@ -133,7 +133,7 @@ public class Controller {
 
 
     @FXML
-    void randomBarrierPressed() {
+    void randomBarrierPressed() { //TODO Teraz nie pobiera liczby wcale. :)
         System.out.println("randBoxNumber: " + randBoxNumber);
         draw.clearBoard(board);
         try {

@@ -52,13 +52,25 @@ public class Drawing { ;
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
-        gc.setFill(Color.GREY);
+        gc.setFill(Color.YELLOW);
         for (Point p: generatedPoints) {
             gc.fillRect(p.getX() * scale,p.getY() * scale, scale, scale);
         }
         drawNet(board,boardPane);
     }
 
+    void drawManCell(Canvas board, AnchorPane boardPane,Point point,boolean clear) throws Exception {
+        calculateMaxScale(board,boardPane);
+        GraphicsContext gc = board.getGraphicsContext2D();
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(1);
+        if (clear)
+            gc.setFill(Color.WHITE);
+        else
+            gc.setFill(Color.YELLOW);
+        gc.fillRect(point.getX() * scale,point.getY() * scale, scale, scale);
+        drawNet(board,boardPane);
+    }
     void drawCells(Canvas board, AnchorPane boardPane, int playerid, Point[] points) throws Exception {
         calculateMaxScale(board,boardPane);
         GraphicsContext gc = board.getGraphicsContext2D();
@@ -97,5 +109,13 @@ public class Drawing { ;
 
     private double snap(double y) {
         return ((int) y) + .5;
+    }
+
+    public boolean verifyPos(int pos){
+        return (pos >= 0) && (pos < boardSize);
+    }
+
+    public int convertToPos(double coord){
+        return (int)coord/scale;
     }
 }

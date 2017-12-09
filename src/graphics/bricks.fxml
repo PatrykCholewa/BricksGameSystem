@@ -34,7 +34,7 @@
             <Button fx:id="nextButton" layoutX="42.0" layoutY="541.0" mnemonicParsing="false" onAction="#nextPressed" prefHeight="42.0" prefWidth="108.0" text="&gt;" visible="false" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="boardPane" layoutX="200.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+      <AnchorPane fx:id="boardPane" layoutX="200.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
             <Canvas fx:id="board" height="600.0" onMouseDragged="#boardMousePressedDragged" onMousePressed="#boardMousePressedDragged" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children></AnchorPane>

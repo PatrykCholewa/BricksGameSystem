@@ -22,6 +22,10 @@ public class Drawing { ;
         return boardSize;
     }
 
+    public int getScale() {
+        return scale;
+    }
+
     public void setBoardSize(int boardSize) {
         this.boardSize = boardSize;
     }

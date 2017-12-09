@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import management.Duel;
 import tools.Translator;
@@ -109,6 +110,13 @@ public class Controller {
         dialog.showWipDialog();
     }
 
+    @FXML
+    void boardMousePressedDragged(MouseEvent event){
+        System.out.println("X:" + event.getX()+ "  Y:"+ event.getY());
+        System.out.println("X:" + event.getX()/draw.getScale() + "  Y:"+ event.getY()/draw.getScale());
+
+    }
+
 
     @FXML
     void randomBarrierPressed() {
@@ -131,6 +139,7 @@ public class Controller {
         statusLabel.setText("");
         startButton.setVisible(false);
         nextButton.setVisible(true);
+        nextButton.setDisable(false);
 
         try {
             rewind = new Duel(displayLogFile);
@@ -156,7 +165,9 @@ public class Controller {
                readAndPrint();
 
         } else {
+            readAndPrint();
             statusLabel.setText(rewind.getMessage());
+            nextButton.setDisable(true);
         }
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e);

@@ -1,6 +1,6 @@
 package graphics;
 
-import archiving.Reader;
+import archiving.Reader;                    //TODO Illegal import
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -10,7 +10,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import management.Duel;
-import processes.Court;
+import processes.Court;                      //TODO Illegal import
 import tools.Translator;
 
 import java.awt.*;

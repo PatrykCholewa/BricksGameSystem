@@ -15,6 +15,7 @@ class TournamentScoreTest {
     private final static File duelSample1 = new File( "./test/testFiles/tourFiles/duelListFiles/sample1.txt" );
     private final static File tourWriteFile = new File( "./test/testFiles/tourFiles/score.txt" );
     private final static File tourSample1 = new File( "./test/testFiles/tourFiles/scoreFiles/sample1.txt" );
+    private final static File errWriteFile = new File( "./test/testFiles/tourFiles/err.txt" );
 
     @Test
     void addNewDuel() throws IOException {
@@ -34,6 +35,7 @@ class TournamentScoreTest {
         FileComparator.compare( tourSample1 , tourWriteFile );
 
         duelWriteFile.deleteOnExit();
+        errWriteFile.deleteOnExit();
         tourWriteFile.deleteOnExit();
 
     }

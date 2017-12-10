@@ -27,4 +27,15 @@ class ScoreDBRecord implements Comparable<ScoreDBRecord>{
         return record.points - this.points;
     }
 
+    @Override
+    public boolean equals( Object o ){
+
+        try{
+            return this.player == ((ScoreDBRecord) o).player;
+        } catch ( ClassCastException e ){
+            return false;
+        }
+
+    }
+
 }

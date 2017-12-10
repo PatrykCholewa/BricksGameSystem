@@ -52,7 +52,7 @@ public class Executioner implements Iterator{
             }
         }
 
-        return pointer < playerDirs.size()*playerDirs.size() ? true : false;
+        return pointer < playerDirs.size() * playerDirs.size();
 
     }
 

@@ -1,23 +1,20 @@
 package management;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import processes.Court;
+import testTools.FileComparator;
 
-import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.ProtocolException;
+import java.io.*;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ArenaTest {
 
-    final static File get1Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish1" );
-    final static File get2Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish2" );
-    final static File logWriteFile = new File( "./test/testFiles/logFiles/logWrite.txt" );
-    final static File logSample = new File( "./test/testFiles/logFiles/logWrite.txt" );
+    private final static File get1Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish1" );
+    private final static File get2Dir = new File( "./test/testFiles/predefinedOutputs/Get_Finish2" );
+    private final static File logWriteFile = new File( "./test/testFiles/logFiles/logWrite.txt" );
+    private final static File logSample = new File( "./test/testFiles/logFiles/logSample.txt" );
 
     @Test
     void finish() throws IOException {
@@ -38,9 +35,9 @@ class ArenaTest {
 
         assertEquals( moves , arena.finish() );
         assertTrue( arena.isFinished() );
-        assertEquals( 0 , logSample.compareTo( logWriteFile ) );
+        FileComparator.compare( logSample , logWriteFile );
 
-        logWriteFile.delete();
+        logWriteFile.deleteOnExit();
 
     }
 

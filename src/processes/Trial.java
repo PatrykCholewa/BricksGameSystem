@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
  * @author Patryk Cholewa
  */
 
-public class Trial {
+class Trial {
 
     private Commander []commanders = new Commander[2];
     private Watch watch = new Watch();

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author Patryk Cholewa
  */
 
-public class LogReader {
+class LogReader {
 
     private int size;
     private String startingPlayer;

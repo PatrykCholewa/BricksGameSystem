@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Patryk Cholewa
  */
 
-public class Arena {
+class Arena {
 
     private Court court;
     private Recorder recorder = null;

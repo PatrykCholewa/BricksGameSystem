@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Patryk Cholewa
  */
 
-public class ScoreSaver {
+class ScoreSaver {
 
     private File saveFile;
 

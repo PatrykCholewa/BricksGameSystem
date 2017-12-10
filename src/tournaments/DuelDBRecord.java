@@ -4,7 +4,7 @@ package tournaments;
  * @author Patryk Cholewa
  */
 
-public class DuelDBRecord {
+class DuelDBRecord {
 
     final int number;
     final int startingPlayer;

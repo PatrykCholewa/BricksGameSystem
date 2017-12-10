@@ -6,7 +6,7 @@ import java.io.*;
  * @author Patryk Cholewa
  */
 
-public class DuelSaver {
+class DuelSaver {
 
     private BufferedWriter bufferedWriter;
 

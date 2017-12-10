@@ -26,4 +26,15 @@ public class FileComparator {
 
     }
 
+    public static void writeOut( File file ) throws IOException{
+        BufferedReader br = new BufferedReader( new FileReader( file ) );
+
+        String line;
+        while( (line = br.readLine()) != null ){
+            System.out.println( line );
+        }
+        br.close();
+
+    }
+
 }

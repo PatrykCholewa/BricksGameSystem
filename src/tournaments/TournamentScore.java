@@ -10,16 +10,20 @@ import java.util.ArrayList;
 
 public class TournamentScore {
 
+    private String path;
     private ArrayList<ScoreDBRecord> players;
     private ArrayList<DuelDBRecord> matches;
     private DuelSaver duelSaver;
     private ScoreSaver scoreSaver;
+    private ErrorSaver errorSaver;
 
     public TournamentScore( File saveDirectory ) throws IOException {
 
-        String path = saveDirectory.getPath();
+        this.path = saveDirectory.getPath();
         File duelsFile = new File( path + "/duels.txt" );
         File scoreFile = new File( path + "/score.txt" );
+        File errFile = new File( path + "/err.txt" );
+        new File( path + "/duels" ).mkdir();
 
         duelsFile.createNewFile();
         scoreFile.createNewFile();
@@ -28,13 +32,29 @@ public class TournamentScore {
         matches = new ArrayList<>();
         duelSaver = new DuelSaver( duelsFile );
         scoreSaver = new ScoreSaver( scoreFile );
+        errorSaver = new ErrorSaver( errFile );
 
+    }
+
+    public File createNewDuelLogFile() throws IOException {
+        File logFile = new File( path + "/duels/" + (matches.size()) + ".txt" );
+        logFile.createNewFile();
+        return logFile;
+    }
+
+    private int getIndexOfPlayer( String player ){
+        for( int i = 0 ; i < players.size() ; i ++ ){
+            if( players.get(i).getPlayer().equals(player) ){
+                return i;
+            }
+        }
+        return -1;
     }
 
     public void addNewDuel( String startingPlayer , String followingPlayer , String winner ) throws IOException {
 
-        int stPlayerIndex = players.indexOf( new ScoreDBRecord(startingPlayer) );
-        int flPlayerIndex = players.indexOf( new ScoreDBRecord(followingPlayer) );
+        int stPlayerIndex = getIndexOfPlayer( startingPlayer );
+        int flPlayerIndex = getIndexOfPlayer( followingPlayer );
         int wnPlayerIndex;
         int matchIndex;
 
@@ -58,8 +78,17 @@ public class TournamentScore {
 
     }
 
-    void close(){
+    public void saveError( Exception e ){
+        try {
+            errorSaver.writeErr( e );
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    public void close(){
         duelSaver.close();
+        errorSaver.close();
     }
 
 }

@@ -27,6 +27,16 @@ public class Controller {
     @FXML
     AnchorPane mainPane = new AnchorPane();
     @FXML
+    AnchorPane boardPane = new AnchorPane();
+    @FXML
+    AnchorPane startupPane = new AnchorPane();
+    @FXML
+    AnchorPane uniPane = new AnchorPane();
+    @FXML
+    AnchorPane duelPane = new AnchorPane();
+    @FXML
+    AnchorPane replayPane = new AnchorPane();
+    @FXML
     Button startButton = new Button();
     @FXML
     Button nextButton = new Button();
@@ -36,8 +46,6 @@ public class Controller {
     Label nickname2 = new Label();
     @FXML
     Canvas board = new Canvas();
-    @FXML
-    AnchorPane boardPane = new AnchorPane();
     @FXML
     Label statusLabel = new Label();
     @FXML
@@ -92,8 +100,11 @@ public class Controller {
 
     @FXML
     void duelPressed() {
-        startButton.setVisible(true);
-        nextButton.setVisible(false);
+        uniPane.toFront();
+        duelPane.toFront();
+        nickname1.setText("...");
+        nickname2.setText("...");
+        logText.clear();
 
         firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
         followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
@@ -134,6 +145,7 @@ public class Controller {
 
     @FXML
     void randomBarrierPressed() {
+        randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 25, 0, draw.getBoardSize()*draw.getBoardSize());
         System.out.println("randBoxNumber: " + randBoxNumber);
         draw.clearBoard(board);
         try {
@@ -145,12 +157,16 @@ public class Controller {
 
     @FXML
     void displayLogPressed() {
+        uniPane.toFront();
+        replayPane.toFront();
+        nickname1.setText("...");
+        nickname2.setText("...");
+        logText.clear();
+
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
         logText.clear();
 
         statusLabel.setText("");
-        startButton.setVisible(false);
-        nextButton.setVisible(true);
         nextButton.setDisable(false);
 
         try {
@@ -173,9 +189,7 @@ public class Controller {
     void nextPressed() {
         try {
         if (!rewind.isFinished()) {
-
                readAndPrint();
-
         } else {
             readAndPrint();
             statusLabel.setText(rewind.getMessage());

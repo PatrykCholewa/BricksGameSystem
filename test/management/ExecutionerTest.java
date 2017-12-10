@@ -1,5 +1,6 @@
-package tournaments;
+package management;
 
+import management.Executioner;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

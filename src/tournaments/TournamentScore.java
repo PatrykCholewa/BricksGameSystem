@@ -15,7 +15,7 @@ public class TournamentScore {
     private DuelSaver duelSaver;
     private ScoreSaver scoreSaver;
 
-    TournamentScore( File saveDirectory ) throws IOException {
+    public TournamentScore( File saveDirectory ) throws IOException {
 
         String path = saveDirectory.getPath();
         File duelsFile = new File( path + "/duels.txt" );
@@ -31,7 +31,7 @@ public class TournamentScore {
 
     }
 
-    void addNewDuel( String startingPlayer , String followingPlayer , String winner ) throws IOException {
+    public void addNewDuel( String startingPlayer , String followingPlayer , String winner ) throws IOException {
 
         int stPlayerIndex = players.indexOf( new ScoreDBRecord(startingPlayer) );
         int flPlayerIndex = players.indexOf( new ScoreDBRecord(followingPlayer) );

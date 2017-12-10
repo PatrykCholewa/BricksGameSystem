@@ -1,5 +1,9 @@
 package tournaments;
 
+/**
+ * @author Patryk Cholewa
+ */
+
 class ScoreDBRecord implements Comparable<ScoreDBRecord>{
 
     private String player;

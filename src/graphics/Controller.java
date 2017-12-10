@@ -97,15 +97,121 @@ public class Controller {
     private Drawing draw = new Drawing();
     private Dialogs dialog = new Dialogs();
 
+    @FXML
+    void selectLogPressed() {
+        tourPane.toBack();
+        logFile = dialog.showFileChooser("CreateLogFile", mainPane, true);
+    }
 
     @FXML
-    void aboutPressed() {
-        dialog.showAbout();
+    void displayLogPressed() {
+        tourPane.toBack();
+        uniPane.toFront();
+        replayPane.toFront();
+        nickname1.setText("...");
+        nickname2.setText("...");
+        logText.clear();
+
+        File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
+        logText.clear();
+
+        statusLabel.setText("");
+        nextButton.setDisable(false);
+
+        if (displayLogFile != null) {
+            try {
+                rewind = new Duel(displayLogFile);
+                nickname1.setText(rewind.getStartingPlayer());
+                nickname2.setText(rewind.getFollowingPlayer());
+                draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
+                draw.clearBoard(board);
+                draw.drawGenCells(board, boardPane, Translator.boxesFromInitString(rewind.getInitData()));
+            } catch (FileNotFoundException e) {
+                nextButton.setDisable(true);
+                dialog.showErrorDialogWithStack(e);
+            } catch (ProtocolException e) {
+                nextButton.setDisable(true);
+                dialog.showErrorDialogWithStack(e);
+            } catch (Exception e) {
+                nextButton.setDisable(true);
+                dialog.showErrorDialogWithStack(e);
+            }
+        }
+        else {
+            nextButton.setDisable(true);
+        }
+    }
+
+    @FXML
+    void nextPressed() {
+        try {
+            if (!rewind.isFinished()) {
+                readAndPrint();
+            } else {
+                readAndPrint();
+                statusLabel.setText(rewind.getMessage());
+                nextButton.setDisable(true);
+            }
+        } catch (ProtocolException e) {
+            dialog.showErrorDialogWithStack(e);
+        } catch (Exception e) {
+            dialog.showErrorDialogWithStack(e);
+        }
+    }
+
+    private void readAndPrint() throws Exception {
+        draw.drawCells(board,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
+        logText.appendText(rewind.getLastMove()+"\n");
+        rewind.nextMove();
     }
 
     @FXML
     void closePressed() {
         System.exit(0);
+    }
+
+    @FXML
+    void setSizePressed() throws Exception {
+        initialize();
+        draw.setBoardSize(dialog.showIntValueSelectDialog("Set board size", "Set board size", 21, 3, 1000));
+        System.out.println("Size: " + draw.getBoardSize());
+        draw.clearBoard(board);
+        draw.drawNet(board, boardPane);
+    }
+
+    @FXML
+    void randomBarrierPressed() {
+        randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 25, 0, draw.getBoardSize()*draw.getBoardSize());
+        System.out.println("randBoxNumber: " + randBoxNumber);
+        draw.clearBoard(board);
+        try {
+            draw.drawNet(board, boardPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void manualBarrierPressed() {
+        dialog.showWipDialog();
+    }
+
+    @FXML
+    void boardMousePressedDragged(MouseEvent event) throws Exception {
+        int x_pos = draw.convertToPos(event.getX());
+        int y_pos = draw.convertToPos(event.getY());
+        if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
+        {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), false);
+                if (!manBoxes.contains(new Point(x_pos,y_pos)))
+                    manBoxes.add(new Point(x_pos,y_pos));
+            }
+            if (event.getButton() == MouseButton.SECONDARY) {
+                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), true);
+                manBoxes.remove(new Point(x_pos,y_pos));
+            }
+        }
     }
 
     @FXML
@@ -179,119 +285,6 @@ public class Controller {
     }
 
     @FXML
-    void manualBarrierPressed() {
-        dialog.showWipDialog();
-    }
-
-    @FXML
-    void boardMousePressedDragged(MouseEvent event) throws Exception {
-        int x_pos = draw.convertToPos(event.getX());
-        int y_pos = draw.convertToPos(event.getY());
-        if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
-        {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), false);
-                if (!manBoxes.contains(new Point(x_pos,y_pos)))
-                        manBoxes.add(new Point(x_pos,y_pos));
-            }
-            if (event.getButton() == MouseButton.SECONDARY) {
-                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), true);
-                manBoxes.remove(new Point(x_pos,y_pos));
-            }
-        }
-    }
-
-
-    @FXML
-    void randomBarrierPressed() {
-        randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 25, 0, draw.getBoardSize()*draw.getBoardSize());
-        System.out.println("randBoxNumber: " + randBoxNumber);
-        draw.clearBoard(board);
-        try {
-            draw.drawNet(board, boardPane);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void displayLogPressed() {
-        tourPane.toBack();
-        uniPane.toFront();
-        replayPane.toFront();
-        nickname1.setText("...");
-        nickname2.setText("...");
-        logText.clear();
-
-        File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
-        logText.clear();
-
-        statusLabel.setText("");
-        nextButton.setDisable(false);
-
-        if (displayLogFile != null) {
-            try {
-                rewind = new Duel(displayLogFile);
-                nickname1.setText(rewind.getStartingPlayer());
-                nickname2.setText(rewind.getFollowingPlayer());
-                draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
-                draw.clearBoard(board);
-                draw.drawGenCells(board, boardPane, Translator.boxesFromInitString(rewind.getInitData()));
-            } catch (FileNotFoundException e) {
-                nextButton.setDisable(true);
-                dialog.showErrorDialogWithStack(e);
-            } catch (ProtocolException e) {
-                nextButton.setDisable(true);
-                dialog.showErrorDialogWithStack(e);
-            } catch (Exception e) {
-                nextButton.setDisable(true);
-                dialog.showErrorDialogWithStack(e);
-            }
-        }
-        else {
-            nextButton.setDisable(true);
-        }
-    }
-
-    @FXML
-    void nextPressed() {
-        try {
-        if (!rewind.isFinished()) {
-               readAndPrint();
-        } else {
-            readAndPrint();
-            statusLabel.setText(rewind.getMessage());
-            nextButton.setDisable(true);
-        }
-        } catch (ProtocolException e) {
-            dialog.showErrorDialogWithStack(e);
-        } catch (Exception e) {
-            dialog.showErrorDialogWithStack(e);
-        }
-    }
-
-    private void readAndPrint() throws Exception {
-        draw.drawCells(board,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
-        logText.appendText(rewind.getLastMove()+"\n");
-        rewind.nextMove();
-    }
-
-    @FXML
-    void selectLogPressed() {
-        tourPane.toBack();
-        logFile = dialog.showFileChooser("CreateLogFile", mainPane, true);
-    }
-
-    @FXML
-    void setSizePressed() throws Exception {
-        initialize();
-        draw.setBoardSize(dialog.showIntValueSelectDialog("Set board size", "Set board size", 21, 3, 1000));
-        System.out.println("Size: " + draw.getBoardSize());
-        draw.clearBoard(board);
-        draw.drawNet(board, boardPane);
-    }
-
-    @FXML
     void startPressed() {
         try {
             draw.redrawNet(board, boardPane);
@@ -340,6 +333,16 @@ public class Controller {
 
     }
 
+    @FXML
+    void aboutPressed() {
+        dialog.showAbout();
+    }
+
+    void initialize() {
+        boardPane.widthProperty().addListener(boardPaneSizeListener);
+        boardPane.heightProperty().addListener(boardPaneSizeListener);
+    }
+
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {
         try {
             draw.redrawNet(board, boardPane);
@@ -348,8 +351,4 @@ public class Controller {
         }
     };
 
-    void initialize() {
-        boardPane.widthProperty().addListener(boardPaneSizeListener);
-        boardPane.heightProperty().addListener(boardPaneSizeListener);
-    }
 }

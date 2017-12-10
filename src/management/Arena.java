@@ -32,7 +32,7 @@ class Arena {
     }
 
     String getFollowingPlayerNick(){
-        return court.getStartingPlayerNick();
+        return court.getFollowingPlayerNick();
     }
 
     String getInitData(){

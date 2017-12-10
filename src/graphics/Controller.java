@@ -110,7 +110,7 @@ public class Controller {
         followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
         try {
             Duel duel = new Duel(firstPlayer, followingPlayer);
-            nickname1.setText(duel.getStrtingPlayer());
+            nickname1.setText(duel.getStartingPlayer());
             nickname2.setText(duel.getFollowingPlayer());
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e, "Player Directory Not Found");
@@ -171,7 +171,7 @@ public class Controller {
 
         try {
             rewind = new Duel(displayLogFile);
-            nickname1.setText(rewind.getStrtingPlayer());
+            nickname1.setText(rewind.getStartingPlayer());
             nickname2.setText(rewind.getFollowingPlayer());
             draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
             draw.clearBoard(board);

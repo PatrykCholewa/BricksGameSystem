@@ -34,7 +34,7 @@ public class Duel {
         this.arena.setLogFile( logFile );
     }
 
-    public String getStrtingPlayer(){
+    public String getStartingPlayer(){
         return readable ? duelShow.getStartingPlayer() : arena.getStartingPlayerNick();
     }
 

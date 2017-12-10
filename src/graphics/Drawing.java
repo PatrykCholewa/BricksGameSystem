@@ -9,6 +9,10 @@ import javafx.scene.shape.StrokeLineCap;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * @author Paweł Zych
+ */
+
 public class Drawing { ;
     private int boardSize;
     private int scale;

@@ -169,19 +169,27 @@ public class Controller {
         statusLabel.setText("");
         nextButton.setDisable(false);
 
-        try {
-            rewind = new Duel(displayLogFile);
-            nickname1.setText(rewind.getStartingPlayer());
-            nickname2.setText(rewind.getFollowingPlayer());
-            draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
-            draw.clearBoard(board);
-            draw.drawGenCells(board,boardPane,Translator.boxesFromInitString(rewind.getInitData()));
-        } catch (FileNotFoundException e) {
-            dialog.showErrorDialogWithStack(e);
-        } catch (ProtocolException e) {
-            dialog.showErrorDialogWithStack(e);
-        } catch (Exception e) {
-            dialog.showErrorDialogWithStack(e);
+        if (displayLogFile != null) {
+            try {
+                rewind = new Duel(displayLogFile);
+                nickname1.setText(rewind.getStartingPlayer());
+                nickname2.setText(rewind.getFollowingPlayer());
+                draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
+                draw.clearBoard(board);
+                draw.drawGenCells(board, boardPane, Translator.boxesFromInitString(rewind.getInitData()));
+            } catch (FileNotFoundException e) {
+                nextButton.setDisable(true);
+                dialog.showErrorDialogWithStack(e);
+            } catch (ProtocolException e) {
+                nextButton.setDisable(true);
+                dialog.showErrorDialogWithStack(e);
+            } catch (Exception e) {
+                nextButton.setDisable(true);
+                dialog.showErrorDialogWithStack(e);
+            }
+        }
+        else {
+            nextButton.setDisable(true);
         }
     }
 

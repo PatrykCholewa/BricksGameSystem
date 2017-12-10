@@ -11,13 +11,16 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import management.Duel;
+import management.Tournament;
 import tools.Translator;
 
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.ProtocolException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * @author Paweł Zych
@@ -36,6 +39,16 @@ public class Controller {
     AnchorPane duelPane = new AnchorPane();
     @FXML
     AnchorPane replayPane = new AnchorPane();
+    @FXML
+    AnchorPane tourPane = new AnchorPane();
+    @FXML
+    Button tourStartButton = new Button();
+    @FXML
+    TextArea tourScoreText = new TextArea();
+    @FXML
+    TextArea tourDuelsText = new TextArea();
+    @FXML
+    TextArea tourErrorsText = new TextArea();
     @FXML
     Button startButton = new Button();
     @FXML
@@ -63,7 +76,7 @@ public class Controller {
     @FXML
     MenuItem manualBarrier = new MenuItem();
     @FXML
-    MenuItem tournament = new MenuItem();
+    MenuItem tournamentButton = new MenuItem();
     @FXML
     MenuItem duelButton = new MenuItem();
     @FXML
@@ -75,6 +88,8 @@ public class Controller {
 
     private File firstPlayer;
     private File followingPlayer;
+
+    private Tournament tournament;
 
     private int randBoxNumber = 0;
     private ArrayList<Point> manBoxes = new ArrayList<>();
@@ -94,12 +109,56 @@ public class Controller {
     }
 
     @FXML
-    void tournamentPressed() {
-        dialog.showWipDialog();
+    void tourButtonPressed() {
+        tourPane.toFront();
+        tourStartButton.setDisable(false);
+        File playersDir = dialog.showDriectoryChooser("Select Players Directory", boardPane);
+        File resultsDir = dialog.showDriectoryChooser("Select Results Directory", boardPane);
+        if (playersDir != null && resultsDir != null) {
+            try {
+                tournament = new Tournament(playersDir, resultsDir);
+
+            } catch (IOException e) {
+                dialog.showErrorDialogWithStack(e);
+                tourStartButton.setDisable(true);
+            }
+        }
+        else {
+            dialog.showError(new Exception("Directories not set"));
+            tourStartButton.setDisable(true);
+        }
+    }
+
+    @FXML
+    void tourStartButtonPressed(){
+        try {
+            tournament.start("3");
+            ////////////////////////////////////////////////////////////////////////////////////////////////////// TODO Only For Prewiev
+            Scanner scn = new Scanner(new File("./test/testFiles/tourTest/results/score.txt"));
+            while (scn.hasNext()){
+                tourScoreText.appendText(scn.nextLine()+"\n");
+            }
+            scn.close();
+            Scanner scn2 = new Scanner(new File("./test/testFiles/tourTest/results/duels.txt"));
+            while (scn2.hasNext()){
+                tourDuelsText.appendText(scn2.nextLine()+"\n");
+            }
+            scn2.close();
+            Scanner scn3 = new Scanner(new File("./test/testFiles/tourTest/results/err.txt"));
+            while (scn3.hasNext()){
+                tourErrorsText.appendText(scn3.nextLine()+"\n");
+            }
+            scn3.close();
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void duelPressed() {
+        tourPane.toBack();
         uniPane.toFront();
         duelPane.toFront();
         nickname1.setText("...");
@@ -157,6 +216,7 @@ public class Controller {
 
     @FXML
     void displayLogPressed() {
+        tourPane.toBack();
         uniPane.toFront();
         replayPane.toFront();
         nickname1.setText("...");
@@ -218,6 +278,7 @@ public class Controller {
 
     @FXML
     void selectLogPressed() {
+        tourPane.toBack();
         logFile = dialog.showFileChooser("CreateLogFile", mainPane, true);
     }
 
@@ -274,7 +335,7 @@ public class Controller {
         try {
             draw.drawCells(board, boardPane, player, Translator.stringToBoxPair(move));
         } catch (ProtocolException e) {
-            ;
+            dialog.showErrorDialogWithStack(e);
         }
 
     }

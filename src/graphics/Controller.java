@@ -199,7 +199,7 @@ public class Controller {
     @FXML
     void randomBarrierPressed() {
         duelInitializeUI();
-        randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 25, 0, draw.getBoardSize()*draw.getBoardSize());
+        randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 0, 0, draw.getBoardSize()*draw.getBoardSize());
         System.out.println("randBoxNumber: " + randBoxNumber);
         draw.clearBoard(boardCanvas);
         try {
@@ -215,6 +215,12 @@ public class Controller {
         uniPane.setVisible(true);
         uniPane.toFront();
         manualPane.toFront();
+
+        try {
+            draw.drawAllObstacles(boardCanvas,boardPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         menuBar.setDisable(true);
 
@@ -293,6 +299,9 @@ public class Controller {
 
     @FXML
     void tourStartButtonPressed(){
+        tourScoreText.clear();
+        tourDuelsText.clear();
+        tourErrorsText.clear();
         try {
             tournament.start("3");
             ////////////////////////////////////////////////////////////////////////////////////////////////////// TODO Only For Preview
@@ -365,7 +374,6 @@ public class Controller {
             int i = 0;
             duel.start();
             while (!duel.isFinished()) {
-                //TODO Pamiętaj, że musisz dawać możliwość ręcznego przewijania.
                 logAndPrint(duel.getLastMove(), getPlayerID(i++));
                 duel.nextMove();
             }

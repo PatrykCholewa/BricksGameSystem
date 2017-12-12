@@ -14,16 +14,18 @@ import java.util.ArrayList;
  */
 
 public class Drawing { ;
-    private int boardSize;
+    private int size;
     private int scale;
+    private boolean resizable;
 
     public Drawing() {
-        this.boardSize = 21;
+        this.size = 21;
         this.scale = 10;
+        this.resizable = false;
     }
 
     public int getBoardSize() {
-        return boardSize;
+        return size;
     }
 
     public int getScale() {
@@ -31,7 +33,11 @@ public class Drawing { ;
     }
 
     public void setBoardSize(int boardSize) {
-        this.boardSize = boardSize;
+        this.size = boardSize;
+    }
+
+    public void setResizable(boolean resizable) {
+        this.resizable = resizable;
     }
 
     void drawNet(Canvas board, AnchorPane boardPane) throws Exception {
@@ -40,9 +46,9 @@ public class Drawing { ;
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         gc.setLineCap(StrokeLineCap.SQUARE);
-        for (int i = 0; i<= boardSize; i++) {
-            gc.strokeLine(snap(i*scale),0,snap(i*scale),scale* boardSize);
-            gc.strokeLine(0,snap(i*scale),scale* boardSize,snap(i*scale));
+        for (int i = 0; i<= size; i++) {
+            gc.strokeLine(snap(i*scale),0,snap(i*scale),scale* size);
+            gc.strokeLine(0,snap(i*scale),scale* size,snap(i*scale));
         }
     }
 
@@ -97,17 +103,19 @@ public class Drawing { ;
     }
 
     private void calculateMaxScale (Canvas board, AnchorPane boardPane) throws Exception {
-        board.setHeight(boardPane.getHeight()+1);
-        board.setWidth(boardPane.getWidth()+1);
-        double width = boardPane.getWidth();
-        double height = boardPane.getHeight();
-        if (height < width) {
-            scale = (int)height/(boardSize);
-        } else {
-            scale = (int) width / (boardSize);
-        }
-        if (scale < 3) {
-            throw new Exception("Window too small to draw");
+        if (resizable) {
+            board.setHeight(boardPane.getHeight() + 1);
+            board.setWidth(boardPane.getWidth() + 1);
+            double width = boardPane.getWidth();
+            double height = boardPane.getHeight();
+            if (height < width) {
+                scale = (int) height / (size);
+            } else {
+                scale = (int) width / (size);
+            }
+            if (scale < 3) {
+                throw new Exception("Window too small to draw");
+            }
         }
     }
 
@@ -116,7 +124,7 @@ public class Drawing { ;
     }
 
     public boolean verifyPos(int pos){
-        return (pos >= 0) && (pos < boardSize);
+        return (pos >= 0) && (pos < size);
     }
 
     public int convertToPos(double coord){

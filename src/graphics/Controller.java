@@ -72,8 +72,6 @@ public class Controller {
     @FXML
     MenuItem setSizeMenu = new MenuItem();
     @FXML
-    MenuItem selectLogMenu = new MenuItem();
-    @FXML
     MenuItem replayMenu = new MenuItem();
     @FXML
     MenuItem closeMenu = new MenuItem();
@@ -104,23 +102,12 @@ public class Controller {
     private Dialogs dialog = new Dialogs();
 
     @FXML
-    void selectLogPressed() {
-        tourPane.toBack();
-        logFile = dialog.showFileChooser("CreateLogFile", mainPane, true);
-    }
-
-    @FXML
     void displayLogPressed() {
-        tourPane.toBack();
-        uniPane.toFront();
-        replayPane.toFront();
-        replayNick1Label.setText("...");
-        replayNick2Label.setText("...");
-        replayLogText.clear();
+        replayInitializeUI();
+        setAutoBoardResizing(true);
 
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
 
-        statusLabel.setText("");
         replayNextButton.setDisable(false);
 
         if (displayLogFile != null) {
@@ -147,8 +134,21 @@ public class Controller {
         }
     }
 
+    void replayInitializeUI(){
+        tourPane.setVisible(false);
+        uniPane.setVisible(true);
+        uniPane.toFront();
+        replayPane.toFront();
+
+        replayNick1Label.setText("...");
+        replayNick2Label.setText("...");
+        statusLabel.setText("");
+        replayLogText.clear();
+    }
+
     @FXML
     void nextPressed() {
+        setAutoBoardResizing(false);
         try {
             if (!rewind.isFinished()) {
                 readAndPrint();
@@ -177,7 +177,6 @@ public class Controller {
 
     @FXML
     void setSizePressed() throws Exception {
-        initialize();
         draw.setBoardSize(dialog.showIntValueSelectDialog("Set board size", "Set board size", 21, 3, 1000));
         System.out.println("Size: " + draw.getBoardSize());
         draw.clearBoard(boardCanvas);
@@ -221,8 +220,12 @@ public class Controller {
 
     @FXML
     void tourButtonPressed() {
+        uniPane.setVisible(false);
+        tourPane.setVisible(true);
         tourPane.toFront();
+
         tourStartButton.setDisable(false);
+
         File playersDir = dialog.showDriectoryChooser("Select Players Directory", boardPane);
         File resultsDir = dialog.showDriectoryChooser("Select Results Directory", boardPane);
         if (playersDir != null && resultsDir != null) {
@@ -269,15 +272,12 @@ public class Controller {
 
     @FXML
     void duelPressed() {
-        tourPane.toBack();
-        uniPane.toFront();
-        duelPane.toFront();
-        duelNick1Label.setText("...");
-        duelNick2Label.setText("...");
-        duelLogText.clear();
+        duelInitializeUI();
 
         firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
         followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
+        logFile = dialog.showFileChooser("Select Log File", mainPane, true);
+
         try {
             Duel duel = new Duel(firstPlayer, followingPlayer);
             duelNick1Label.setText(duel.getStartingPlayer());
@@ -287,6 +287,17 @@ public class Controller {
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e, "Can't Read Player Name");
         }
+    }
+
+    void duelInitializeUI(){
+        tourPane.setVisible(false);
+        uniPane.setVisible(true);
+        uniPane.toFront();
+        duelPane.toFront();
+
+        duelNick1Label.setText("...");
+        duelNick2Label.setText("...");
+        duelLogText.clear();
     }
 
     @FXML
@@ -343,9 +354,16 @@ public class Controller {
         dialog.showAbout();
     }
 
-    void initialize() {
-        boardPane.widthProperty().addListener(boardPaneSizeListener);
-        boardPane.heightProperty().addListener(boardPaneSizeListener);
+    void setAutoBoardResizing(boolean value) {
+        if (value) {
+            boardPane.widthProperty().addListener(boardPaneSizeListener);
+            boardPane.heightProperty().addListener(boardPaneSizeListener);
+            draw.setResizable(true);
+        } else {
+            boardPane.widthProperty().removeListener(boardPaneSizeListener);
+            boardPane.heightProperty().removeListener(boardPaneSizeListener);
+            draw.setResizable(false);
+        }
     }
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {
@@ -355,5 +373,4 @@ public class Controller {
             e.printStackTrace();
         }
     };
-
 }

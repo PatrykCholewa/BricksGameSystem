@@ -316,7 +316,7 @@ public class Controller {
             int i = 0;
             duel.start();
             while (!duel.isFinished()) {
-                //TODO Pamiętaj, że musisz dawać możliwość ręcznego przewijania.
+
                 logAndPrint(duel.getLastMove(), getPlayerID(i++));
                 duel.nextMove();
             }
@@ -334,12 +334,11 @@ public class Controller {
         }
     }
 
-    private int getPlayerID(int counter) {                              //TODO Takie metody nie w kontrolerze.
+    private int getPlayerID(int counter) {
         return ((counter) % 2) + 1;
     }
 
     private void logAndPrint(String move, int player) throws Exception {
-        //TODO Rozważ move + " :" + getLastPlayer to będzie można wywalić metodę wyżej.
         duelLogText.appendText(move + " :P" + player + '\n');
         try {
             draw.drawCells(boardCanvas, boardPane, player, Translator.stringToBoxPair(move));

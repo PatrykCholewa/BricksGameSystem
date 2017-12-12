@@ -13,10 +13,10 @@ class MatrixTest {
 
         Matrix matrix = new Matrix( 2 );
 
-        matrix.setValue( new Point(0,0) , '1' );
-        matrix.setValue( new Point(1,1) , '3' );
+        matrix.setTrue( new Point(0,0) );
+        matrix.setTrue( new Point(1,1) );
 
-        assertArrayEquals( new Character[][]{ {'1','0'} , {'0','3'} } , matrix.getMatrix() );
+        assertArrayEquals( new Boolean[][]{ {true,false} , {false,true} } , matrix.getMatrix() );
 
     }
 

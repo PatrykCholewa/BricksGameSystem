@@ -2,8 +2,10 @@ package management;
 
 import tournaments.TournamentScore;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Tournament {
 
@@ -16,14 +18,14 @@ public class Tournament {
         this.score = new TournamentScore( resultsDirectory );
     }
 
-    public void start( String initData ) throws IOException {
+    public void start( int size , ArrayList<Point> boxes ) throws IOException {
         File []players;
         while( executioner.hasNext() ){
             players = executioner.next();
             try {
                 arena = new Arena(players[0], players[1]);
                 arena.setLogFile( score.createNewDuelLogFile() );
-                arena.setBoard( initData );
+                arena.setBoard(size, boxes );
                 arena.start();
                 arena.finish();
                 score.addNewDuel( arena.getStartingPlayerNick() ,

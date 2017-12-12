@@ -122,12 +122,12 @@
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
                         <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
-                        <Label fx:id="duelNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+                        <Label fx:id="duelNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="duelNick2Label" prefHeight="60.0" prefWidth="190.0" text="..." AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
+                        <Label fx:id="duelNick2Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -146,12 +146,12 @@
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" layoutY="125.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
                         <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <Label fx:id="replayNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+                        <Label fx:id="replayNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label fx:id="replayNick2Label" layoutX="5.0" layoutY="130.0" prefHeight="60.0" prefWidth="190.0" text="..." AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
+                        <Label fx:id="replayNick2Label" layoutX="5.0" layoutY="130.0" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
                            <font>
                               <Font size="15.0" />
                            </font>

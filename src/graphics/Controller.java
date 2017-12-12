@@ -330,7 +330,7 @@ public class Controller {
         tourDuelsLog.getItems().clear();
         tourErrorsText.clear();
         try {
-            tournament.start("3");
+            tournament.start(draw.getBoardSize(),draw.getObstaclePoints());
             ////////////////////////////////////////////////////////////////////////////////////////////////////// TODO Only For Preview
             Scanner scn = new Scanner(new File("./test/testFiles/tourTest/results/score.txt"));
             while (scn.hasNext()){

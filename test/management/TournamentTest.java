@@ -3,8 +3,10 @@ package management;
 import org.junit.jupiter.api.Test;
 import testTools.FileComparator;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +37,7 @@ class TournamentTest {
         resultsDir.mkdir();
 
         Tournament tournament = new Tournament( playersDir , resultsDir );
-        tournament.start( "3" );
+        tournament.start( 3,new ArrayList<Point>());
 
         System.out.println( "SCORE" );
         System.out.println( "-----------------------");

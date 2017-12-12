@@ -56,12 +56,18 @@ class Trial {
     void initPlayer( String initData , int player ) throws IOException, TimeoutException {
 
         nextPlayer();
-        commanders[player].initProcess();
+        try {
+            commanders[player].initProcess();
+        } catch ( IOException e ){
+            lastMove = null;
+            throw e;
+        }
         commanders[player].insertOutputLine( initData );
         watch.initTimer();
 
         while( !commanders[player].hasInput() ){
             if( watch.exceededInitTime() ){
+                lastMove = "NORESPONSE";
                 throw new TimeoutException( "Player " + commanders[player].getNick() + " do not answer!" );
             }
         }

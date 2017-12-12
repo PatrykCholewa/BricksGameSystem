@@ -50,37 +50,43 @@ public class Controller {
     @FXML
     TextArea tourErrorsText = new TextArea();
     @FXML
-    Button startButton = new Button();
+    Button duelStartButton = new Button();
     @FXML
-    Button nextButton = new Button();
+    Button replayNextButton = new Button();
     @FXML
-    Label nickname1 = new Label();
+    Label replayNick1Label = new Label();
     @FXML
-    Label nickname2 = new Label();
+    Label replayNick2Label = new Label();
     @FXML
-    Canvas board = new Canvas();
+    Label duelNick1Label = new Label();
+    @FXML
+    Label duelNick2Label = new Label();
+    @FXML
+    TextArea replayLogText = new TextArea();
+    @FXML
+    TextArea duelLogText = new TextArea();
+    @FXML
+    Canvas boardCanvas = new Canvas();
     @FXML
     Label statusLabel = new Label();
     @FXML
-    TextArea logText = new TextArea();
+    MenuItem setSizeMenu = new MenuItem();
     @FXML
-    MenuItem setSize = new MenuItem();
+    MenuItem selectLogMenu = new MenuItem();
     @FXML
-    MenuItem selectLog = new MenuItem();
+    MenuItem replayMenu = new MenuItem();
     @FXML
-    MenuItem displayLog = new MenuItem();
+    MenuItem closeMenu = new MenuItem();
     @FXML
-    MenuItem close = new MenuItem();
+    MenuItem randomBarrierMenu = new MenuItem();
     @FXML
-    MenuItem randomBarrier = new MenuItem();
+    MenuItem manualBarrierMenu = new MenuItem();
     @FXML
-    MenuItem manualBarrier = new MenuItem();
+    MenuItem tournamentMenu = new MenuItem();
     @FXML
-    MenuItem tournamentButton = new MenuItem();
+    MenuItem duelMenu = new MenuItem();
     @FXML
-    MenuItem duelButton = new MenuItem();
-    @FXML
-    MenuItem about = new MenuItem();
+    MenuItem aboutMenu = new MenuItem();
 
     private File logFile;
 
@@ -108,37 +114,36 @@ public class Controller {
         tourPane.toBack();
         uniPane.toFront();
         replayPane.toFront();
-        nickname1.setText("...");
-        nickname2.setText("...");
-        logText.clear();
+        replayNick1Label.setText("...");
+        replayNick2Label.setText("...");
+        replayLogText.clear();
 
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
-        logText.clear();
 
         statusLabel.setText("");
-        nextButton.setDisable(false);
+        replayNextButton.setDisable(false);
 
         if (displayLogFile != null) {
             try {
                 rewind = new Duel(displayLogFile);
-                nickname1.setText(rewind.getStartingPlayer());
-                nickname2.setText(rewind.getFollowingPlayer());
+                replayNick1Label.setText(rewind.getStartingPlayer());
+                replayNick2Label.setText(rewind.getFollowingPlayer());
                 draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
-                draw.clearBoard(board);
-                draw.drawGenCells(board, boardPane, Translator.boxesFromInitString(rewind.getInitData()));
+                draw.clearBoard(boardCanvas);
+                draw.drawGenCells(boardCanvas, boardPane, Translator.boxesFromInitString(rewind.getInitData()));
             } catch (FileNotFoundException e) {
-                nextButton.setDisable(true);
+                replayNextButton.setDisable(true);
                 dialog.showErrorDialogWithStack(e);
             } catch (ProtocolException e) {
-                nextButton.setDisable(true);
+                replayNextButton.setDisable(true);
                 dialog.showErrorDialogWithStack(e);
             } catch (Exception e) {
-                nextButton.setDisable(true);
+                replayNextButton.setDisable(true);
                 dialog.showErrorDialogWithStack(e);
             }
         }
         else {
-            nextButton.setDisable(true);
+            replayNextButton.setDisable(true);
         }
     }
 
@@ -150,7 +155,7 @@ public class Controller {
             } else {
                 readAndPrint();
                 statusLabel.setText(rewind.getMessage());
-                nextButton.setDisable(true);
+                replayNextButton.setDisable(true);
             }
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e);
@@ -160,8 +165,8 @@ public class Controller {
     }
 
     private void readAndPrint() throws Exception {
-        draw.drawCells(board,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
-        logText.appendText(rewind.getLastMove()+"\n");
+        draw.drawCells(boardCanvas,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
+        replayLogText.appendText(rewind.getLastMove()+"\n");
         rewind.nextMove();
     }
 
@@ -175,17 +180,17 @@ public class Controller {
         initialize();
         draw.setBoardSize(dialog.showIntValueSelectDialog("Set board size", "Set board size", 21, 3, 1000));
         System.out.println("Size: " + draw.getBoardSize());
-        draw.clearBoard(board);
-        draw.drawNet(board, boardPane);
+        draw.clearBoard(boardCanvas);
+        draw.drawNet(boardCanvas, boardPane);
     }
 
     @FXML
     void randomBarrierPressed() {
         randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 25, 0, draw.getBoardSize()*draw.getBoardSize());
         System.out.println("randBoxNumber: " + randBoxNumber);
-        draw.clearBoard(board);
+        draw.clearBoard(boardCanvas);
         try {
-            draw.drawNet(board, boardPane);
+            draw.drawNet(boardCanvas, boardPane);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,12 +208,12 @@ public class Controller {
         if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
         {
             if (event.getButton() == MouseButton.PRIMARY) {
-                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), false);
+                draw.drawManCell(boardCanvas, boardPane, new Point(x_pos, y_pos), false);
                 if (!manBoxes.contains(new Point(x_pos,y_pos)))
                     manBoxes.add(new Point(x_pos,y_pos));
             }
             if (event.getButton() == MouseButton.SECONDARY) {
-                draw.drawManCell(board, boardPane, new Point(x_pos, y_pos), true);
+                draw.drawManCell(boardCanvas, boardPane, new Point(x_pos, y_pos), true);
                 manBoxes.remove(new Point(x_pos,y_pos));
             }
         }
@@ -239,7 +244,7 @@ public class Controller {
     void tourStartButtonPressed(){
         try {
             tournament.start("3");
-            ////////////////////////////////////////////////////////////////////////////////////////////////////// TODO Only For Prewiev
+            ////////////////////////////////////////////////////////////////////////////////////////////////////// TODO Only For Preview
             Scanner scn = new Scanner(new File("./test/testFiles/tourTest/results/score.txt"));
             while (scn.hasNext()){
                 tourScoreText.appendText(scn.nextLine()+"\n");
@@ -267,16 +272,16 @@ public class Controller {
         tourPane.toBack();
         uniPane.toFront();
         duelPane.toFront();
-        nickname1.setText("...");
-        nickname2.setText("...");
-        logText.clear();
+        duelNick1Label.setText("...");
+        duelNick2Label.setText("...");
+        duelLogText.clear();
 
         firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
         followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
         try {
             Duel duel = new Duel(firstPlayer, followingPlayer);
-            nickname1.setText(duel.getStartingPlayer());
-            nickname2.setText(duel.getFollowingPlayer());
+            duelNick1Label.setText(duel.getStartingPlayer());
+            duelNick2Label.setText(duel.getFollowingPlayer());
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e, "Player Directory Not Found");
         } catch (ProtocolException e) {
@@ -287,15 +292,15 @@ public class Controller {
     @FXML
     void startPressed() {
         try {
-            draw.redrawNet(board, boardPane);
-            logText.clear();
+            draw.redrawNet(boardCanvas, boardPane);
+            duelLogText.clear();
             Duel duel = new Duel(firstPlayer, followingPlayer, logFile);
             if (randBoxNumber != 0) {
                 ArrayList<Point> randBoxes = duel.setBoard(draw.getBoardSize(), randBoxNumber);
-                draw.drawGenCells(board, boardPane, randBoxes);
+                draw.drawGenCells(boardCanvas, boardPane, randBoxes);
             } else {
                 duel.setBoard(draw.getBoardSize(), manBoxes);
-                draw.drawGenCells(board, boardPane, manBoxes);
+                draw.drawGenCells(boardCanvas, boardPane, manBoxes);
             }
             int i = 0;
             duel.start();
@@ -324,9 +329,9 @@ public class Controller {
 
     private void logAndPrint(String move, int player) throws Exception {
         //TODO Rozważ move + " :" + getLastPlayer to będzie można wywalić metodę wyżej.
-        logText.appendText(move + " :P" + player + '\n');
+        duelLogText.appendText(move + " :P" + player + '\n');
         try {
-            draw.drawCells(board, boardPane, player, Translator.stringToBoxPair(move));
+            draw.drawCells(boardCanvas, boardPane, player, Translator.stringToBoxPair(move));
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e);
         }
@@ -345,7 +350,7 @@ public class Controller {
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {
         try {
-            draw.redrawNet(board, boardPane);
+            draw.redrawNet(boardCanvas, boardPane);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -23,7 +23,7 @@
             <Label fx:id="statusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="800.0" text="TEST" textFill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
-      <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar fx:id="menuBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Program">
             <items>
@@ -32,7 +32,7 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Replay">
               <items>
-                <MenuItem fx:id="replayMenu" mnemonicParsing="false" onAction="#displayLogPressed" text="Open Log File" />
+                <MenuItem fx:id="replayMenu" mnemonicParsing="false" onAction="#replayLogPressed" text="Open Log File" />
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Board">
@@ -102,7 +102,7 @@
          <children>
             <AnchorPane fx:id="boardPane" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Canvas fx:id="boardCanvas" height="600.0" onMouseDragged="#boardMousePressedDragged" onMousePressed="#boardMousePressedDragged" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Canvas fx:id="boardCanvas" height="600.0" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <StackPane alignment="CENTER_LEFT" prefHeight="600.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -133,6 +133,28 @@
                         <Button layoutX="145.0" layoutY="478.0" mnemonicParsing="false" text="&gt;&gt;&gt;" />
                      </children>
                   </AnchorPane>
+                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </AnchorPane>
+                  <AnchorPane fx:id="manualPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="200.0" text="MANUAL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="System Bold Italic" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="manualFinishButton" layoutX="32.0" layoutY="511.0" mnemonicParsing="false" onAction="#manualFinishButtonPressed" prefHeight="52.0" prefWidth="142.0" text="Finish Ediditing" />
+                        <Label alignment="CENTER" layoutX="20.0" layoutY="68.0" prefHeight="40.0" prefWidth="160.0" text="Left Click to Select Box" wrapText="true" />
+                        <Label layoutX="32.0" layoutY="124.0" text="Right Click to Unselect Box" />
+                        <Button fx:id="manualClearButton" layoutX="73.0" layoutY="184.0" mnemonicParsing="false" onAction="#manualClearButtonPressed" text="Clear All" />
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="duelPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
                      <children>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -149,26 +171,13 @@
                            </font>
                         </Label>
                         <TextArea fx:id="duelLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" prefHeight="42.0" prefWidth="200.0" text="DUEL" textAlignment="CENTER" AnchorPane.bottomAnchor="558.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" prefHeight="42.0" prefWidth="200.0" text="DUEL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
                               <Font name="System Bold Italic" size="24.0" />
                            </font>
                         </Label>
                         <Button fx:id="duelStartButton" layoutX="46.0" layoutY="516.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
                      </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutY="70.0" prefHeight="40.0" prefWidth="200.0" text="STARTUP..." textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
                   </AnchorPane>
                </children>
             </StackPane>

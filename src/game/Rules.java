@@ -21,8 +21,8 @@ class Rules {
     private void validateAddingBlock( Point p ) throws IndexOutOfBoundsException , IllegalArgumentException {
 
         try{
-            Character val = board.getValue( p );
-            if( val != '0' ){
+            Boolean val = board.isFilled( p );
+            if(val){
                 throw new IllegalArgumentException( "Cell("+p.x+";"+p.y+") already has a value of " + val + "."  );
             }
         } catch ( IndexOutOfBoundsException e ){
@@ -33,14 +33,14 @@ class Rules {
 
     private Boolean isThereZero( Point p ){
 
-        Character c;
+        Boolean b;
         try{
-            c = board.getValue( p );
+            b = board.isFilled( p );
         } catch ( IllegalArgumentException e ){
-            c = 'X';
+            b = true;
         }
 
-        return c == '0';
+        return !b;
 
     }
 
@@ -83,11 +83,11 @@ class Rules {
 
     Boolean isFinished(){
 
-        for( int i = 0 ; i < board.getMatrixSize() ; i++ ){
-            for( int j = 0 ; j < board.getMatrixSize() ; j++ ){
-                if( board.getValue( new Point( i , j ) ) == '0' && hasANeighbourZero( new Point( i , j ) ) ){
-                    return false;
-                }
+        ArrayList<Point> remainingBoxes = board.getRemainingBoxes();
+
+        for( int i = 0 ; i < remainingBoxes.size() ; i++ ){
+            if( !board.isFilled(remainingBoxes.get(i)) && hasANeighbourZero( remainingBoxes.get(i) ) ) {
+                return false;
             }
         }
 

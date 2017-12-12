@@ -8,20 +8,16 @@ import java.awt.*;
 
 class Matrix {
 
-    private Character [][]matrix;
+    private Boolean [][]matrix;
     private int matrixSize;
 
     Matrix( int size ){
         this.matrixSize = size;
-        this.matrix = new Character[size][size];
+        this.matrix = new Boolean[size][size];
         clear();
     }
 
-    int getMatrixSize(){
-        return matrixSize;
-    }
-
-    Character getValue( Point p ){
+    Boolean getValue( Point p ){
         try{
             return matrix[p.x][p.y];
         } catch( IndexOutOfBoundsException e ){
@@ -30,26 +26,20 @@ class Matrix {
         }
     }
 
-    Character [][]getMatrix(){
+    Boolean [][]getMatrix(){
         return matrix;
     }
 
     void clear(){
         for(int i = 0; i < matrixSize; i++ ){
             for(int j = 0; j < matrixSize; j++ ){
-                setValue( new Point( i, j ) ,'0' );
+                matrix[i][j] = false;
             }
         }
     }
 
-    void setValue( Point p , int value) {
-        setValue( p , (char)(value + '0' ) );
-    }
-
-    void setValue( Point p , char value ){
-        if( value < '0' )
-            throw new IllegalArgumentException( "Lower than ASCII('0') " );
-        matrix[p.x][p.y] = value;
+    void setTrue(Point p){
+        matrix[p.x][p.y] = true;
     }
 
     private String matrixSizeToString(){

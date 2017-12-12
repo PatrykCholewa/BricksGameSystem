@@ -3,6 +3,7 @@ package graphics;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
@@ -49,13 +50,17 @@ public class Controller {
     @FXML
     TextArea tourScoreText = new TextArea();
     @FXML
-    TextArea tourDuelsText = new TextArea();
+    ListView<String> tourDuelsLog = new ListView<>();
     @FXML
     TextArea tourErrorsText = new TextArea();
+    @FXML
+    Button tourReplayButton = new Button();
     @FXML
     Button duelStartButton = new Button();
     @FXML
     Button replayNextButton = new Button();
+    @FXML
+    Button replayBackButton = new Button();
     @FXML
     Label replayNick1Label = new Label();
     @FXML
@@ -109,6 +114,8 @@ public class Controller {
     private BoardDraw draw = new BoardDraw();
     private Dialogs dialog = new Dialogs();
 
+    private boolean backToTournamentFlag = false;
+
     @FXML
     void replayLogPressed() {
         setAutoBoardResizing(true);
@@ -116,9 +123,11 @@ public class Controller {
         replayInitializeUI();
 
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
-
         replayNextButton.setDisable(false);
+        replayFromFile(displayLogFile);
+    }
 
+    void replayFromFile(File displayLogFile){
         if (displayLogFile != null) {
             try {
                 rewind = new Duel(displayLogFile);
@@ -156,10 +165,16 @@ public class Controller {
         replayNick2Label.setText("...");
         statusLabel.setText("");
         replayLogText.clear();
+
+        replayBackButton.setVisible(false);
     }
 
     @FXML
     void nextPressed() {
+        if (backToTournamentFlag)
+            replayBackButton.setVisible(true);
+        else
+            replayBackButton.setVisible(false);
         try {
             if (!rewind.isFinished()) {
                 readAndPrint();
@@ -168,11 +183,18 @@ public class Controller {
                 statusLabel.setText(rewind.getMessage());
                 replayNextButton.setDisable(true);
             }
+
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e);
         } catch (Exception e) {
             dialog.showErrorDialogWithStack(e);
         }
+    }
+
+    @FXML
+    void replayBackButtonPressed(){
+        backToTournamentFlag = false;
+        tourInitializeUI();
     }
 
     private void readAndPrint() throws Exception {
@@ -274,9 +296,8 @@ public class Controller {
 
     @FXML
     void tourButtonPressed() {
-        uniPane.setVisible(false);
-        tourPane.setVisible(true);
-        tourPane.toFront();
+        tourInitializeUI();
+
 
         tourStartButton.setDisable(false);
 
@@ -297,10 +318,16 @@ public class Controller {
         }
     }
 
+    void tourInitializeUI(){
+        uniPane.setVisible(false);
+        tourPane.setVisible(true);
+        tourPane.toFront();
+    }
+
     @FXML
     void tourStartButtonPressed(){
         tourScoreText.clear();
-        tourDuelsText.clear();
+        tourDuelsLog.getItems().clear();
         tourErrorsText.clear();
         try {
             tournament.start("3");
@@ -312,7 +339,7 @@ public class Controller {
             scn.close();
             Scanner scn2 = new Scanner(new File("./test/testFiles/tourTest/results/duels.txt"));
             while (scn2.hasNext()){
-                tourDuelsText.appendText(scn2.nextLine()+"\n");
+                tourDuelsLog.getItems().add(scn2.nextLine()+"\n");
             }
             scn2.close();
             Scanner scn3 = new Scanner(new File("./test/testFiles/tourTest/results/err.txt"));
@@ -320,11 +347,27 @@ public class Controller {
                 tourErrorsText.appendText(scn3.nextLine()+"\n");
             }
             scn3.close();
+
+            tourDuelsLog.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void TourReplayButtonPressed(){
+        String name = tourDuelsLog.getSelectionModel().getSelectedItem();
+        String[] split = name.split(":");
+        String number = split[0];
+
+        setAutoBoardResizing(true);
+        replayInitializeUI();
+        replayNextButton.setDisable(false);
+        System.out.println("./test/testFiles/tourTest/results/duels/"+number+".txt");
+        backToTournamentFlag = true;
+        replayFromFile(new File("./test/testFiles/tourTest/results/duels/"+number+".txt"));
     }
 
     @FXML

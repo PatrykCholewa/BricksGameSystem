@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseButton;
@@ -40,6 +41,8 @@ public class Controller {
     @FXML
     AnchorPane replayPane = new AnchorPane();
     @FXML
+    AnchorPane manualPane = new AnchorPane();
+    @FXML
     AnchorPane tourPane = new AnchorPane();
     @FXML
     Button tourStartButton = new Button();
@@ -62,6 +65,10 @@ public class Controller {
     @FXML
     Label duelNick2Label = new Label();
     @FXML
+    Button manualFinishButton = new Button();
+    @FXML
+    Button manualClearButton = new Button();
+    @FXML
     TextArea replayLogText = new TextArea();
     @FXML
     TextArea duelLogText = new TextArea();
@@ -69,6 +76,8 @@ public class Controller {
     Canvas boardCanvas = new Canvas();
     @FXML
     Label statusLabel = new Label();
+    @FXML
+    MenuBar menuBar = new MenuBar();
     @FXML
     MenuItem setSizeMenu = new MenuItem();
     @FXML
@@ -96,15 +105,15 @@ public class Controller {
     private Tournament tournament;
 
     private int randBoxNumber = 0;
-    private ArrayList<Point> manBoxes = new ArrayList<>();
 
-    private Drawing draw = new Drawing();
+    private BoardDraw draw = new BoardDraw();
     private Dialogs dialog = new Dialogs();
 
     @FXML
-    void displayLogPressed() {
-        replayInitializeUI();
+    void replayLogPressed() {
         setAutoBoardResizing(true);
+
+        replayInitializeUI();
 
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
 
@@ -115,9 +124,12 @@ public class Controller {
                 rewind = new Duel(displayLogFile);
                 replayNick1Label.setText(rewind.getStartingPlayer());
                 replayNick2Label.setText(rewind.getFollowingPlayer());
+
                 draw.setBoardSize(Translator.getSizeFromInitString(rewind.getInitData()));
-                draw.clearBoard(boardCanvas);
-                draw.drawGenCells(boardCanvas, boardPane, Translator.boxesFromInitString(rewind.getInitData()));
+                draw.setObstaclePoints(Translator.boxesFromInitString(rewind.getInitData()));
+                draw.removePlayersCells();
+                draw.drawAllObstacles(boardCanvas,boardPane);
+
             } catch (FileNotFoundException e) {
                 replayNextButton.setDisable(true);
                 dialog.showErrorDialogWithStack(e);
@@ -148,7 +160,6 @@ public class Controller {
 
     @FXML
     void nextPressed() {
-        setAutoBoardResizing(false);
         try {
             if (!rewind.isFinished()) {
                 readAndPrint();
@@ -165,7 +176,7 @@ public class Controller {
     }
 
     private void readAndPrint() throws Exception {
-        draw.drawCells(boardCanvas,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
+        draw.drawAndAddCells(boardCanvas,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
         replayLogText.appendText(rewind.getLastMove()+"\n");
         rewind.nextMove();
     }
@@ -177,14 +188,17 @@ public class Controller {
 
     @FXML
     void setSizePressed() throws Exception {
+        duelInitializeUI();
         draw.setBoardSize(dialog.showIntValueSelectDialog("Set board size", "Set board size", 21, 3, 1000));
         System.out.println("Size: " + draw.getBoardSize());
-        draw.clearBoard(boardCanvas);
-        draw.drawNet(boardCanvas, boardPane);
+        draw.removeObstaclePoints();
+        draw.removePlayersCells();
+        draw.drawAllObstacles(boardCanvas,boardPane);
     }
 
     @FXML
     void randomBarrierPressed() {
+        duelInitializeUI();
         randBoxNumber = dialog.showIntValueSelectDialog("Set random", "Set number of random boxes", 25, 0, draw.getBoardSize()*draw.getBoardSize());
         System.out.println("randBoxNumber: " + randBoxNumber);
         draw.clearBoard(boardCanvas);
@@ -197,23 +211,57 @@ public class Controller {
 
     @FXML
     void manualBarrierPressed() {
-        dialog.showWipDialog();
+        tourPane.setVisible(false);
+        uniPane.setVisible(true);
+        uniPane.toFront();
+        manualPane.toFront();
+
+        menuBar.setDisable(true);
+
+        try {
+            draw.drawNet(boardCanvas,boardPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boardCanvas.setOnMouseClicked(this::boardMousePressedDragged);
+        boardCanvas.setOnMouseDragged(this::boardMousePressedDragged);
     }
 
     @FXML
-    void boardMousePressedDragged(MouseEvent event) throws Exception {
+    void manualFinishButtonPressed(){
+        boardCanvas.setOnMouseClicked(null);
+        boardCanvas.setOnMouseDragged(null);
+        startupPane.toFront();
+
+        menuBar.setDisable(false);
+
+    }
+
+    @FXML
+    void manualClearButtonPressed(){
+        draw.removeObstaclePoints();
+        try {
+            draw.drawAllObstacles(boardCanvas,boardPane);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void boardMousePressedDragged(MouseEvent event)  {
         int x_pos = draw.convertToPos(event.getX());
         int y_pos = draw.convertToPos(event.getY());
         if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
         {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                draw.drawManCell(boardCanvas, boardPane, new Point(x_pos, y_pos), false);
-                if (!manBoxes.contains(new Point(x_pos,y_pos)))
-                    manBoxes.add(new Point(x_pos,y_pos));
-            }
-            if (event.getButton() == MouseButton.SECONDARY) {
-                draw.drawManCell(boardCanvas, boardPane, new Point(x_pos, y_pos), true);
-                manBoxes.remove(new Point(x_pos,y_pos));
+            try {
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    draw.addOneObstacleCell(boardCanvas, boardPane, new Point(x_pos, y_pos));
+                }
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    draw.removeOneObstacleCell(boardCanvas, boardPane, new Point(x_pos, y_pos));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -303,15 +351,16 @@ public class Controller {
     @FXML
     void startPressed() {
         try {
-            draw.redrawNet(boardCanvas, boardPane);
             duelLogText.clear();
+            draw.removePlayersCells();
             Duel duel = new Duel(firstPlayer, followingPlayer, logFile);
             if (randBoxNumber != 0) {
                 ArrayList<Point> randBoxes = duel.setBoard(draw.getBoardSize(), randBoxNumber);
-                draw.drawGenCells(boardCanvas, boardPane, randBoxes);
+                draw.setObstaclePoints(randBoxes);
+                draw.drawAllObstacles(boardCanvas, boardPane);
             } else {
-                duel.setBoard(draw.getBoardSize(), manBoxes);
-                draw.drawGenCells(boardCanvas, boardPane, manBoxes);
+                duel.setBoard(draw.getBoardSize(), draw.getObstaclePoints());
+                draw.drawAllObstacles(boardCanvas, boardPane);
             }
             int i = 0;
             duel.start();
@@ -341,7 +390,7 @@ public class Controller {
     private void logAndPrint(String move, int player) throws Exception {
         duelLogText.appendText(move + " :P" + player + '\n');
         try {
-            draw.drawCells(boardCanvas, boardPane, player, Translator.stringToBoxPair(move));
+            draw.drawAndAddCells(boardCanvas, boardPane, player, Translator.stringToBoxPair(move));
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e);
         }
@@ -367,7 +416,7 @@ public class Controller {
 
     ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {
         try {
-            draw.redrawNet(boardCanvas, boardPane);
+            draw.drawAll(boardCanvas,boardPane);
         } catch (Exception e) {
             e.printStackTrace();
         }

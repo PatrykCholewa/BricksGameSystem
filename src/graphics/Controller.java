@@ -121,8 +121,8 @@ public class Controller {
 
     @FXML
     void replayLogPressed() {
+        backToTournamentFlag=false;
         setAutoBoardResizing(true);
-
         replayInitializeUI();
 
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
@@ -253,6 +253,7 @@ public class Controller {
 
     @FXML
     void setSizePressed() throws Exception {
+        setAutoBoardResizing(true);
         duelInitializeUI();
         draw.setBoardSize(dialog.showIntValueSelectDialog("Set board size", "Set board size", 21, 3, 1000));
         System.out.println("Size: " + draw.getBoardSize());
@@ -340,8 +341,6 @@ public class Controller {
     @FXML
     void tourButtonPressed() {
         tourInitializeUI();
-
-
         tourStartButton.setDisable(false);
 
         File playersDir = dialog.showDriectoryChooser("Select Players Directory", boardPane);
@@ -412,6 +411,7 @@ public class Controller {
 
     @FXML
     void duelPressed() {
+        setAutoBoardResizing(true);
         duelInitializeUI();
 
         firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);

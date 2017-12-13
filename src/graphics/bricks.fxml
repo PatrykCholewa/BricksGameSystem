@@ -81,7 +81,7 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="386.0" prefWidth="780.0">
                            <children>
                               <ListView fx:id="tourDuelsLog" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
-                              <Button fx:id="tourReplayButton" layoutX="687.0" layoutY="401.0" mnemonicParsing="false" onAction="#TourReplayButtonPressed" text="Replay" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="40.0" />
+                              <Button fx:id="tourReplayButton" layoutX="687.0" layoutY="401.0" mnemonicParsing="false" onAction="#tourReplayButtonPressed" text="Replay" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="40.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -141,6 +141,14 @@
                         <Button fx:id="duelStartButton" layoutX="46.0" layoutY="516.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
                      </children>
                   </AnchorPane>
+                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </AnchorPane>
                   <AnchorPane fx:id="replayPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
                      <children>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -163,18 +171,10 @@
                            </font>
                         </Label>
                         <Button fx:id="replayNextButton" layoutX="14.0" layoutY="484.0" mnemonicParsing="false" onAction="#nextPressed" prefHeight="42.0" prefWidth="108.0" text="&gt;" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="484.0" />
-                        <Button layoutX="145.0" layoutY="514.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="End" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="514.0" />
-                        <Button layoutX="145.0" layoutY="471.0" mnemonicParsing="false" text="&gt;&gt;&gt;" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="471.0" />
+                        <Button fx:id="replayEndButton" layoutX="145.0" layoutY="514.0" mnemonicParsing="false" onAction="#replayEndButtonPressed" prefHeight="25.0" prefWidth="41.0" text="End" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="514.0" />
+                        <Button fx:id="replayFForwardButton" layoutX="145.0" layoutY="471.0" mnemonicParsing="false" onAction="#replayFForwardButtonPressed" text="&gt;&gt;&gt;" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="471.0" />
                         <Button fx:id="replayBackButton" layoutX="14.0" layoutY="552.0" mnemonicParsing="false" onAction="#replayBackButtonPressed" text="Back to List" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="552.0" />
                      </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
                   </AnchorPane>
                </children>
             </StackPane>

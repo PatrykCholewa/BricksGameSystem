@@ -60,6 +60,10 @@ public class Controller {
     @FXML
     Button replayNextButton = new Button();
     @FXML
+    Button replayFForwardButton = new Button();
+    @FXML
+    Button replayEndButton = new Button();
+    @FXML
     Button replayBackButton = new Button();
     @FXML
     Label replayNick1Label = new Label();
@@ -150,7 +154,7 @@ public class Controller {
             }
         }
         else {
-            replayNextButton.setDisable(true);
+            disableReplayButtons(true);
         }
     }
 
@@ -165,22 +169,23 @@ public class Controller {
         statusLabel.setText("");
         replayLogText.clear();
 
-        replayBackButton.setVisible(false);
-    }
 
-    @FXML
-    void nextPressed() {
+        disableReplayButtons(false);
         if (backToTournamentFlag)
             replayBackButton.setVisible(true);
         else
             replayBackButton.setVisible(false);
+    }
+
+    @FXML
+    void nextPressed() {
         try {
             if (!rewind.isFinished()) {
                 readAndPrint();
             } else {
                 readAndPrint();
                 statusLabel.setText(rewind.getMessage());
-                replayNextButton.setDisable(true);
+                disableReplayButtons(true);
             }
 
         } catch (ProtocolException e) {
@@ -195,6 +200,46 @@ public class Controller {
         backToTournamentFlag = false;
         tourInitializeUI();
     }
+
+    @FXML
+    void replayFForwardButtonPressed(){
+        try{
+            for(int i= 0; i<10;i++) {
+                if(!rewind.isFinished()) {
+                    readAndPrint();
+                }
+                else {
+                    readAndPrint();
+                    statusLabel.setText(rewind.getMessage());
+                    disableReplayButtons(true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void replayEndButtonPressed(){
+        try {
+            while (!rewind.isFinished()) {
+                readAndPrint();
+            }
+            readAndPrint();
+            statusLabel.setText(rewind.getMessage());
+            disableReplayButtons(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void disableReplayButtons(boolean value){
+        replayNextButton.setDisable(value);
+        replayFForwardButton.setDisable(value);
+        replayEndButton.setDisable(value);
+    }
+
 
     private void readAndPrint() throws Exception {
         draw.drawAndAddCells(boardCanvas,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
@@ -352,7 +397,7 @@ public class Controller {
     }
 
     @FXML
-    void TourReplayButtonPressed(){
+    void tourReplayButtonPressed(){
         String name = tourDuelsLog.getSelectionModel().getSelectedItem();
         String[] split = name.split(":");
         String number = split[0];

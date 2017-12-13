@@ -51,7 +51,7 @@ public class TournamentScore {
         return -1;
     }
 
-    public void addNewDuel( String startingPlayer , String followingPlayer , String winner ) throws IOException {
+    public void addNewDuel( String startingPlayer , String followingPlayer , String winner , String endReason ) throws IOException {
 
         int stPlayerIndex = getIndexOfPlayer( startingPlayer );
         int flPlayerIndex = getIndexOfPlayer( followingPlayer );
@@ -73,7 +73,7 @@ public class TournamentScore {
 
         matches.add( new DuelDBRecord( matchIndex , stPlayerIndex , flPlayerIndex , wnPlayerIndex ) );
         players.get( wnPlayerIndex ).addOnePoint();
-        duelSaver.addDuel( matchIndex , startingPlayer , followingPlayer , winner );
+        duelSaver.addDuel( matchIndex , startingPlayer , followingPlayer , winner , endReason );
         scoreSaver.updateScore( players );
 
     }

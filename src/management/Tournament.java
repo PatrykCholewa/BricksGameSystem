@@ -30,7 +30,8 @@ public class Tournament {
                 arena.finish();
                 score.addNewDuel( arena.getStartingPlayerNick() ,
                         arena.getFollowingPlayerNick() ,
-                        arena.getWinner() );
+                        arena.getWinner() ,
+                        arena.getMessage() );
             } catch ( Exception e ){
                 score.saveError( e );
             }

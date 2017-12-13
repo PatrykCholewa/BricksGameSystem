@@ -16,9 +16,9 @@ class DuelSaver {
 
     }
 
-    void addDuel( int number , String startingPlayer , String followingPlayer , String winner ) throws IOException {
+    void addDuel( int number , String startingPlayer , String followingPlayer , String winner , String endReason ) throws IOException {
 
-        bufferedWriter.write( number + ":" + startingPlayer + ":" + followingPlayer + ":" + winner );
+        bufferedWriter.write( number + ":" + startingPlayer + ":" + followingPlayer + ":" + winner  + ":" + endReason );
         bufferedWriter.newLine();
         bufferedWriter.flush();
 

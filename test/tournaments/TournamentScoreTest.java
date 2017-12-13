@@ -22,12 +22,12 @@ class TournamentScoreTest {
 
         TournamentScore ts = new TournamentScore( dir );
 
-        ts.addNewDuel( "P1" , "P2" , "P2" );
-        ts.addNewDuel( "P1" , "P3" , "P3" );
-        ts.addNewDuel( "P2" , "P1" , "P2" );
-        ts.addNewDuel( "P2" , "P3" , "P2" );
-        ts.addNewDuel( "P3" , "P1" , "P1" );
-        ts.addNewDuel( "P3" , "P2" , "P2" );
+        ts.addNewDuel( "P1" , "P2" , "P2" , "Reason1" );
+        ts.addNewDuel( "P1" , "P3" , "P3" , "Reason1" );
+        ts.addNewDuel( "P2" , "P1" , "P2" , "Reason1" );
+        ts.addNewDuel( "P2" , "P3" , "P2" , "Reason1" );
+        ts.addNewDuel( "P3" , "P1" , "P1" , "Reason1" );
+        ts.addNewDuel( "P3" , "P2" , "P2" , "Reason1" );
 
         ts.close();
 

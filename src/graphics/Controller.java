@@ -323,6 +323,7 @@ public class Controller {
     private void boardMousePressedDragged(MouseEvent event)  {
         int x_pos = draw.convertToPos(event.getX());
         int y_pos = draw.convertToPos(event.getY());
+        System.out.println("X:"+ x_pos + " Y:" + y_pos);
         if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
         {
             try {

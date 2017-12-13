@@ -17,6 +17,7 @@ public class BoardDraw { ;
     private int size;
     private int scale;
     private boolean resizable;
+    private boolean drawingNet;
     private ArrayList<Point> obstaclePoints;
     private ArrayList<Point> firstPoints;
     private ArrayList<Point> secondPoints;
@@ -25,6 +26,7 @@ public class BoardDraw { ;
         this.size = 21;
         this.scale = 10;
         this.resizable = true;
+        this.drawingNet = true;
         this.obstaclePoints=new ArrayList<>(10);
         this.firstPoints=new ArrayList<>(10);
         this.secondPoints=new ArrayList<>(10);
@@ -109,19 +111,34 @@ public class BoardDraw { ;
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
-        gc.setFill(Color.YELLOW);
-        for (Point p: obstaclePoints) {
-            gc.fillRect(p.getX() * scale,p.getY() * scale, scale, scale);
+        if (drawingNet) {
+            gc.setFill(Color.YELLOW);
+            for (Point p : obstaclePoints) {
+                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            }
+            gc.setFill(Color.BLUE);
+            for (Point p : firstPoints) {
+                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            }
+            gc.setFill(Color.RED);
+            for (Point p : secondPoints) {
+                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            }
+            drawNet(board, boardPane);
+        } else {
+            gc.setFill(Color.YELLOW);
+            for (Point p : obstaclePoints) {
+                gc.fillRect(p.getX(), p.getY(), 1, 1);
+            }
+            gc.setFill(Color.BLUE);
+            for (Point p : firstPoints) {
+                gc.fillRect(p.getX(), p.getY(), 1, 1);
+            }
+            gc.setFill(Color.RED);
+            for (Point p : secondPoints) {
+                gc.fillRect(p.getX(), p.getY(), 1, 1);
+            }
         }
-        gc.setFill(Color.BLUE);
-        for (Point p: firstPoints) {
-            gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
-        }
-        gc.setFill(Color.RED);
-        for (Point p: secondPoints) {
-            gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
-        }
-        drawNet(board,boardPane);
     }
 
     void clearBoard(Canvas board) {
@@ -130,20 +147,20 @@ public class BoardDraw { ;
     }
 
     void drawNet(Canvas board, AnchorPane boardPane) throws Exception {
-        calculateMaxScale(board,boardPane);
-        GraphicsContext gc = board.getGraphicsContext2D();
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(1);
-        gc.setLineCap(StrokeLineCap.SQUARE);
-        for (int i = 0; i<= size; i++) {
-            gc.strokeLine(snap(i*scale),0,snap(i*scale),scale* size);
-            gc.strokeLine(0,snap(i*scale),scale* size,snap(i*scale));
+            calculateMaxScale(board, boardPane);
+            GraphicsContext gc = board.getGraphicsContext2D();
+            gc.setStroke(Color.BLACK);
+            gc.setLineWidth(1);
+            gc.setLineCap(StrokeLineCap.SQUARE);
+        if (drawingNet) {
+            for (int i = 0; i <= size; i++) {
+                gc.strokeLine(snap(i * scale), 0, snap(i * scale), scale * size);
+                gc.strokeLine(0, snap(i * scale), scale * size, snap(i * scale));
+            }
+        } else {
+            gc.strokeLine(snap(size * scale), 0, snap(size * scale), scale * size);
+            gc.strokeLine(0, snap(size * scale), scale * size, snap(size * scale));
         }
-    }
-
-    void redrawNet(Canvas board,AnchorPane boardPane) throws Exception {
-        clearBoard(board);
-        drawNet(board,boardPane);
     }
 
     private void calculateMaxScale (Canvas board, AnchorPane boardPane) throws Exception {
@@ -157,9 +174,14 @@ public class BoardDraw { ;
             } else {
                 scale = (int) width / (size);
             }
-            if (scale < 3) {
+            if (scale < 1) {
                 throw new Exception("Window too small to draw");
+            } else if (scale > 0 && scale < 2){
+                drawingNet = false;
+            } else {
+                drawingNet = true;
             }
+            System.out.println(scale);
         }
     }
 

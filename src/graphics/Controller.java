@@ -100,21 +100,20 @@ public class Controller {
     @FXML
     MenuItem aboutMenu = new MenuItem();
 
-    private File logFile;
-
-    Duel rewind;
+    private File replayLogFile;
+    private Duel rewind;
 
     private File firstPlayer;
     private File followingPlayer;
 
     private Tournament tournament;
+    private File tourResultDir;
+    private boolean backToTournamentFlag = false;
 
     private int randBoxNumber = 0;
 
     private BoardDraw draw = new BoardDraw();
     private Dialogs dialog = new Dialogs();
-
-    private boolean backToTournamentFlag = false;
 
     @FXML
     void replayLogPressed() {
@@ -127,7 +126,7 @@ public class Controller {
         replayFromFile(displayLogFile);
     }
 
-    void replayFromFile(File displayLogFile){
+    private void replayFromFile(File displayLogFile){
         if (displayLogFile != null) {
             try {
                 rewind = new Duel(displayLogFile);
@@ -155,7 +154,7 @@ public class Controller {
         }
     }
 
-    void replayInitializeUI(){
+    private void replayInitializeUI(){
         tourPane.setVisible(false);
         uniPane.setVisible(true);
         uniPane.toFront();
@@ -276,7 +275,7 @@ public class Controller {
         }
     }
 
-    void boardMousePressedDragged(MouseEvent event)  {
+    private void boardMousePressedDragged(MouseEvent event)  {
         int x_pos = draw.convertToPos(event.getX());
         int y_pos = draw.convertToPos(event.getY());
         if (draw.verifyPos(x_pos) && draw.verifyPos(y_pos))
@@ -302,10 +301,10 @@ public class Controller {
         tourStartButton.setDisable(false);
 
         File playersDir = dialog.showDriectoryChooser("Select Players Directory", boardPane);
-        File resultsDir = dialog.showDriectoryChooser("Select Results Directory", boardPane);
-        if (playersDir != null && resultsDir != null) {
+        tourResultDir = dialog.showDriectoryChooser("Select Results Directory", boardPane);
+        if (playersDir != null && tourResultDir != null) {
             try {
-                tournament = new Tournament(playersDir, resultsDir);
+                tournament = new Tournament(playersDir, tourResultDir);
 
             } catch (IOException e) {
                 dialog.showErrorDialogWithStack(e);
@@ -318,7 +317,7 @@ public class Controller {
         }
     }
 
-    void tourInitializeUI(){
+    private void tourInitializeUI(){
         uniPane.setVisible(false);
         tourPane.setVisible(true);
         tourPane.toFront();
@@ -331,26 +330,22 @@ public class Controller {
         tourErrorsText.clear();
         try {
             tournament.start(draw.getBoardSize(),draw.getObstaclePoints());
-            ////////////////////////////////////////////////////////////////////////////////////////////////////// TODO Only For Preview
-            Scanner scn = new Scanner(new File("./test/testFiles/tourTest/results/score.txt"));
+            Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
             while (scn.hasNext()){
                 tourScoreText.appendText(scn.nextLine()+"\n");
             }
             scn.close();
-            Scanner scn2 = new Scanner(new File("./test/testFiles/tourTest/results/duels.txt"));
-            while (scn2.hasNext()){
-                tourDuelsLog.getItems().add(scn2.nextLine()+"\n");
+            scn = new Scanner(new File(tourResultDir.getPath() + "/duels.txt"));
+            while (scn.hasNext()){
+                tourDuelsLog.getItems().add(scn.nextLine()+"\n");
             }
-            scn2.close();
-            Scanner scn3 = new Scanner(new File("./test/testFiles/tourTest/results/err.txt"));
-            while (scn3.hasNext()){
-                tourErrorsText.appendText(scn3.nextLine()+"\n");
+            scn.close();
+            scn = new Scanner(new File(tourResultDir.getPath() + "/err.txt"));
+            while (scn.hasNext()){
+                tourErrorsText.appendText(scn.nextLine()+"\n");
             }
-            scn3.close();
-
+            scn.close();
             tourDuelsLog.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -365,9 +360,9 @@ public class Controller {
         setAutoBoardResizing(true);
         replayInitializeUI();
         replayNextButton.setDisable(false);
-        System.out.println("./test/testFiles/tourTest/results/duels/"+number+".txt");
+        System.out.println(tourResultDir.getPath() + "/duels/"+number+".txt");
         backToTournamentFlag = true;
-        replayFromFile(new File("./test/testFiles/tourTest/results/duels/"+number+".txt"));
+        replayFromFile(new File(tourResultDir.getPath() + "/duels/"+number+".txt"));
     }
 
     @FXML
@@ -376,7 +371,7 @@ public class Controller {
 
         firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
         followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
-        logFile = dialog.showFileChooser("Select Log File", mainPane, true);
+        replayLogFile = dialog.showFileChooser("Select Log File", mainPane, true);
 
         try {
             Duel duel = new Duel(firstPlayer, followingPlayer);
@@ -389,7 +384,7 @@ public class Controller {
         }
     }
 
-    void duelInitializeUI(){
+    private void duelInitializeUI(){
         tourPane.setVisible(false);
         uniPane.setVisible(true);
         uniPane.toFront();
@@ -405,7 +400,7 @@ public class Controller {
         try {
             duelLogText.clear();
             draw.removePlayersCells();
-            Duel duel = new Duel(firstPlayer, followingPlayer, logFile);
+            Duel duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
             if (randBoxNumber != 0) {
                 ArrayList<Point> randBoxes = duel.setBoard(draw.getBoardSize(), randBoxNumber);
                 draw.setObstaclePoints(randBoxes);
@@ -454,7 +449,7 @@ public class Controller {
         dialog.showAbout();
     }
 
-    void setAutoBoardResizing(boolean value) {
+    private void setAutoBoardResizing(boolean value) {
         if (value) {
             boardPane.widthProperty().addListener(boardPaneSizeListener);
             boardPane.heightProperty().addListener(boardPaneSizeListener);
@@ -466,7 +461,7 @@ public class Controller {
         }
     }
 
-    ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {
+    private ChangeListener<Number> boardPaneSizeListener = (observable, oldValue, newValue) -> {
         try {
             draw.drawAll(boardCanvas,boardPane);
         } catch (Exception e) {

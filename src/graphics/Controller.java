@@ -126,7 +126,6 @@ public class Controller {
         replayInitializeUI();
 
         File displayLogFile = dialog.showFileChooser("SelectLogFile", mainPane, false);
-        replayNextButton.setDisable(false);
         replayFromFile(displayLogFile);
     }
 
@@ -407,6 +406,7 @@ public class Controller {
         replayNextButton.setDisable(false);
         System.out.println(tourResultDir.getPath() + "/duels/"+number+".txt");
         backToTournamentFlag = true;
+        replayInitializeUI();
         replayFromFile(new File(tourResultDir.getPath() + "/duels/"+number+".txt"));
     }
 

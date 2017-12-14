@@ -12,22 +12,24 @@ class BoxGeneratorTest {
     @Test
     void generateBoxes() {
 
-        ArrayList<Point> boxes = BoxGenerator.generateBoxes( 5  , 8 );
-        assertEquals( 8 , boxes.size() );
+        ArrayList<Point> boxes = BoxGenerator.generateBoxes( 7  , 17 );
+        assertEquals( 17 , boxes.size() );
 
         Boolean [][]table = new Boolean[][]{
-                { false , false , false , false , false } ,
-                { false , false , false , false , false } ,
-                { false , false , false , false , false } ,
-                { false , false , false , false , false } ,
-                { false , false , false , false , false }
+                { false , false , false , false , false , false , false } ,
+                { false , false , false , false , false , false , false } ,
+                { false , false , false , false , false , false , false } ,
+                { false , false , false , false , false , false , false } ,
+                { false , false , false , false , false , false , false } ,
+                { false , false , false , false , false , false , false } ,
+                { false , false , false , false , false , false , false }
         };
 
         for( Point box : boxes ){
             table[box.x][box.y] = true;
         }
 
-        System.out.println( "GENERATE RANDOM ( 8 )" );
+        System.out.println( "GENERATE RANDOM ( 17 )" );
 
         for ( Boolean []row : table) {
             for( Boolean box : row ){
@@ -40,7 +42,7 @@ class BoxGeneratorTest {
             System.out.printf( "\n" );
         }
 
-        assertThrows( IllegalArgumentException.class , ()->BoxGenerator.generateBoxes( 5 , 25 ) );
+        assertThrows( IllegalArgumentException.class , ()->BoxGenerator.generateBoxes( 7 , 49 ) );
 
     }
 

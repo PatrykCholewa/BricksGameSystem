@@ -104,11 +104,9 @@ public class Controller {
     @FXML
     MenuItem aboutMenu = new MenuItem();
 
-    private File replayLogFile;
     private Duel rewind;
 
-    private File firstPlayer;
-    private File followingPlayer;
+    private Duel duel;
 
     private Tournament tournament;
     private File tourResultDir;
@@ -152,12 +150,6 @@ public class Controller {
                 draw.removePlayersCells();
                 draw.drawAllObstacles(boardCanvas,boardPane);
 
-            } catch (FileNotFoundException e) {
-                replayNextButton.setDisable(true);
-                dialog.showErrorDialogWithStack(e);
-            } catch (ProtocolException e) {
-                replayNextButton.setDisable(true);
-                dialog.showErrorDialogWithStack(e);
             } catch (Exception e) {
                 replayNextButton.setDisable(true);
                 dialog.showErrorDialogWithStack(e);
@@ -198,8 +190,6 @@ public class Controller {
                 disableReplayButtons(true);
             }
 
-        } catch (ProtocolException e) {
-            dialog.showErrorDialogWithStack(e);
         } catch (Exception e) {
             dialog.showErrorDialogWithStack(e);
         }
@@ -424,14 +414,15 @@ public class Controller {
     @FXML
     void duelPressed() {
         setAutoBoardResizing(true);
+        duelStartButton.setDisable(false);
         duelInitializeUI();
 
-        firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
-        followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
-        replayLogFile = dialog.showFileChooser("Select Log File", mainPane, true);
+        File firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
+        File followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
+        File replayLogFile = dialog.showFileChooser("Select Log File", mainPane, true);
 
         try {
-            Duel duel = new Duel(firstPlayer, followingPlayer);
+            duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
             duelNick1Label.setText(duel.getStartingPlayer());
             duelNick2Label.setText(duel.getFollowingPlayer());
         } catch (FileNotFoundException e) {
@@ -456,8 +447,8 @@ public class Controller {
     void startPressed() {
         try {
             duelLogText.clear();
+            duelStartButton.setDisable(true);
             draw.removePlayersCells();
-            Duel duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
             if (randBoxNumber != 0) {
                 ArrayList<Point> randBoxes = duel.setBoard(draw.getBoardSize(), randBoxNumber);
                 draw.setObstaclePoints(randBoxes);
@@ -476,12 +467,10 @@ public class Controller {
             logAndPrint(duel.getLastMove(), getPlayerID(i++));
             statusLabel.setText(duel.getMessage());
             duel.close();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | NullPointerException e) {
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (ProtocolException e) {
             dialog.showErrorDialogWithStack(e, "Comunication Protocol Error");
-        } catch (NullPointerException e) {
-            dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (Exception e) {
             dialog.showErrorDialogWithStack(e);
         }

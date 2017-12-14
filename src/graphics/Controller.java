@@ -1,5 +1,8 @@
 package graphics;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -12,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import management.Duel;
 import management.Tournament;
 import tools.Translator;
@@ -104,9 +108,11 @@ public class Controller {
     @FXML
     MenuItem aboutMenu = new MenuItem();
     @FXML
-    Button refresh = new Button();
+    Button duelRefreshButton = new Button();
     @FXML
-    Button stop = new Button();
+    Button duelStopButton = new Button();
+    @FXML
+    CheckBox duelAutorefreshChBox = new CheckBox();
 
     private File replayLogFile;
     private Duel rewind;
@@ -123,6 +129,20 @@ public class Controller {
     private BoardDraw draw = new BoardDraw();
     private Dialogs dialog = new Dialogs();
     private Duel duel;
+
+    @FXML
+    void initialize(){
+        tourPane.setVisible(false);
+        uniPane.setVisible(true);
+        uniPane.toFront();
+        startupPane.toFront();
+
+        disableReplayButtons(true);
+        disableDuelButtons(true);
+        duelStartButton.setDisable(true);
+
+        setupTimer();
+    }
 
     @FXML
     void replayLogPressed() {
@@ -246,7 +266,8 @@ public class Controller {
 
 
     private void readAndPrint() throws Exception {
-        draw.drawAndAddCells(boardCanvas,boardPane,getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
+        draw.addCells(getPlayerID(rewind.getMoveCounter()),Translator.stringToBoxPair(rewind.getLastMove()));
+        draw.drawAll(boardCanvas,boardPane);
         replayLogText.appendText(rewind.getLastMove()+"\n");
         rewind.nextMove();
     }
@@ -418,13 +439,15 @@ public class Controller {
     void duelPressed() {
         setAutoBoardResizing(true);
         duelInitializeUI();
+        disableDuelButtons(true);
+        duelStartButton.setDisable(false);
 
         firstPlayer = dialog.showDriectoryChooser("Select Starting Player Folder", boardPane);
         followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
         replayLogFile = dialog.showFileChooser("Select Log File", mainPane, true);
 
         try {
-            Duel duel = new Duel(firstPlayer, followingPlayer);
+            duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
             duelNick1Label.setText(duel.getStartingPlayer());
             duelNick2Label.setText(duel.getFollowingPlayer());
         } catch (FileNotFoundException e) {
@@ -447,10 +470,11 @@ public class Controller {
 
     @FXML
     void startPressed() {
+        disableDuelButtons(false);
+        duelStartButton.setDisable(true);
         try {
             duelLogText.clear();
             draw.removePlayersCells();
-            duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
             if (randBoxNumber != 0) {
                 ArrayList<Point> randBoxes = duel.setBoard(draw.getBoardSize(), randBoxNumber);
                 draw.setObstaclePoints(randBoxes);
@@ -460,7 +484,28 @@ public class Controller {
                 draw.drawAllObstacles(boardCanvas, boardPane);
             }
             duel.start();
-            watek.start();
+            thread = new Thread(() -> {
+                int i = 0;
+                try {
+                    while (!duel.isFinished()) {
+                        logAndPrint(duel.getLastMove(), getPlayerID(i++));
+                        duel.nextMove();
+                        if (Thread.currentThread().isInterrupted()) {
+                            break;
+                        }
+                    }
+                    logAndPrint(duel.getLastMove(), getPlayerID(i++));
+                    duel.close();
+                    disableDuelButtons(true);
+                    duelStartButton.setDisable(true);
+                    System.out.println("THREAD FINISHED!!!");
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (ProtocolException e) {
@@ -472,30 +517,13 @@ public class Controller {
         }
     }
 
-    Thread watek = new Thread() {
-        public void run() {
-            int i = 0;
-            try {
-                while (!duel.isFinished()) {
-                    logAndPrint(duel.getLastMove(), getPlayerID(i++));
-                    duel.nextMove();
-                    if (Thread.currentThread().isInterrupted()) {
-                        break;
-                    }
-                }
-                logAndPrint(duel.getLastMove(), getPlayerID(i++));
-                duel.close();
-                System.out.println("FINISHED!!!");
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
+    private Thread thread;
+    private StringBuilder messageB= new StringBuilder();
 
     private void logAndPrint(String move, int player) throws Exception {
-        //duelLogText.appendText(move + " :P" + player + '\n');
+        synchronized (messageB) {
+            messageB.append(move + " :P" + player + '\n');
+        }
         try {
             draw.addCells(player, Translator.stringToBoxPair(move));
         } catch (ProtocolException e) {
@@ -509,18 +537,47 @@ public class Controller {
     }
 
     @FXML
-    void refreshPressed(){
+    void duelRefreshButtonPressed(){
         try {
             draw.drawAll(boardCanvas, boardPane);
+            synchronized (messageB) {
+                duelLogText.appendText(messageB.toString());
+                messageB = new StringBuilder();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    void stopPressed(){
-        watek.interrupt();
+    void duelStopButtonPressed(){
+        thread.interrupt();
     }
+
+    Timeline timeline;
+
+    void setupTimer (){
+        timeline = new Timeline(new KeyFrame(
+                Duration.millis(1000),
+                ae -> duelRefreshButton.fire()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+    }
+
+    @FXML
+    void duelAutorefreshChBoxPressed(){
+        if (duelAutorefreshChBox.isSelected()){
+            timeline.play();
+        } else {
+            timeline.stop();
+        }
+    }
+
+    void disableDuelButtons(boolean value){
+        duelStopButton.setDisable(value);
+        duelRefreshButton.setDisable(value);
+        duelAutorefreshChBox.setDisable(value);
+    }
+
 
     @FXML
     void aboutPressed() {
@@ -547,5 +604,4 @@ public class Controller {
             e.printStackTrace();
         }
     };
-
 }

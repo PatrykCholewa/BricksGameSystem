@@ -92,19 +92,6 @@ public class BoardDraw { ;
         this.secondPoints.clear();
     }
 
-    void drawAndAddCells(Canvas board, AnchorPane boardPane, int playerid, Point[] points) throws Exception {
-        if(playerid ==1) {
-            for (Point p:points) {
-                firstPoints.add(p);
-            }
-        } else {
-            for (Point p:points) {
-                secondPoints.add(p);
-            }
-        }
-        drawAll(board,boardPane);
-    }
-
     void addCells(int playerid, Point[] points) throws Exception {
         if(playerid ==1) {
             for (Point p:points) {
@@ -121,45 +108,46 @@ public class BoardDraw { ;
         }
     }
 
-
     void drawAll(Canvas board, AnchorPane boardPane) throws Exception {
-        calculateMaxScale(board,boardPane);
-        clearBoard(board);
-        GraphicsContext gc = board.getGraphicsContext2D();
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(1);
-        if (drawingNet) {
-            gc.setFill(Color.YELLOW);
-            synchronized (obstaclePoints) {
+        if (this != null) {
+            calculateMaxScale(board, boardPane);
+            clearBoard(board);
+            GraphicsContext gc = board.getGraphicsContext2D();
+            gc.setStroke(Color.BLACK);
+            gc.setLineWidth(1);
+            if (drawingNet) {
+                gc.setFill(Color.YELLOW);
+                synchronized (obstaclePoints) {
+                    for (Point p : obstaclePoints) {
+                        gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                    }
+                }
+                gc.setFill(Color.BLUE);
+                synchronized (firstPoints) {
+                    for (Point p : firstPoints) {
+                        gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                    }
+                }
+                gc.setFill(Color.RED);
+                synchronized (secondPoints) {
+                    for (Point p : secondPoints) {
+                        gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                    }
+                }
+                drawNet(board, boardPane);
+            } else {
+                gc.setFill(Color.YELLOW);
                 for (Point p : obstaclePoints) {
-                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                    gc.fillRect(p.getX(), p.getY(), 1, 1);
                 }
-            }
-            gc.setFill(Color.BLUE);
-            synchronized (firstPoints) {
+                gc.setFill(Color.BLUE);
                 for (Point p : firstPoints) {
-                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                    gc.fillRect(p.getX(), p.getY(), 1, 1);
                 }
-            }
-            gc.setFill(Color.RED);
-            synchronized (secondPoints) {
+                gc.setFill(Color.RED);
                 for (Point p : secondPoints) {
-                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                    gc.fillRect(p.getX(), p.getY(), 1, 1);
                 }
-            }
-            drawNet(board, boardPane);
-        } else {
-            gc.setFill(Color.YELLOW);
-            for (Point p : obstaclePoints) {
-                gc.fillRect(p.getX(), p.getY(), 1, 1);
-            }
-            gc.setFill(Color.BLUE);
-            for (Point p : firstPoints) {
-                gc.fillRect(p.getX(), p.getY(), 1, 1);
-            }
-            gc.setFill(Color.RED);
-            for (Point p : secondPoints) {
-                gc.fillRect(p.getX(), p.getY(), 1, 1);
             }
         }
     }

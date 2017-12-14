@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -173,9 +174,10 @@
                               <Font name="System Bold Italic" size="24.0" />
                            </font>
                         </Label>
-                        <Button fx:id="duelStartButton" layoutX="46.0" layoutY="516.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
-                        <Button fx:id="refresh" layoutX="74.0" layoutY="475.0" mnemonicParsing="false" onAction="#refreshPressed" text="Refresh" />
-                        <Button fx:id="stop" layoutX="154.0" layoutY="530.0" mnemonicParsing="false" onAction="#stopPressed" text="Stop" />
+                        <Button fx:id="duelStartButton" layoutX="20.0" layoutY="517.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
+                        <Button fx:id="duelRefreshButton" layoutX="100.0" layoutY="475.0" mnemonicParsing="false" onAction="#duelRefreshButtonPressed" text="Refresh" />
+                        <Button fx:id="duelStopButton" layoutX="128.0" layoutY="531.0" mnemonicParsing="false" onAction="#duelStopButtonPressed" text="Stop" />
+                        <CheckBox fx:id="duelAutorefreshChBox" layoutX="46.0" layoutY="479.0" mnemonicParsing="false" onAction="#duelAutorefreshChBoxPressed" text="Auto" />
                      </children>
                   </AnchorPane>
                </children>

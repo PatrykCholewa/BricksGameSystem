@@ -23,7 +23,7 @@ public class BoxGenerator {
 
         for( int i = 0 ; i < numberOfRandomBoxes ; i++ ){
 
-            box = toGenerate.remove( rndGen.nextInt( toGenerate.size() - i ) );
+            box = toGenerate.remove( rndGen.nextInt( toGenerate.size() ) );
             gotBoxes.add( box );
 
         }

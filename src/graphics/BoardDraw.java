@@ -105,6 +105,23 @@ public class BoardDraw { ;
         drawAll(board,boardPane);
     }
 
+    void addCells(int playerid, Point[] points) throws Exception {
+        if(playerid ==1) {
+            for (Point p:points) {
+                synchronized (firstPoints) {
+                    firstPoints.add(p);
+                }
+            }
+        } else {
+            for (Point p:points) {
+                synchronized (secondPoints) {
+                    secondPoints.add(p);
+                }
+            }
+        }
+    }
+
+
     void drawAll(Canvas board, AnchorPane boardPane) throws Exception {
         calculateMaxScale(board,boardPane);
         clearBoard(board);
@@ -113,16 +130,22 @@ public class BoardDraw { ;
         gc.setLineWidth(1);
         if (drawingNet) {
             gc.setFill(Color.YELLOW);
-            for (Point p : obstaclePoints) {
-                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            synchronized (obstaclePoints) {
+                for (Point p : obstaclePoints) {
+                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                }
             }
             gc.setFill(Color.BLUE);
-            for (Point p : firstPoints) {
-                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            synchronized (firstPoints) {
+                for (Point p : firstPoints) {
+                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                }
             }
             gc.setFill(Color.RED);
-            for (Point p : secondPoints) {
-                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            synchronized (secondPoints) {
+                for (Point p : secondPoints) {
+                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                }
             }
             drawNet(board, boardPane);
         } else {
@@ -181,7 +204,6 @@ public class BoardDraw { ;
             } else {
                 drawingNet = true;
             }
-            System.out.println(scale);
         }
     }
 

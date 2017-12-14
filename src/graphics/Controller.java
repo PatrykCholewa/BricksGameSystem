@@ -120,6 +120,17 @@ public class Controller {
     private Dialogs dialog = new Dialogs();
 
     @FXML
+    void initialize(){
+        tourPane.setVisible(false);
+        uniPane.setVisible(true);
+        uniPane.toFront();
+        startupPane.toFront();
+
+        disableReplayButtons(true);
+        duelStartButton.setDisable(true);
+    }
+
+    @FXML
     void replayLogPressed() {
         backToTournamentFlag=false;
         setAutoBoardResizing(true);

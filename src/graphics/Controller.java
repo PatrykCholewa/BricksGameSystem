@@ -468,7 +468,7 @@ public class Controller {
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (ProtocolException e) {
-            dialog.showErrorDialogWithStack(e, "Comunication Protocol Error");
+            dialog.showErrorDialogWithStack(e, "Communication Protocol Error");
         } catch (NullPointerException e) {
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (Exception e) {

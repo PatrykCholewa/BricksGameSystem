@@ -249,6 +249,8 @@ public class Controller {
         try {
             draw.addCells(player, Translator.stringToBoxPair(rewind.getLastMove()));
             draw.drawAll(boardCanvas, boardPane);
+        } catch ( ProtocolException e ){
+            ;
         } catch (Exception e) {
             e.printStackTrace();
         }

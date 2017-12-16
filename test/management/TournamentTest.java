@@ -39,6 +39,10 @@ class TournamentTest {
         Tournament tournament = new Tournament( playersDir , resultsDir );
         tournament.start( 3,new ArrayList<Point>());
 
+        while( !tournament.isFinished() ){
+            tournament.nextDuel();
+        }
+
         System.out.println( "SCORE" );
         System.out.println( "-----------------------");
         FileComparator.writeOut( writeScore );

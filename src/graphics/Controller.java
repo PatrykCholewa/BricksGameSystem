@@ -249,6 +249,8 @@ public class Controller {
         try {
             draw.addCells(player, Translator.stringToBoxPair(rewind.getLastMove()));
             draw.drawAll(boardCanvas, boardPane);
+        } catch ( ProtocolException e ){
+            ;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -380,6 +382,11 @@ public class Controller {
         tourErrorsText.clear();
         try {
             tournament.start(draw.getBoardSize(), draw.getObstaclePoints());
+
+            while( !tournament.isFinished() ){
+                tournament.nextDuel();
+            }
+
             Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
             while (scn.hasNext()) {
                 tourScoreText.appendText(scn.nextLine() + "\n");

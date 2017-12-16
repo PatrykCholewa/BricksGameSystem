@@ -1,6 +1,5 @@
 package management;
 
-import management.Executioner;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -42,6 +41,20 @@ class ExecutionerTest {
         assertArrayEquals( files , executioner.next() );
 
         assertFalse( executioner.hasNext() );
+
+    }
+
+    @Test
+    void progressPercentage() throws NotDirectoryException {
+        Executioner executioner = new Executioner(new File("./test/testFiles/miniMainDir"));
+
+        assertEquals( 0 , (double)executioner.progressPercentage() );
+        executioner.next();
+        assertEquals( 0.5 , (double)executioner.progressPercentage() );
+        executioner.next();
+        assertEquals( 0.75 , (double)executioner.progressPercentage() );
+        executioner.next();
+        assertEquals( 1.0 , (double)executioner.progressPercentage() );
 
     }
 

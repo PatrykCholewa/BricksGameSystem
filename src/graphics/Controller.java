@@ -164,13 +164,13 @@ public class Controller {
                 draw.drawAllObstacles(boardCanvas, boardPane);
 
             } catch (FileNotFoundException e) {
-                replayNextButton.setDisable(true);
+                disableReplayButtons(true);
                 dialog.showErrorDialogWithStack(e);
             } catch (ProtocolException e) {
-                replayNextButton.setDisable(true);
+                disableReplayButtons(true);
                 dialog.showErrorDialogWithStack(e);
             } catch (Exception e) { //Drawing
-                replayNextButton.setDisable(true);
+                disableReplayButtons(true);
                 dialog.showErrorDialogWithStack(e);
             }
         } else {

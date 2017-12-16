@@ -450,6 +450,7 @@ public class Controller {
 
         duelAutorefreshChBox.setSelected(false);
         timeline.stop();
+        messageBuffer.setLength(0);
     }
 
     @FXML
@@ -475,21 +476,22 @@ public class Controller {
                     logAndPrint(duel.getLastMove(), getPlayerID(i++));
                     duel.nextMove();
                     if (Thread.currentThread().isInterrupted()) {
+                        Platform.runLater(() -> statusLabel.setText("Duel Aborted"));
                         break;
                     }
                 }
                 if (duel.isFinished()) {
                     logAndPrint(duel.getLastMove(), getPlayerID(i++));
+                    Platform.runLater(() -> statusLabel.setText(duel.getMessage()));
                 }
                 try {
-                    draw.drawAll(boardCanvas, boardPane);
+                    duelRefreshButtonPressed();
                 } catch (Exception e) {
                    ;
                 }
                 duel.close();
                 disableDuelButtons(true);
                 duelStartButton.setDisable(true);
-                Platform.runLater(() -> statusLabel.setText(duel.getMessage()));
                 System.out.println("END OF THREAD");
             });
             thread.start();
@@ -518,8 +520,9 @@ public class Controller {
         }
         try {
             draw.addCells(player, Translator.stringToBoxPair(move));
-        } catch (ProtocolException e) {
-            Platform.runLater(() -> dialog.showErrorDialogWithStack(e));
+        } catch (ProtocolException | NullPointerException e) {
+            e.printStackTrace();
+            //Platform.runLater(() -> dialog.showErrorDialogWithStack(e));
         }
 
     }
@@ -534,7 +537,7 @@ public class Controller {
             draw.drawAll(boardCanvas, boardPane);
             synchronized (messageBuffer) {
                 duelLogText.appendText(messageBuffer.toString());
-                messageBuffer = new StringBuilder();
+                messageBuffer.setLength(0);
             }
         } catch (Exception e) {
             dialog.showErrorDialogWithStack(e, "Drawing Area Too Small");
@@ -551,7 +554,7 @@ public class Controller {
     void setupTimer() {
         timeline = new Timeline(new KeyFrame(
                 Duration.millis(1000),
-                ae -> duelRefreshButton.fire()));
+                ae -> duelRefreshButtonPressed()));
         timeline.setCycleCount(Animation.INDEFINITE);
     }
 
@@ -570,10 +573,8 @@ public class Controller {
         duelAutorefreshChBox.setDisable(value);
     }
 
-
     @FXML
     void aboutPressed() {
-        statusLabel.setText(duel.getMessage());
         dialog.showAbout();
     }
 

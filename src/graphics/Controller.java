@@ -114,6 +114,8 @@ public class Controller {
     Button duelStopButton = new Button();
     @FXML
     CheckBox duelAutorefreshChBox = new CheckBox();
+    @FXML
+    ProgressBar tourProgressBar = new ProgressBar();
 
     private BoardDraw draw = new BoardDraw();
     private Dialogs dialog = new Dialogs();
@@ -350,7 +352,6 @@ public class Controller {
     @FXML
     void tourButtonPressed() {
         tourInitializeUI();
-        tourStartButton.setDisable(false);
 
         File playersDir = dialog.showDriectoryChooser("Select Players Directory", boardPane);
         tourResultDir = dialog.showDriectoryChooser("Select Results Directory", boardPane);
@@ -372,6 +373,7 @@ public class Controller {
         uniPane.setVisible(false);
         tourPane.setVisible(true);
         tourPane.toFront();
+        tourStartButton.setDisable(false);
         statusLabel.setText("");
     }
 
@@ -380,33 +382,53 @@ public class Controller {
         tourScoreText.clear();
         tourDuelsLog.getItems().clear();
         tourErrorsText.clear();
+        tourProgressBar.setVisible(true);
         try {
             tournament.start(draw.getBoardSize(), draw.getObstaclePoints());
-
-            while( !tournament.isFinished() ){
-                tournament.nextDuel();
-            }
-
-            Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
-            while (scn.hasNext()) {
-                tourScoreText.appendText(scn.nextLine() + "\n");
-            }
-            scn.close();
-            scn = new Scanner(new File(tourResultDir.getPath() + "/duels.txt"));
-            while (scn.hasNext()) {
-                tourDuelsLog.getItems().add(scn.nextLine() + "\n");
-            }
-            scn.close();
-            scn = new Scanner(new File(tourResultDir.getPath() + "/err.txt"));
-            while (scn.hasNext()) {
-                tourErrorsText.appendText(scn.nextLine() + "\n");
-            }
-            scn.close();
-            tourDuelsLog.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            tourThread = new Thread(() -> {
+                while( !tournament.isFinished() ) {
+                    {
+                        tournament.nextDuel();
+                        Platform.runLater(() -> tourProgressBar.setProgress(tournament.progressPercentage()));
+                    }
+                    if (Thread.currentThread().isInterrupted()) {
+                        Platform.runLater(() -> statusLabel.setText("Tournament Aborted"));
+                        break;
+                    }
+                }
+                try {
+                    Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
+                    while (scn.hasNext()) {
+                        tourScoreText.appendText(scn.nextLine() + "\n");
+                    }
+                    scn.close();
+                    scn = new Scanner(new File(tourResultDir.getPath() + "/duels.txt"));
+                    while (scn.hasNext()) {
+                        tourDuelsLog.getItems().add(scn.nextLine() + "\n");
+                    }
+                    scn.close();
+                    scn = new Scanner(new File(tourResultDir.getPath() + "/err.txt"));
+                    while (scn.hasNext()) {
+                        tourErrorsText.appendText(scn.nextLine() + "\n");
+                    }
+                    scn.close();
+                    tourDuelsLog.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(() -> tourProgressBar.setVisible(false));
+                System.out.println("END OF THREAD");
+                System.out.println(Thread.currentThread().getState().toString());
+            });
+            tourThread.setDaemon(true);
+            tourThread.start();
+            tourStartButton.setDisable(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private Thread tourThread;
 
     @FXML
     void tourReplayButtonPressed() {
@@ -433,14 +455,20 @@ public class Controller {
         File followingPlayer = dialog.showDriectoryChooser("Select Following Player Folder", boardPane);
         File replayLogFile = dialog.showFileChooser("Select Log File", mainPane, true);
 
-        try {
-            duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
-            duelNick1Label.setText(duel.getStartingPlayer());
-            duelNick2Label.setText(duel.getFollowingPlayer());
-        } catch (FileNotFoundException e) {
-            dialog.showErrorDialogWithStack(e, "Player Directory Not Found");
-        } catch (ProtocolException e) {
-            dialog.showErrorDialogWithStack(e);
+        if (firstPlayer != null && followingPlayer != null && replayLogFile != null) {
+            try {
+                duel = new Duel(firstPlayer, followingPlayer, replayLogFile);
+                duelNick1Label.setText(duel.getStartingPlayer());
+                duelNick2Label.setText(duel.getFollowingPlayer());
+            } catch (FileNotFoundException e) {
+                dialog.showErrorDialogWithStack(e, "Player Directory Not Found");
+            } catch (ProtocolException e) {
+                dialog.showErrorDialogWithStack(e);
+            }
+        }
+        else {
+            dialog.showError(new Exception("Directories not set, Try again"));
+            duelStartButton.setDisable(true);
         }
     }
 
@@ -477,7 +505,7 @@ public class Controller {
                 draw.drawAllObstacles(boardCanvas, boardPane);
             }
             duel.start();
-            thread = new Thread(() -> {
+            duelThread = new Thread(() -> {
                 int i = 0;
                 while (!duel.isFinished()) {
                     logAndPrint(duel.getLastMove(), getPlayerID(i++));
@@ -501,7 +529,8 @@ public class Controller {
                 duelStartButton.setDisable(true);
                 System.out.println("END OF THREAD");
             });
-            thread.start();
+            duelThread.setDaemon(true);
+            duelThread.start();
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (ProtocolException e) {
@@ -518,7 +547,7 @@ public class Controller {
         }
     }
 
-    private Thread thread;
+    private Thread duelThread;
     private StringBuilder messageBuffer = new StringBuilder();
 
     private void logAndPrint(String move, int player) {
@@ -553,7 +582,7 @@ public class Controller {
 
     @FXML
     void duelStopButtonPressed() {
-        thread.interrupt();
+        duelThread.interrupt();
     }
 
     Timeline timeline;

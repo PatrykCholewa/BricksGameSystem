@@ -9,9 +9,10 @@ import java.util.ArrayList;
 
 public class Tournament {
 
-    private Arena arena;
     private TournamentScore score;
     private Executioner executioner;
+    private int boardSize;
+    private ArrayList<Point> boxes;
 
     public Tournament( File playerDirectory , File resultsDirectory ) throws IOException {
         this.executioner = new Executioner( playerDirectory );
@@ -19,24 +20,43 @@ public class Tournament {
     }
 
     public void start( int size , ArrayList<Point> boxes ) throws IOException {
-        File []players;
-        while( executioner.hasNext() ){
-            players = executioner.next();
-            try {
-                arena = new Arena(players[0], players[1]);
-                arena.setLogFile( score.createNewDuelLogFile() );
-                arena.setBoard(size, boxes );
-                arena.start();
-                arena.finish();
-                score.addNewDuel( arena.getStartingPlayerNick() ,
-                        arena.getFollowingPlayerNick() ,
-                        arena.getWinner() ,
-                        arena.getMessage() );
-            } catch ( Exception e ){
-                score.saveError( e );
-            }
+       this.boardSize = size;
+       this.boxes = boxes;
+    }
+
+    public void nextDuel(){
+        if( isFinished() ){
+            throw new IllegalStateException( "The tournament is finished!" );
         }
-        score.close();
+
+        File []players = executioner.next();
+
+        try {
+            Arena arena = new Arena(players[0], players[1]);
+            arena.setLogFile( score.createNewDuelLogFile() );
+            arena.setBoard( boardSize , boxes );
+            arena.start();
+            arena.finish();
+            score.addNewDuel( arena.getStartingPlayerNick() ,
+                    arena.getFollowingPlayerNick() ,
+                    arena.getWinner() ,
+                    arena.getMessage() );
+        } catch ( Exception e ){
+            score.saveError( e );
+        }
+
+        if( isFinished() ){
+            score.close();
+        }
+
+    }
+
+    public Boolean isFinished(){
+        return !executioner.hasNext();
+    }
+
+    public Double progressPercentage(){
+        return executioner.progressPercentage();
     }
 
 }

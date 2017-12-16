@@ -56,6 +56,11 @@ public class Executioner implements Iterator{
 
     }
 
+    Double progressPercentage(){
+        int max = playerDirs.size()*playerDirs.size();
+        return ( (double)pointer )/max;
+    }
+
     @Override
     public boolean hasNext() {
 

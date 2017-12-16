@@ -380,6 +380,11 @@ public class Controller {
         tourErrorsText.clear();
         try {
             tournament.start(draw.getBoardSize(), draw.getObstaclePoints());
+
+            while( !tournament.isFinished() ){
+                tournament.nextDuel();
+            }
+
             Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
             while (scn.hasNext()) {
                 tourScoreText.appendText(scn.nextLine() + "\n");

@@ -470,36 +470,40 @@ public class Controller {
             duel.start();
             thread = new Thread(() -> {
                 int i = 0;
-                try {
-                    while (!duel.isFinished()) {
-                        logAndPrint(duel.getLastMove(), getPlayerID(i++));
-                        duel.nextMove();
-                        if (Thread.currentThread().isInterrupted()) {
-                            break;
-                        }
+                while (!duel.isFinished()) {
+                    logAndPrint(duel.getLastMove(), getPlayerID(i++));
+                    duel.nextMove();
+                    if (Thread.currentThread().isInterrupted()) {
+                        break;
                     }
-                    if (duel.isFinished()) {
-                        logAndPrint(duel.getLastMove(), getPlayerID(i++));
-                    }
-                    duel.close();
-                    draw.drawAll(boardCanvas, boardPane);
-                    disableDuelButtons(true);
-                    duelStartButton.setDisable(true);
-                    Platform.runLater(() -> statusLabel.setText(duel.getMessage()));
-                    System.out.println("THREAD FINISHED!");
-                } catch (Exception e) {
-                    Platform.runLater(() -> dialog.showErrorDialogWithStack(e));
                 }
+                if (duel.isFinished()) {
+                    logAndPrint(duel.getLastMove(), getPlayerID(i++));
+                }
+                try {
+                    draw.drawAll(boardCanvas, boardPane);
+                } catch (Exception e) {
+                   ;
+                }
+                duel.close();
+                disableDuelButtons(true);
+                duelStartButton.setDisable(true);
+                Platform.runLater(() -> statusLabel.setText(duel.getMessage()));
                 System.out.println("END OF THREAD");
             });
             thread.start();
         } catch (FileNotFoundException e) {
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (ProtocolException e) {
+            disableDuelButtons(true);
+            duelStartButton.setDisable(true);
             dialog.showErrorDialogWithStack(e, "Communication Protocol Error");
         } catch (NullPointerException e) {
+            duelStartButton.setDisable(true);
             dialog.showErrorDialogWithStack(e, "Log File Not Found");
         } catch (Exception e) {
+            disableDuelButtons(true);
+            duelStartButton.setDisable(true);
             dialog.showErrorDialogWithStack(e);
         }
     }

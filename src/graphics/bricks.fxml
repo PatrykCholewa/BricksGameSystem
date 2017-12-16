@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -117,30 +118,6 @@
                         <Button fx:id="manualClearButton" layoutX="73.0" layoutY="184.0" mnemonicParsing="false" onAction="#manualClearButtonPressed" text="Clear All" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="duelPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
-                        <Label fx:id="duelNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="duelNick2Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="duelLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" prefHeight="42.0" prefWidth="200.0" text="DUEL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="duelStartButton" layoutX="46.0" layoutY="516.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
-                     </children>
-                  </AnchorPane>
                   <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
                      <children>
                         <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -174,6 +151,33 @@
                         <Button fx:id="replayEndButton" layoutX="145.0" layoutY="514.0" mnemonicParsing="false" onAction="#replayEndButtonPressed" prefHeight="25.0" prefWidth="41.0" text="End" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="514.0" />
                         <Button fx:id="replayFForwardButton" layoutX="145.0" layoutY="471.0" mnemonicParsing="false" onAction="#replayFForwardButtonPressed" text="&gt;&gt;&gt;" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="471.0" />
                         <Button fx:id="replayBackButton" layoutX="14.0" layoutY="552.0" mnemonicParsing="false" onAction="#replayBackButtonPressed" text="Back to List" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="552.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="duelPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
+                        <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
+                        <Label fx:id="duelNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="duelNick2Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="duelLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" prefHeight="42.0" prefWidth="200.0" text="DUEL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="System Bold Italic" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="duelStartButton" layoutX="20.0" layoutY="517.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
+                        <Button fx:id="duelRefreshButton" layoutX="100.0" layoutY="475.0" mnemonicParsing="false" onAction="#duelRefreshButtonPressed" text="Refresh" />
+                        <Button fx:id="duelStopButton" layoutX="128.0" layoutY="531.0" mnemonicParsing="false" onAction="#duelStopButtonPressed" text="Stop" />
+                        <CheckBox fx:id="duelAutorefreshChBox" layoutX="46.0" layoutY="479.0" mnemonicParsing="false" onAction="#duelAutorefreshChBoxPressed" text="Auto" />
                      </children>
                   </AnchorPane>
                </children>

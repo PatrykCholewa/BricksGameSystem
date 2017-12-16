@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Paweł Zych
  */
 
-public class BoardDraw { ;
+public class BoardDraw {
     private int size;
     private int scale;
     private boolean resizable;
@@ -27,10 +27,9 @@ public class BoardDraw { ;
         this.scale = 10;
         this.resizable = true;
         this.drawingNet = true;
-        this.obstaclePoints=new ArrayList<>(10);
-        this.firstPoints=new ArrayList<>(10);
-        this.secondPoints=new ArrayList<>(10);
-
+        this.obstaclePoints = new ArrayList<>(10);
+        this.firstPoints = new ArrayList<>(10);
+        this.secondPoints = new ArrayList<>(10);
     }
 
     public int getBoardSize() {
@@ -62,29 +61,29 @@ public class BoardDraw { ;
         this.obstaclePoints.clear();
     }
 
-    void addOneObstacleCell(Canvas board, AnchorPane boardPane,Point point) throws Exception {
-        if (!obstaclePoints.contains(point)){
+    void addOneObstacleCell(Canvas board, AnchorPane boardPane, Point point) throws Exception {
+        if (!obstaclePoints.contains(point)) {
             obstaclePoints.add(point);
         }
-        drawAllObstacles(board,boardPane);
+        drawAllObstacles(board, boardPane);
     }
 
-    void removeOneObstacleCell(Canvas board, AnchorPane boardPane,Point point) throws Exception {
+    void removeOneObstacleCell(Canvas board, AnchorPane boardPane, Point point) throws Exception {
         obstaclePoints.remove(point);
-        drawAllObstacles(board,boardPane);
+        drawAllObstacles(board, boardPane);
     }
 
     void drawAllObstacles(Canvas board, AnchorPane boardPane) throws Exception {
         clearBoard(board);
-        calculateMaxScale(board,boardPane);
+        calculateMaxScale(board, boardPane);
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         gc.setFill(Color.YELLOW);
-        for (Point p: obstaclePoints) {
-            gc.fillRect(p.getX() * scale,p.getY() * scale, scale, scale);
+        for (Point p : obstaclePoints) {
+            gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
         }
-        drawNet(board,boardPane);
+        drawNet(board, boardPane);
     }
 
     public void removePlayersCells() {
@@ -92,51 +91,66 @@ public class BoardDraw { ;
         this.secondPoints.clear();
     }
 
-    void drawAndAddCells(Canvas board, AnchorPane boardPane, int playerid, Point[] points) throws Exception {
-        if(playerid ==1) {
-            for (Point p:points) {
-                firstPoints.add(p);
+    void addCells(int playerid, Point[] points) {
+        if (playerid == 1) {
+            for (Point p : points) {
+                synchronized (firstPoints) {
+                    firstPoints.add(p);
+                }
             }
         } else {
-            for (Point p:points) {
-                secondPoints.add(p);
+            for (Point p : points) {
+                synchronized (secondPoints) {
+                    secondPoints.add(p);
+                }
             }
         }
-        drawAll(board,boardPane);
     }
 
     void drawAll(Canvas board, AnchorPane boardPane) throws Exception {
-        calculateMaxScale(board,boardPane);
+        calculateMaxScale(board, boardPane);
         clearBoard(board);
         GraphicsContext gc = board.getGraphicsContext2D();
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
         if (drawingNet) {
             gc.setFill(Color.YELLOW);
-            for (Point p : obstaclePoints) {
-                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            synchronized (obstaclePoints) {
+                for (Point p : obstaclePoints) {
+                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                }
             }
             gc.setFill(Color.BLUE);
-            for (Point p : firstPoints) {
-                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            synchronized (firstPoints) {
+                for (Point p : firstPoints) {
+                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                }
             }
             gc.setFill(Color.RED);
-            for (Point p : secondPoints) {
-                gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+            synchronized (secondPoints) {
+                for (Point p : secondPoints) {
+                    gc.fillRect(p.getX() * scale, p.getY() * scale, scale, scale);
+                }
             }
             drawNet(board, boardPane);
         } else {
-            gc.setFill(Color.YELLOW);
-            for (Point p : obstaclePoints) {
-                gc.fillRect(p.getX(), p.getY(), 1, 1);
+            synchronized (obstaclePoints) {
+                gc.setFill(Color.YELLOW);
+                for (Point p : obstaclePoints) {
+                    gc.fillRect(p.getX(), p.getY(), 1, 1);
+                }
             }
-            gc.setFill(Color.BLUE);
-            for (Point p : firstPoints) {
-                gc.fillRect(p.getX(), p.getY(), 1, 1);
+            synchronized (firstPoints) {
+                gc.setFill(Color.BLUE);
+                for (Point p : firstPoints) {
+                    gc.fillRect(p.getX(), p.getY(), 1, 1);
+                }
             }
-            gc.setFill(Color.RED);
-            for (Point p : secondPoints) {
-                gc.fillRect(p.getX(), p.getY(), 1, 1);
+            synchronized (secondPoints) {
+                gc.setFill(Color.RED);
+                for (Point p : secondPoints) {
+                    gc.fillRect(p.getX(), p.getY(), 1, 1);
+                }
             }
         }
     }
@@ -147,11 +161,11 @@ public class BoardDraw { ;
     }
 
     void drawNet(Canvas board, AnchorPane boardPane) throws Exception {
-            calculateMaxScale(board, boardPane);
-            GraphicsContext gc = board.getGraphicsContext2D();
-            gc.setStroke(Color.BLACK);
-            gc.setLineWidth(1);
-            gc.setLineCap(StrokeLineCap.SQUARE);
+        calculateMaxScale(board, boardPane);
+        GraphicsContext gc = board.getGraphicsContext2D();
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(1);
+        gc.setLineCap(StrokeLineCap.SQUARE);
         if (drawingNet) {
             for (int i = 0; i <= size; i++) {
                 gc.strokeLine(snap(i * scale), 0, snap(i * scale), scale * size);
@@ -163,7 +177,7 @@ public class BoardDraw { ;
         }
     }
 
-    private void calculateMaxScale (Canvas board, AnchorPane boardPane) throws Exception {
+    private void calculateMaxScale(Canvas board, AnchorPane boardPane) throws Exception {
         if (resizable) {
             board.setHeight(boardPane.getHeight() + 1);
             board.setWidth(boardPane.getWidth() + 1);
@@ -176,12 +190,11 @@ public class BoardDraw { ;
             }
             if (scale < 1) {
                 throw new Exception("Window too small to draw");
-            } else if (scale > 0 && scale < 2){
+            } else if (scale > 0 && scale < 2) {
                 drawingNet = false;
             } else {
                 drawingNet = true;
             }
-            System.out.println(scale);
         }
     }
 
@@ -189,11 +202,11 @@ public class BoardDraw { ;
         return ((int) y) + .5;
     }
 
-    public boolean verifyPos(int pos){
+    public boolean verifyPos(int pos) {
         return (pos >= 0) && (pos < size);
     }
 
-    public int convertToPos(double coord){
-        return (int)coord/scale;
+    public int convertToPos(double coord) {
+        return (int) coord / scale;
     }
 }

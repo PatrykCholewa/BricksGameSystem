@@ -133,7 +133,7 @@ public class Dialogs {
     public File showDriectoryChooser(String title, Pane component){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle(title);
-        directoryChooser.setInitialDirectory(new File("./test/testFiles"));
+        directoryChooser.setInitialDirectory(new File("."));
         File selectedDirectory = directoryChooser.showDialog(component.getScene().getWindow());
 
         if(selectedDirectory != null){
@@ -145,7 +145,7 @@ public class Dialogs {
     public File showFileChooser(String title, Pane component, boolean save){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(title);
-        fileChooser.setInitialDirectory(new File("./src/archiving"));
+        fileChooser.setInitialDirectory(new File("."));
         fileChooser.setInitialFileName("defaultLog.txt");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"),

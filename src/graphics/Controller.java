@@ -17,6 +17,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import management.Duel;
 import management.Tournament;
 import tools.Translator;
@@ -116,6 +117,8 @@ public class Controller {
     CheckBox duelAutorefreshChBox = new CheckBox();
     @FXML
     ProgressBar tourProgressBar = new ProgressBar();
+    @FXML
+    Slider replaySlider = new Slider();
 
     private BoardDraw draw = new BoardDraw();
     private Dialogs dialog = new Dialogs();
@@ -145,6 +148,8 @@ public class Controller {
         disableReplayButtons(true);
         disableDuelButtons(true);
         duelStartButton.setDisable(true);
+
+        initializeSlider();
 
         setupTimer();
     }
@@ -196,6 +201,8 @@ public class Controller {
         statusLabel.setText("");
         replayLogText.clear();
 
+        replaySlider.setValue(1d);
+
 
         disableReplayButtons(false);
         if (backToTournamentFlag)
@@ -223,7 +230,14 @@ public class Controller {
 
     @FXML
     void replayFForwardButtonPressed() {
-        for (int i = 0; i < 10; i++) {
+        int val = (int)replaySlider.getValue();
+        if (val ==1)
+            val = 10;
+        if (val ==2)
+            val = 100;
+        if (val ==3)
+            val = 1000;
+        for (int i = 0; i < val; i++) {
             if (!rewind.isFinished()) {
                 readAndPrint();
             } else {
@@ -234,6 +248,32 @@ public class Controller {
             }
         }
     }
+
+    private void initializeSlider(){
+     replaySlider.setLabelFormatter(new StringConverter<Double>()
+    {
+        @Override
+        public String toString (Double n){
+        if (n < 2) return "10";
+        if (n < 3) return "100";
+        return "1000";
+        }
+
+       @Override
+        public Double fromString (String s){
+            switch (s) {
+            case "10":
+                return 1d;
+            case "100":
+                return 2d;
+            case "1000":
+                return 3d;
+            default:
+                return 1d;
+            }
+        }
+    });
+}
 
     @FXML
     void replayEndButtonPressed() {

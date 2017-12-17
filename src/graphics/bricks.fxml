@@ -11,6 +11,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -59,95 +60,6 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane fx:id="uniPane" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-         <children>
-            <StackPane alignment="CENTER_LEFT" prefHeight="600.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <AnchorPane fx:id="manualPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="200.0" text="MANUAL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="manualFinishButton" layoutX="32.0" layoutY="511.0" mnemonicParsing="false" onAction="#manualFinishButtonPressed" prefHeight="52.0" prefWidth="142.0" text="Finish Ediditing" />
-                        <Label alignment="CENTER" layoutX="20.0" layoutY="68.0" prefHeight="40.0" prefWidth="160.0" text="Left Click to Select Box" wrapText="true" />
-                        <Label layoutX="32.0" layoutY="124.0" text="Right Click to Unselect Box" />
-                        <Button fx:id="manualClearButton" layoutX="73.0" layoutY="184.0" mnemonicParsing="false" onAction="#manualClearButtonPressed" text="Clear All" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </AnchorPane>
-                  <AnchorPane fx:id="replayPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" layoutY="125.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
-                        <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <Label fx:id="replayNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="replayNick2Label" layoutX="5.0" layoutY="130.0" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="replayLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="200.0" text="REPLAY" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="replayNextButton" layoutX="14.0" layoutY="484.0" mnemonicParsing="false" onAction="#nextPressed" prefHeight="42.0" prefWidth="108.0" text="&gt;" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="484.0" />
-                        <Button fx:id="replayEndButton" layoutX="145.0" layoutY="514.0" mnemonicParsing="false" onAction="#replayEndButtonPressed" prefHeight="25.0" prefWidth="41.0" text="End" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="514.0" />
-                        <Button fx:id="replayFForwardButton" layoutX="145.0" layoutY="471.0" mnemonicParsing="false" onAction="#replayFForwardButtonPressed" text="&gt;&gt;&gt;" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="471.0" />
-                        <Button fx:id="replayBackButton" layoutX="14.0" layoutY="552.0" mnemonicParsing="false" onAction="#replayBackButtonPressed" text="Back to List" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="552.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="duelPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
-                        <Label fx:id="duelNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="duelNick2Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="duelLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" prefHeight="42.0" prefWidth="200.0" text="DUEL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="System Bold Italic" size="24.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="duelStartButton" layoutX="20.0" layoutY="517.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
-                        <Button fx:id="duelRefreshButton" layoutX="100.0" layoutY="475.0" mnemonicParsing="false" onAction="#duelRefreshButtonPressed" text="Refresh" />
-                        <Button fx:id="duelStopButton" layoutX="128.0" layoutY="531.0" mnemonicParsing="false" onAction="#duelStopButtonPressed" text="Stop" />
-                        <CheckBox fx:id="duelAutorefreshChBox" layoutX="46.0" layoutY="479.0" mnemonicParsing="false" onAction="#duelAutorefreshChBoxPressed" text="Auto" />
-                     </children>
-                  </AnchorPane>
-               </children>
-            </StackPane>
-            <AnchorPane fx:id="boardPane" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Canvas fx:id="boardCanvas" height="600.0" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
       <AnchorPane fx:id="tourPane" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #6bff9f;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
             <Button fx:id="tourStartButton" layoutX="687.0" layoutY="534.0" mnemonicParsing="false" onAction="#tourStartButtonPressed" prefHeight="52.0" prefWidth="79.0" text="Start" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="34.0" />
@@ -189,6 +101,96 @@
               </tabs>
             </TabPane>
             <ProgressBar fx:id="tourProgressBar" layoutX="14.0" layoutY="551.0" prefHeight="18.0" prefWidth="615.0" progress="0.0" visible="false" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="uniPane" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <StackPane alignment="CENTER_LEFT" prefHeight="600.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <AnchorPane fx:id="manualPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="200.0" text="MANUAL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="System Bold Italic" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="manualFinishButton" layoutX="32.0" layoutY="511.0" mnemonicParsing="false" onAction="#manualFinishButtonPressed" prefHeight="52.0" prefWidth="142.0" text="Finish Ediditing" />
+                        <Label alignment="CENTER" layoutX="20.0" layoutY="68.0" prefHeight="40.0" prefWidth="160.0" text="Left Click to Select Box" wrapText="true" />
+                        <Label layoutX="32.0" layoutY="124.0" text="Right Click to Unselect Box" />
+                        <Button fx:id="manualClearButton" layoutX="73.0" layoutY="184.0" mnemonicParsing="false" onAction="#manualClearButtonPressed" text="Clear All" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </AnchorPane>
+                  <AnchorPane fx:id="duelPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" layoutX="10.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
+                        <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
+                        <Label fx:id="duelNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="duelNick2Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="duelLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="70.0" prefHeight="42.0" prefWidth="200.0" text="DUEL" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="System Bold Italic" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="duelStartButton" layoutX="20.0" layoutY="517.0" mnemonicParsing="false" onAction="#startPressed" prefHeight="52.0" prefWidth="108.0" text="Start" />
+                        <Button fx:id="duelRefreshButton" layoutX="100.0" layoutY="475.0" mnemonicParsing="false" onAction="#duelRefreshButtonPressed" text="Refresh" />
+                        <Button fx:id="duelStopButton" layoutX="128.0" layoutY="531.0" mnemonicParsing="false" onAction="#duelStopButtonPressed" text="Stop" />
+                        <CheckBox fx:id="duelAutorefreshChBox" layoutX="46.0" layoutY="479.0" mnemonicParsing="false" onAction="#duelAutorefreshChBoxPressed" text="Auto" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="replayPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#70ffa2" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Rectangle arcWidth="5.0" fill="#ffaaaa" height="80.0" layoutY="125.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="120.0" />
+                        <Rectangle arcWidth="5.0" fill="#9bceff" height="80.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
+                        <Label fx:id="replayNick1Label" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="replayNick2Label" layoutX="5.0" layoutY="130.0" prefHeight="60.0" prefWidth="190.0" text="..." wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="130.0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <TextArea fx:id="replayLogText" editable="false" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="205.0" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="200.0" text="REPLAY" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="System Bold Italic" size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="replayNextButton" layoutX="80.0" layoutY="508.0" mnemonicParsing="false" onAction="#nextPressed" prefHeight="40.0" prefWidth="108.0" text="&gt;" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="508.0" />
+                        <Button fx:id="replayEndButton" layoutX="20.0" layoutY="515.0" mnemonicParsing="false" onAction="#replayEndButtonPressed" prefHeight="25.0" prefWidth="41.0" text="End" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="515.0" />
+                        <Button fx:id="replayFForwardButton" layoutX="145.0" layoutY="465.0" mnemonicParsing="false" onAction="#replayFForwardButtonPressed" text="&gt;&gt;&gt;" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="465.0" />
+                        <Button fx:id="replayBackButton" layoutX="20.0" layoutY="561.0" mnemonicParsing="false" onAction="#replayBackButtonPressed" text="Back to List" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="561.0" />
+                        <Slider fx:id="replaySlider" blockIncrement="0.0" layoutX="14.0" layoutY="465.0" majorTickUnit="1.0" max="3.0" min="1.0" minorTickCount="0" prefHeight="14.0" prefWidth="120.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="465.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </StackPane>
+            <AnchorPane fx:id="boardPane" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Canvas fx:id="boardCanvas" height="600.0" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

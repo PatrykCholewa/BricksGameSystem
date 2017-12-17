@@ -129,6 +129,12 @@ public class Controller {
 
     private int randBoxNumber = 0;
 
+    private Timeline timeline;
+    private Thread tourThread;
+    private Thread duelThread;
+    private StringBuilder messageBuffer = new StringBuilder();
+
+
     @FXML
     void initialize() {
         tourPane.setVisible(false);
@@ -251,8 +257,6 @@ public class Controller {
         try {
             draw.addCells(player, Translator.stringToBoxPair(rewind.getLastMove()));
             draw.drawAll(boardCanvas, boardPane);
-        } catch ( ProtocolException e ){
-            ;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -428,8 +432,6 @@ public class Controller {
         }
     }
 
-    private Thread tourThread;
-
     @FXML
     void tourReplayButtonPressed() {
         String name = tourDuelsLog.getSelectionModel().getSelectedItem();
@@ -519,11 +521,7 @@ public class Controller {
                     logAndPrint(duel.getLastMove(), getPlayerID(i++));
                     Platform.runLater(() -> statusLabel.setText(duel.getMessage()));
                 }
-                try {
-                    duelRefreshButtonPressed();
-                } catch (Exception e) {
-                   ;
-                }
+                duelRefreshButtonPressed();
                 duel.close();
                 disableDuelButtons(true);
                 duelStartButton.setDisable(true);
@@ -546,9 +544,6 @@ public class Controller {
             dialog.showErrorDialogWithStack(e);
         }
     }
-
-    private Thread duelThread;
-    private StringBuilder messageBuffer = new StringBuilder();
 
     private void logAndPrint(String move, int player) {
         synchronized (messageBuffer) {
@@ -585,9 +580,8 @@ public class Controller {
         duelThread.interrupt();
     }
 
-    Timeline timeline;
 
-    void setupTimer() {
+    private void setupTimer() {
         timeline = new Timeline(new KeyFrame(
                 Duration.millis(1000),
                 ae -> duelRefreshButtonPressed()));
@@ -603,7 +597,7 @@ public class Controller {
         }
     }
 
-    void disableDuelButtons(boolean value) {
+    private void disableDuelButtons(boolean value) {
         duelStopButton.setDisable(value);
         duelRefreshButton.setDisable(value);
         duelAutorefreshChBox.setDisable(value);

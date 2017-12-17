@@ -387,6 +387,7 @@ public class Controller {
         tourDuelsLog.getItems().clear();
         tourErrorsText.clear();
         tourProgressBar.setVisible(true);
+        tourProgressBar.setProgress(0);
         try {
             tournament.start(draw.getBoardSize(), draw.getObstaclePoints());
             tourThread = new Thread(() -> {
@@ -400,34 +401,39 @@ public class Controller {
                         break;
                     }
                 }
-                try {
-                    Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
-                    while (scn.hasNext()) {
-                        tourScoreText.appendText(scn.nextLine() + "\n");
-                    }
-                    scn.close();
-                    scn = new Scanner(new File(tourResultDir.getPath() + "/duels.txt"));
-                    while (scn.hasNext()) {
-                        tourDuelsLog.getItems().add(scn.nextLine() + "\n");
-                    }
-                    scn.close();
-                    scn = new Scanner(new File(tourResultDir.getPath() + "/err.txt"));
-                    while (scn.hasNext()) {
-                        tourErrorsText.appendText(scn.nextLine() + "\n");
-                    }
-                    scn.close();
-                    tourDuelsLog.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                Platform.runLater(() -> tourProgressBar.setVisible(false));
+                Platform.runLater(() -> {
+                    tourProgressBar.setVisible(false);
+                    tourReadLogs();
+                });
                 System.out.println("END OF THREAD");
-                System.out.println(Thread.currentThread().getState().toString());
             });
             tourThread.setDaemon(true);
             tourThread.start();
             tourStartButton.setDisable(true);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void tourReadLogs()  {
+        try {
+            Scanner scn = new Scanner(new File(tourResultDir.getPath() + "/score.txt"));
+            while (scn.hasNext()) {
+                tourScoreText.appendText(scn.nextLine() + "\n");
+            }
+            scn.close();
+            scn = new Scanner(new File(tourResultDir.getPath() + "/duels.txt"));
+            while (scn.hasNext()) {
+                tourDuelsLog.getItems().add(scn.nextLine() + "\n");
+            }
+            scn.close();
+            scn = new Scanner(new File(tourResultDir.getPath() + "/err.txt"));
+            while (scn.hasNext()) {
+                tourErrorsText.appendText(scn.nextLine() + "\n");
+            }
+            scn.close();
+            tourDuelsLog.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

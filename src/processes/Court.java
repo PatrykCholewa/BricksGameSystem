@@ -25,6 +25,7 @@ public class Court {
 
     private String winner;
     private String message = "OK";
+    private Boolean wasDeadlocked;
 
     /**
      * @param player1Dir starting player directory
@@ -74,6 +75,10 @@ public class Court {
 
     public String getLastPlayer(){
         return trial.getLastPlayer();
+    }
+
+    public Boolean wasDeadlocked(){
+        return wasDeadlocked;
     }
 
     /**
@@ -135,8 +140,7 @@ public class Court {
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
         } catch ( SecurityException e ){
             failure( e.getMessage() );
-            updateWinner();
-            throw e;
+            wasDeadlocked = true;
         }
     }
 
@@ -147,6 +151,7 @@ public class Court {
 
         winner = null;
         message = "OK";
+        wasDeadlocked = false;
         trial.reset();
 
         initPlayer( 0 );
@@ -162,8 +167,7 @@ public class Court {
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
         }catch ( SecurityException e ){
             failure( e.getMessage() );
-            updateWinner();
-            throw e;
+            wasDeadlocked = true;
         }
 
         updateWinner();
@@ -182,8 +186,7 @@ public class Court {
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
         } catch ( SecurityException e  ){
             failure( e.getMessage() );
-            updateWinner();
-            throw e;
+            wasDeadlocked = true;
         }
 
         updateWinner();

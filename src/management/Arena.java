@@ -51,6 +51,10 @@ class Arena {
         return court.getMessage();
     }
 
+    Boolean wasDeadlocked(){
+        return court.wasDeadlocked();
+    }
+
     void setBoard( int size , ArrayList<Point> boxes ){
         court.setBoard( size , boxes );
     }
@@ -67,7 +71,7 @@ class Arena {
         return court.isFinished();
     }
 
-    void start() throws SecurityException {
+    void start() {
 
         if( recorder != null ) {
             recorder.printHeader(
@@ -115,13 +119,16 @@ class Arena {
 
     }
 
-    ArrayList<String> finish(){
-        ArrayList<String> furtherMoves = new ArrayList<>();
+    void finish(){
+
         while( !isFinished() ){
-            nextMove();
-            furtherMoves.add( getLastMove() );
+            try {
+                nextMove();
+            } catch ( NullPointerException ignored ){
+                ;
+            }
         }
-        return furtherMoves;
+
     }
 
     void close(){

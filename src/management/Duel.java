@@ -111,7 +111,7 @@ public class Duel {
         } else {
             try {
                 arena.start();
-            } catch ( SecurityException e ){
+            } catch ( SecurityException ignored){
                 ;
             }
         }
@@ -123,18 +123,10 @@ public class Duel {
         } else {
             try {
                 arena.nextMove();
-            } catch ( SecurityException e ){
+            } catch ( SecurityException ignored){
                 ;
             }
         }
-    }
-
-    /**
-     * Pushes to the end of the game.
-     * @return further moves
-     */
-    public ArrayList<String> finish(){
-        return readable ? duelShow.finish() : arena.finish();
     }
 
     public void close(){

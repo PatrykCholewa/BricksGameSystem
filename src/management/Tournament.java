@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
 
 public class Tournament {
 
@@ -32,15 +33,22 @@ public class Tournament {
         File []players = executioner.next();
 
         try {
+
             Arena arena = new Arena(players[0], players[1]);
             arena.setLogFile( score.createNewDuelLogFile() );
             arena.setBoard( boardSize , boxes );
             arena.start();
             arena.finish();
+
+            if( arena.wasDeadlocked() ){
+                score.saveError( new TimeoutException( arena.getMessage() ));
+            }
+
             score.addNewDuel( arena.getStartingPlayerNick() ,
                     arena.getFollowingPlayerNick() ,
                     arena.getWinner() ,
                     arena.getMessage() );
+
         } catch ( Exception e ){
             score.saveError( e );
         }

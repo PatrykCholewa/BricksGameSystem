@@ -109,7 +109,11 @@ public class Duel {
         if( readable ){
             duelShow.start();
         } else {
-            arena.start();
+            try {
+                arena.start();
+            } catch ( SecurityException ignored){
+                ;
+            }
         }
     }
 
@@ -117,16 +121,12 @@ public class Duel {
         if( readable ){
             duelShow.nextMove();
         } else {
-            arena.nextMove();
+            try {
+                arena.nextMove();
+            } catch ( SecurityException ignored){
+                ;
+            }
         }
-    }
-
-    /**
-     * Pushes to the end of the game.
-     * @return further moves
-     */
-    public ArrayList<String> finish(){
-        return readable ? duelShow.finish() : arena.finish();
     }
 
     public void close(){

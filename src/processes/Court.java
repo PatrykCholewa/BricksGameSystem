@@ -25,6 +25,7 @@ public class Court {
 
     private String winner;
     private String message = "OK";
+    private Boolean wasDeadlocked;
 
     /**
      * @param player1Dir starting player directory
@@ -74,6 +75,10 @@ public class Court {
 
     public String getLastPlayer(){
         return trial.getLastPlayer();
+    }
+
+    public Boolean wasDeadlocked(){
+        return wasDeadlocked;
     }
 
     /**
@@ -133,6 +138,9 @@ public class Court {
             trial.initPlayer( initData , player );
         } catch ( IllegalArgumentException | IOException | TimeoutException e ){
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        } catch ( SecurityException e ){
+            failure( e.getMessage() );
+            wasDeadlocked = true;
         }
     }
 
@@ -143,6 +151,7 @@ public class Court {
 
         winner = null;
         message = "OK";
+        wasDeadlocked = false;
         trial.reset();
 
         initPlayer( 0 );
@@ -156,6 +165,9 @@ public class Court {
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
         }catch ( IllegalArgumentException | IOException | TimeoutException e ) {
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        }catch ( SecurityException e ){
+            failure( e.getMessage() );
+            wasDeadlocked = true;
         }
 
         updateWinner();
@@ -172,6 +184,9 @@ public class Court {
             referee.addRectangle(Translator.stringToBoxPair( trial.getLastMove() ) );
         } catch ( IOException | TimeoutException | IllegalArgumentException e ){
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        } catch ( SecurityException e  ){
+            failure( e.getMessage() );
+            wasDeadlocked = true;
         }
 
         updateWinner();

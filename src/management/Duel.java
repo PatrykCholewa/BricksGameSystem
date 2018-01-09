@@ -111,7 +111,7 @@ public class Duel {
         } else {
             try {
                 arena.start();
-            } catch ( InternalError e ){
+            } catch ( SecurityException e ){
                 ;
             }
         }
@@ -123,7 +123,7 @@ public class Duel {
         } else {
             try {
                 arena.nextMove();
-            } catch ( InternalError e ){
+            } catch ( SecurityException e ){
                 ;
             }
         }

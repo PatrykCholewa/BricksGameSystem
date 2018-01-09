@@ -76,10 +76,10 @@ class Trial {
 
     }
 
-    private void errorCheck( DeadlockProtector deadlockProtector , int player ) throws  TimeoutException , InternalError {
+    private void errorCheck( DeadlockProtector deadlockProtector , int player ) throws  TimeoutException , SecurityException {
         if( deadlockProtector.isDeadlockOccurred() ){
             lastMove = "DEADLOCKNORESPONSE";
-            throw new InternalError( "Player " + commanders[player].getNick() + " caused deadlock!" );
+            throw new SecurityException( "Player " + commanders[player].getNick() + " caused deadlock!" );
         }
 
         if( errorMessage != null ){

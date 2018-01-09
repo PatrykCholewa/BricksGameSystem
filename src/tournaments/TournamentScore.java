@@ -80,17 +80,9 @@ public class TournamentScore {
 
     public void saveError( Exception e ){
         try {
-            errorSaver.writeErr( e.getMessage() );
+            errorSaver.writeErr( e );
         } catch (IOException e1) {
             e1.printStackTrace();
-        }
-    }
-
-    public void saveError( Error err ){
-        try {
-            errorSaver.writeErr(err.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

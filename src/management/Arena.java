@@ -67,7 +67,7 @@ class Arena {
         return court.isFinished();
     }
 
-    void start(){
+    void start() throws SecurityException {
 
         if( recorder != null ) {
             recorder.printHeader(
@@ -105,7 +105,7 @@ class Arena {
     /**
      * @throws NullPointerException when the game is finished!
      */
-    void nextMove(){
+    void nextMove() throws SecurityException{
         if( court.getWinner() != null ){
             throw new NullPointerException( "The game has ended!" );
         }

@@ -97,9 +97,9 @@ class Trial {
                 while (!commanders[player].hasInput()) {
 
                     if (watch.exceededInitTime()) {
-                        deadlockProtector.stop();
                         lastMove = "NORESPONSE";
                         errorMessage = "Player " + commanders[player].getNick() + " do not answer!";
+                        break;
                     } else {
                         watch.waitCheckInterval();
                     }

@@ -43,6 +43,8 @@ public class Tournament {
                     arena.getMessage() );
         } catch ( Exception e ){
             score.saveError( e );
+        } catch ( Error err ){
+            score.saveError( err );
         }
 
         if( isFinished() ){

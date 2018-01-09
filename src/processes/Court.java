@@ -133,6 +133,9 @@ public class Court {
             trial.initPlayer( initData , player );
         } catch ( IllegalArgumentException | IOException | TimeoutException e ){
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        } catch ( InternalError err ){
+            failure( err.getMessage() );
+            throw err;
         }
     }
 
@@ -156,6 +159,9 @@ public class Court {
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
         }catch ( IllegalArgumentException | IOException | TimeoutException e ) {
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        }catch ( InternalError err ){
+            failure( err.getMessage() );
+            throw err;
         }
 
         updateWinner();
@@ -172,6 +178,9 @@ public class Court {
             referee.addRectangle(Translator.stringToBoxPair( trial.getLastMove() ) );
         } catch ( IOException | TimeoutException | IllegalArgumentException e ){
             failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        } catch ( InternalError err ){
+            failure( err.getMessage() );
+            throw err;
         }
 
         updateWinner();

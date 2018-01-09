@@ -16,6 +16,7 @@ class Trial {
     private Watch watch = new Watch();
     private int lastPlayer = -1;
     private String lastMove;
+    private String errorMessage;
 
     Trial( File []playerDirs ) throws FileNotFoundException, ProtocolException {
 
@@ -63,18 +64,61 @@ class Trial {
             throw e;
         }
         commanders[player].insertOutputLine( initData );
-        watch.initTimer();
 
-        while( !commanders[player].hasInput() ){
-            if( watch.exceededInitTime() ){
-                lastMove = "NORESPONSE";
-                throw new TimeoutException( "Player " + commanders[player].getNick() + " do not answer!" );
-            }
-        }
+        DeadlockProtector deadlockProtector = new DeadlockProtector();
+        waitForAnswer( deadlockProtector , player );
+        errorCheck( deadlockProtector , player );
 
         lastMove = commanders[player].getInputLine();
         if( !lastMove.equals( "OK" ) ){
             throw new ProtocolException( "Player " + commanders[player].getNick() + " should have given \"OK\", but gave \"" + lastMove + "\"!" );
+        }
+
+    }
+
+    private void errorCheck( DeadlockProtector deadlockProtector , int player ) throws  TimeoutException , InternalError {
+        if( deadlockProtector.isDeadlockOccurred() ){
+            lastMove = "DEADLOCKNORESPONSE";
+            throw new InternalError( "Player " + commanders[player].getNick() + " caused deadlock!" );
+        }
+
+        if( errorMessage != null ){
+            throw new TimeoutException( errorMessage );
+        }
+    }
+
+    private void waitForAnswer( DeadlockProtector deadlockProtector , int player ){
+
+        errorMessage = null;
+        Thread lineGetterThread = new Thread( ()->{
+
+            watch.initTimer();
+            try {
+                while (!commanders[player].hasInput()) {
+
+                    if (watch.exceededInitTime()) {
+                        deadlockProtector.stop();
+                        lastMove = "NORESPONSE";
+                        errorMessage = "Player " + commanders[player].getNick() + " do not answer!";
+                    } else {
+                        watch.waitCheckInterval();
+                    }
+                }
+            } catch ( IOException e ){
+                errorMessage = e.getMessage();
+            }
+
+            deadlockProtector.stop();
+
+        });
+
+        lineGetterThread.setDaemon( true );
+
+        deadlockProtector.init(lineGetterThread);
+        lineGetterThread.start();
+
+        while( !lineGetterThread.isInterrupted() && lineGetterThread.isAlive() ){
+            watch.waitCheckInterval();
         }
 
     }
@@ -85,14 +129,10 @@ class Trial {
         commanders[lastPlayer].insertOutputLine( playerInput );
 
         watch.initTimer();
-        while ( !commanders[lastPlayer].hasInput() ){
-            if( watch.exceededMoveTime() ){
-                lastMove = "NORESPONSE";
-                throw new TimeoutException( "Player " + commanders[lastPlayer].getNick() + " timed out!" );
-            } else {
-                watch.waitCheckInterval();
-            }
-        }
+
+        DeadlockProtector deadlockProtector = new DeadlockProtector();
+        waitForAnswer( deadlockProtector , lastPlayer );
+        errorCheck( deadlockProtector ,  lastPlayer );
 
         lastMove = commanders[lastPlayer].getInputLine();
 

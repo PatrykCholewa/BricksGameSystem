@@ -16,9 +16,9 @@ class ErrorSaver {
         bufferedWriter = new BufferedWriter( new FileWriter( errFile ) );
     }
 
-    void writeErr(Exception e) throws IOException {
+    void writeErr(String message) throws IOException {
         try {
-            bufferedWriter.write(e.getMessage());
+            bufferedWriter.write(message);
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch ( NullPointerException e1 ){

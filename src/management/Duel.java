@@ -109,7 +109,11 @@ public class Duel {
         if( readable ){
             duelShow.start();
         } else {
-            arena.start();
+            try {
+                arena.start();
+            } catch ( InternalError e ){
+                ;
+            }
         }
     }
 
@@ -117,7 +121,11 @@ public class Duel {
         if( readable ){
             duelShow.nextMove();
         } else {
-            arena.nextMove();
+            try {
+                arena.nextMove();
+            } catch ( InternalError e ){
+                ;
+            }
         }
     }
 

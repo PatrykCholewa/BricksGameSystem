@@ -98,7 +98,7 @@ class Trial {
 
                     if (watch.exceededInitTime()) {
                         lastMove = "NORESPONSE";
-                        errorMessage = "Player " + commanders[player].getNick() + " do not answer!";
+                        errorMessage = "Player " + commanders[player].getNick() + " does not answer!";
                         break;
                     } else {
                         watch.waitCheckInterval();

@@ -13,6 +13,7 @@ class Rules {
     private final static int MAX_NUMBER_OF_SIZE = 999;
 
     private Board board;
+    private ArrayList<Point> remainingToCheck;
 
     Rules( Board board ){
         this.board = board;
@@ -46,14 +47,26 @@ class Rules {
 
     private Boolean hasANeighbourZero( Point p ){
 
+        remainingToCheck.remove( p );
         if( isThereZero( new Point( p.x - 1 , p.y ) )){
+            remainingToCheck.remove( new Point( p.x - 1 , p.y ));
             return true;
         } else if( isThereZero( new Point( p.x + 1 , p.y ) ) ){
+            remainingToCheck.remove( new Point( p.x + 1 , p.y ));
             return true;
         } else if( isThereZero( new Point( p.x , p.y - 1 ) ) ){
+            remainingToCheck.remove( new Point( p.x , p.y - 1 ));
             return true;
-        } else return isThereZero( new Point( p.x , p.y + 1 ) );
+        } else if( isThereZero( new Point( p.x , p.y + 1 ) ) ){
+            remainingToCheck.remove( new Point( p.x , p.y + 1 ));
+            return true;
+        }
+
+        return false;
+
     }
+
+
 
     static void validateSize ( Integer size ){
         if( size < MIN_NUMBER_OF_SIZE || size > MAX_NUMBER_OF_SIZE || size % 2 == 0 ){
@@ -84,11 +97,14 @@ class Rules {
     Boolean isFinished(){
 
         ArrayList<Point> remainingBoxes = board.getRemainingBoxes();
+        remainingToCheck = new ArrayList<>();
+        remainingToCheck.addAll( remainingBoxes );
 
-        for( int i = 0 ; i < remainingBoxes.size() ; i++ ){
-            if( !board.isFilled(remainingBoxes.get(i)) && hasANeighbourZero( remainingBoxes.get(i) ) ) {
+        while( remainingToCheck.size() > 0 ){
+            if( hasANeighbourZero( remainingToCheck.get(0) ) ) {
                 return false;
             }
+
         }
 
         return true;

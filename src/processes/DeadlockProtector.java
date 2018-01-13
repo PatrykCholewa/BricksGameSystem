@@ -2,12 +2,16 @@ package processes;
 
 class DeadlockProtector {
 
+    /**
+     * @author Patryk Cholewa
+     */
+
     //DEFINE
     private long maxMillisDelay = 15000; //15s
 
     private Thread protector;
     private Thread fuse;
-    private Boolean deadlockOccurred;
+    private Boolean deadlockOccurred = false;
     private Long start = System.currentTimeMillis();
     private Long elapsedTime = new Long(0);
     private Long lastSavedElapsedTime = new Long(0);
@@ -26,10 +30,7 @@ class DeadlockProtector {
      */
     void init( Thread fuse ) {
 
-        deadlockOccurred = false;
-
         this.fuse = fuse;
-
 
         this.protector = new Thread( ()-> {
 
@@ -41,9 +42,7 @@ class DeadlockProtector {
                 elapsedTime = System.currentTimeMillis() - start;
             }
 
-            if( !stopFlag ){
-                fuseOut();
-            }
+            fuseOut();
 
         });
 
@@ -56,28 +55,23 @@ class DeadlockProtector {
 
         if( !protector.isInterrupted() ){
 
-            deadlockOccurred = true;
-            System.out.println( "FUSE OUT" );
-            fuse.interrupt();
+            if( !stopFlag ) {
+                deadlockOccurred = true;
+                System.out.println("FUSE OUT");
+            }
 
-           stop();
+            fuse.interrupt();
 
         }
 
     }
 
     /**
-     * Stops deadlockProtector, so it won't interrupt the fuse.
+     * Stops deadlockProtector.
      */
     void stop() {
 
         stopFlag = true;
-        fuse = null;
-        try {
-            protector.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
 

@@ -75,15 +75,11 @@ class Commander {
 
         try {
             insertOutputLine("STOP");
+            process.destroy();
+
             output.close();
             input.close();
         } catch ( NullPointerException | IOException e) {
-            ;
-        }
-
-        try {
-            process.destroy();
-        } catch ( NullPointerException e ){
             ;
         }
 

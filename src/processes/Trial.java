@@ -73,7 +73,7 @@ class Trial {
         errorCheck( deadlockProtector , player );
 
         lastMove = commanders[player].getInputLine();
-        if( !lastMove.equals( "OK" ) ){
+        if( !( lastMove.equals( "OK" ) || lastMove.equals( "ok" ) ) ){
             throw new ProtocolException( "Player " + commanders[player].getNick() + " should have given \"OK\", but gave \"" + lastMove + "\"!" );
         }
 

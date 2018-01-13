@@ -13,12 +13,11 @@ class DeadlockProtector {
     private Thread fuse;
     private Boolean deadlockOccurred = false;
     private Long start = System.currentTimeMillis();
-    private Long elapsedTime = new Long(0);
-    private Long lastSavedElapsedTime = new Long(0);
+    private Long elapsedTime = 0L;
+    private Long lastSavedElapsedTime = 0L;
     private Boolean stopFlag = false;
 
     DeadlockProtector(){
-        ;
     }
 
     boolean isDeadlockOccurred(){

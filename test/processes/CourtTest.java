@@ -49,12 +49,14 @@ class CourtTest {
         court.nextMove();
         court.nextMove();
         assertEquals( "PREDEFINED OUTPUT FINISH2" , court.getWinner() );
+        court.close();
 
         ArrayList<Point> box = new ArrayList<>();
         box.add( new Point (0 , 1 ) );
         court.setBoard( 3 , box );
         court.start();
         assertEquals( "PREDEFINED OUTPUT FINISH2" , court.getWinner() );
+        court.close();
 
     }
 
@@ -71,16 +73,19 @@ class CourtTest {
         assertFalse( court.isFinished() );
         court.nextMove();
         assertTrue( court.isFinished() );
+        court.close();
 
         court.setBoard( court.getInitData() );
         court.start();
         assertFalse( court.isFinished() );
+        court.close();
 
         ArrayList<Point> box = new ArrayList<>();
         box.add( new Point (0 , 1 ) );
         court.setBoard( 3 , box );
         court.start();
         assertTrue( court.isFinished() );
+        court.close();
 
     }
 
@@ -97,16 +102,19 @@ class CourtTest {
         assertEquals( "2x2_2x1" , court.getLastMove() );
         court.nextMove();
         assertEquals( "2x0_1x0" , court.getLastMove() );
+        court.close();
 
         court.setBoard( court.getInitData() );
         court.start();
         assertEquals( "0x0_0x1" , court.getLastMove() );
+        court.close();
 
         ArrayList<Point> box = new ArrayList<>();
         box.add( new Point (0 , 1 ) );
         court.setBoard( 3 , box );
         court.start();
         assertEquals( "0x0_0x1" , court.getLastMove() );
+        court.close();
 
     }
 
@@ -123,16 +131,19 @@ class CourtTest {
         assertEquals( "OK" , court.getMessage() );
         court.nextMove();
         assertTrue( court.getMessage().contains( "normally") );
+        court.close();
 
         court.setBoard( court.getInitData() );
         court.start();
         assertEquals( "OK" , court.getMessage() );
+        court.close();
 
         ArrayList<Point> box = new ArrayList<>();
         box.add( new Point (0 , 1 ) );
         court.setBoard( 3 , box );
         court.start();
         assertTrue( court.getMessage().contains( "already" ) );
+        court.close();
 
     }
 

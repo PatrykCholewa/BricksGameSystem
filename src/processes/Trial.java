@@ -63,10 +63,13 @@ class Trial {
             lastMove = null;
             throw e;
         }
+
+        watch.waitProcessWakeupTime();
+
         commanders[player].insertOutputLine( initData );
 
         DeadlockProtector deadlockProtector = new DeadlockProtector();
-        waitForAnswer( deadlockProtector , player );
+        waitForAnswer( deadlockProtector , false , player );
         errorCheck( deadlockProtector , player );
 
         lastMove = commanders[player].getInputLine();
@@ -87,30 +90,52 @@ class Trial {
         }
     }
 
-    private void waitForAnswer( DeadlockProtector deadlockProtector , int player ){
+    private void waitForAnswer( DeadlockProtector deadlockProtector , boolean isMove , int player ){
 
         errorMessage = null;
-        Thread lineGetterThread = new Thread( ()->{
+        Thread lineGetterThread;
 
-            watch.initTimer();
-            try {
-                while (!commanders[player].hasInput()) {
+        if( isMove ) {
+            lineGetterThread = new Thread(() -> {
 
-                    if (watch.exceededInitTime()) {
-                        lastMove = "NORESPONSE";
-                        errorMessage = "Player " + commanders[player].getNick() + " does not answer!";
-                        break;
-                    } else {
+                watch.initTimer();
+                try {
+                    while (!commanders[player].hasInput()) {
                         watch.waitCheckInterval();
                     }
+
+                    if(watch.exceededMoveTime()){
+                        lastMove = "NORESPONSE";
+                        errorMessage = "Player " + commanders[player].getNick() + " does not answer!";
+                    }
+                } catch (IOException e) {
+                    errorMessage = e.getMessage();
                 }
-            } catch ( IOException e ){
-                errorMessage = e.getMessage();
-            }
 
-            deadlockProtector.stop();
+                deadlockProtector.stop();
 
-        });
+            });
+        } else {
+            lineGetterThread = new Thread(() -> {
+
+                try {
+                    watch.initTimer();
+                    while (!commanders[player].hasInput()) {
+                       watch.waitCheckInterval();
+                    }
+
+                    if(watch.exceededInitTime()){
+                        lastMove = "NOOKRESPONSE";
+                        errorMessage = "Player " + commanders[player].getNick() + " does not answer OK!";
+                    }
+                } catch (IOException e) {
+                    errorMessage = e.getMessage();
+                }
+
+                deadlockProtector.stop();
+
+            });
+        }
 
         lineGetterThread.setDaemon( true );
 
@@ -120,6 +145,8 @@ class Trial {
         while( !lineGetterThread.isInterrupted() && lineGetterThread.isAlive() ){
             watch.waitCheckInterval();
         }
+
+
 
     }
 
@@ -131,7 +158,7 @@ class Trial {
         watch.initTimer();
 
         DeadlockProtector deadlockProtector = new DeadlockProtector();
-        waitForAnswer( deadlockProtector , lastPlayer );
+        waitForAnswer( deadlockProtector ,true , lastPlayer );
         errorCheck( deadlockProtector ,  lastPlayer );
 
         lastMove = commanders[lastPlayer].getInputLine();

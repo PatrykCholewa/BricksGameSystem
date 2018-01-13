@@ -7,7 +7,7 @@ class DeadlockProtector {
      */
 
     //DEFINE
-    private long maxMillisDelay = 15000; //15s
+    private long maxMillisDelay = 7000; //7s
 
     private Thread protector;
     private Thread fuse;

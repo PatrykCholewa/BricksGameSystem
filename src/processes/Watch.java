@@ -6,6 +6,12 @@ package processes;
 
 
 class Watch {
+
+    //DEFINE
+    private long maxInitTime = 1000000000;
+    private long maxMoveTime = 500000000;
+    private long bufferTime  = 20000000;
+
     private long begin;
     private long elapsedTime;
 
@@ -30,7 +36,7 @@ class Watch {
      */
     boolean exceededInitTime(){
         updateElapsedTime();
-        return elapsedTime > 1010000000;
+        return elapsedTime > maxInitTime + bufferTime;
     }
 
     /**
@@ -39,7 +45,7 @@ class Watch {
      */
     boolean exceededMoveTime(){
         updateElapsedTime();
-        return elapsedTime > 510000000;
+        return elapsedTime > maxMoveTime + bufferTime;
     }
 
     /**

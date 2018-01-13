@@ -30,7 +30,7 @@ class Watch {
      */
     boolean exceededInitTime(){
         updateElapsedTime();
-        return elapsedTime > 1000000000;
+        return elapsedTime > 1010000000;
     }
 
     /**
@@ -39,7 +39,7 @@ class Watch {
      */
     boolean exceededMoveTime(){
         updateElapsedTime();
-        return elapsedTime > 500000000;
+        return elapsedTime > 510000000;
     }
 
     /**

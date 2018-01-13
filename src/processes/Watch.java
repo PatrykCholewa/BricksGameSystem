@@ -22,10 +22,7 @@ class Watch {
      */
     boolean exceededInitTime(){
         elapsedTime = (System.nanoTime() - begin);
-        if (elapsedTime < 1000000000)
-            return true;
-        else
-            return false;
+        return elapsedTime > 1000000000;
     }
 
     /**
@@ -34,21 +31,13 @@ class Watch {
      */
     boolean exceededMoveTime(){
         elapsedTime = (System.nanoTime() - begin);
-        if (elapsedTime < 500000000)
-            return true;
-        else
-            return false;
+        return elapsedTime > 500000000;
     }
 
     /**
      * Waits.
      */
-
     synchronized void waitCheckInterval(){
-        try {
-            wait( 10 );
-        } catch (InterruptedException e) {
-            ;
-        }
+        ;
     }
 }

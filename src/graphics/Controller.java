@@ -604,7 +604,7 @@ public class Controller {
         try {
             draw.addCells(player, Translator.stringToBoxPair(move));
         } catch (ProtocolException | NullPointerException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             //Platform.runLater(() -> dialog.showErrorDialogWithStack(e));
         }
 

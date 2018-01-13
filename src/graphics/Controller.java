@@ -20,6 +20,7 @@ import javafx.util.Duration;
 import javafx.util.StringConverter;
 import management.Duel;
 import management.Tournament;
+import tools.BoxGenerator;
 import tools.Translator;
 
 import java.awt.*;
@@ -429,7 +430,12 @@ public class Controller {
         tourProgressBar.setVisible(true);
         tourProgressBar.setProgress(0);
         try {
-            tournament.start(draw.getBoardSize(), draw.getObstaclePoints());
+            if (randBoxNumber != 0) {
+                tournament.start(draw.getBoardSize(), BoxGenerator.generateBoxes(draw.getBoardSize(),randBoxNumber));
+            } else {
+                draw.removePlayersCells();
+                tournament.start(draw.getBoardSize(), draw.getObstaclePoints());
+            }
             tourThread = new Thread(() -> {
                 while( !tournament.isFinished() ) {
                     {

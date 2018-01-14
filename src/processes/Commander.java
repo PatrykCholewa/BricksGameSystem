@@ -22,11 +22,16 @@ class Commander {
 
     Commander( File directory ) throws ProtocolException , FileNotFoundException{
 
-        String []info = InfoReader.getLines( directory );
-
         processBuilder = new ProcessBuilder();
-        processBuilder.command( info[0].split( " " ) );
-        processBuilder.directory(directory);
+
+        String []info = InfoReader.getLines( directory );
+        if( info[0].split( " " )[0].contains( ".exe" ) ){
+            info[0] = directory.getPath() + "\\" + info[0];
+            processBuilder.command( info[0].split(" ")  );
+        } else {
+            processBuilder.command( info[0].split(" ")  );
+            processBuilder.directory(directory);
+        }
 
         nick = info[1];
 

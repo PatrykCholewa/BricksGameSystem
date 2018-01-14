@@ -82,7 +82,7 @@ class Trial {
     private void errorCheck( DeadlockProtector deadlockProtector , int player ) throws  TimeoutException , SecurityException {
         if( deadlockProtector.isDeadlockOccurred() ){
             lastMove = "DEADLOCKNORESPONSE";
-            throw new SecurityException( "Player " + commanders[player].getNick() + " caused deadlock!" );
+            throw new SecurityException( "Player " + commanders[player].getNick() + " does not anwser within 5s!" );
         }
 
         if( errorMessage != null ){
@@ -106,7 +106,7 @@ class Trial {
 
                     if(watch.exceededMoveTime()){
                         lastMove = "NORESPONSE";
-                        errorMessage = "Player " + commanders[player].getNick() + " does not answer!";
+                        errorMessage = "Player " + commanders[player].getNick() + " is out of time (0.5s)!";
                     }
                 } catch (IOException e) {
                     errorMessage = e.getMessage();
@@ -126,7 +126,7 @@ class Trial {
 
                     if(watch.exceededInitTime()){
                         lastMove = "NOOKRESPONSE";
-                        errorMessage = "Player " + commanders[player].getNick() + " does not answer OK!";
+                        errorMessage = "Player " + commanders[player].getNick() + " does not answer OK within (1s)!";
                     }
                 } catch (IOException e) {
                     errorMessage = e.getMessage();

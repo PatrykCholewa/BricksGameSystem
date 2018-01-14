@@ -82,7 +82,7 @@ class Trial {
     private void errorCheck( DeadlockProtector deadlockProtector , int player ) throws  TimeoutException , SecurityException {
         if( deadlockProtector.isDeadlockOccurred() ){
             lastMove = "DEADLOCKNORESPONSE";
-            throw new SecurityException( "Player " + commanders[player].getNick() + " does not anwser within 5s!" );
+            throw new SecurityException( "Player " + commanders[player].getNick() + " does not answer within 5s!" );
         }
 
         if( errorMessage != null ){

@@ -47,20 +47,21 @@ class Rules {
 
     private Boolean hasANeighbourZero( Point p ){
 
-        remainingToCheck.remove( p );
         if( isThereZero( new Point( p.x - 1 , p.y ) )){
-            remainingToCheck.remove( new Point( p.x - 1 , p.y ));
             return true;
         } else if( isThereZero( new Point( p.x + 1 , p.y ) ) ){
-            remainingToCheck.remove( new Point( p.x + 1 , p.y ));
             return true;
         } else if( isThereZero( new Point( p.x , p.y - 1 ) ) ){
-            remainingToCheck.remove( new Point( p.x , p.y - 1 ));
             return true;
         } else if( isThereZero( new Point( p.x , p.y + 1 ) ) ){
-            remainingToCheck.remove( new Point( p.x , p.y + 1 ));
             return true;
         }
+
+        remainingToCheck.remove( p );
+        remainingToCheck.remove( new Point( p.x - 1 , p.y ));
+        remainingToCheck.remove( new Point( p.x + 1 , p.y ));
+        remainingToCheck.remove( new Point( p.x , p.y - 1 ));
+        remainingToCheck.remove( new Point( p.x , p.y + 1 ));
 
         return false;
 

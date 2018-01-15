@@ -176,9 +176,9 @@ public class Court {
             trial.move("START");
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
         }catch ( IllegalArgumentException e ){
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , FailureReason.INVALIDMOVE );
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , FailureReason.INVALIDMOVE );
         }catch ( IOException | TimeoutException e ) {
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , trial.getFailureReasonEnum() );
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , trial.getFailureReasonEnum() );
         }catch ( SecurityException e ){
             failure( e.getMessage() , trial.getFailureReasonEnum() );
         }
@@ -196,9 +196,9 @@ public class Court {
             trial.move(trial.getLastMove());
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
         } catch ( IllegalArgumentException e ){
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , FailureReason.INVALIDMOVE );
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , FailureReason.INVALIDMOVE );
         } catch ( IOException | TimeoutException e ){
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , trial.getFailureReasonEnum() );
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , trial.getFailureReasonEnum() );
         } catch ( SecurityException e  ){
             failure( e.getMessage() , trial.getFailureReasonEnum() );
         }

@@ -1,5 +1,7 @@
 package tournaments;
 
+import enums.FailureReason;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,11 +53,14 @@ public class TournamentScore {
         return -1;
     }
 
-    public void addNewDuel( String startingPlayer , String followingPlayer , String winner , String endReason ) throws IOException {
+    public void addNewDuel(String startingPlayer , String followingPlayer ,
+                           String winner ,
+                           String failureMessage , FailureReason failureEnum ) throws IOException {
 
         int stPlayerIndex = getIndexOfPlayer( startingPlayer );
         int flPlayerIndex = getIndexOfPlayer( followingPlayer );
         int wnPlayerIndex;
+        int lsPlayerIndex;
         int matchIndex;
 
         if( stPlayerIndex == -1 ){
@@ -68,12 +73,29 @@ public class TournamentScore {
             players.add( new ScoreDBRecord( followingPlayer ) );
         }
 
-        wnPlayerIndex = winner.equals(startingPlayer) ? stPlayerIndex : flPlayerIndex;
+        if( winner.equals(startingPlayer) ){
+            wnPlayerIndex = stPlayerIndex;
+            lsPlayerIndex = flPlayerIndex;
+        } else {
+            wnPlayerIndex = flPlayerIndex;
+            lsPlayerIndex = stPlayerIndex;
+        }
+
         matchIndex = matches.size();
 
         matches.add( new DuelDBRecord( matchIndex , stPlayerIndex , flPlayerIndex , wnPlayerIndex ) );
-        players.get( wnPlayerIndex ).addOnePoint();
-        duelSaver.addDuel( matchIndex , startingPlayer , followingPlayer , winner , endReason );
+
+        if( failureEnum == FailureReason.NORMAL ){
+            players.get( wnPlayerIndex ).addOnePointToAllWins();
+            players.get( wnPlayerIndex ).addOnePointToNormalWins();
+            players.get( lsPlayerIndex ).addOnePointToAllLoses();
+        } else {
+            players.get( wnPlayerIndex ).addOnePointToAllWins();
+            players.get( lsPlayerIndex ).addOnePointToAllLoses();
+            players.get( lsPlayerIndex ).addErrorFailure( failureEnum );
+        }
+
+        duelSaver.addDuel( matchIndex , startingPlayer , followingPlayer , winner , failureMessage );
         scoreSaver.updateScore( players );
 
     }

@@ -37,6 +37,7 @@ class TournamentTest {
         resultsDir.mkdir();
 
         Tournament tournament = new Tournament( playersDir , resultsDir );
+        tournament.setWatchConstants( 1.5 , 0 );
         tournament.start( 3,new ArrayList<Point>());
 
         while( !tournament.isFinished() ){

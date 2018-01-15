@@ -41,7 +41,6 @@ public class Tournament {
         File []players = executioner.next();
 
         try {
-
             Arena arena = new Arena(players[0], players[1]);
             arena.setLogFile( score.createNewDuelLogFile() );
             arena.setBoard( boardSize , boxes );
@@ -49,6 +48,7 @@ public class Tournament {
             arena.start();
             arena.finish();
 
+            //TODO
             if( arena.wasDeadlocked() ){
                 score.saveError( new TimeoutException( arena.getMessage() ));
             }
@@ -56,7 +56,8 @@ public class Tournament {
             score.addNewDuel( arena.getStartingPlayerNick() ,
                     arena.getFollowingPlayerNick() ,
                     arena.getWinner() ,
-                    arena.getMessage() );
+                    arena.getMessage() ,
+                    arena.getFailureReason() );
 
         } catch ( Exception e ){
             score.saveError( e );

@@ -22,6 +22,8 @@ class TrialTest {
     void getStartingPlayerNick() throws IOException, TimeoutException {
 
         Trial trial = new Trial( dirs );
+        trial.setProcessWakeUpTime( 1.5 );
+        trial.setInputTimeBuffer( 0 );
         trial.initPlayer( "3" , 0 );
 
         assertEquals( "PREDEFINED OUTPUT FINISH1" , trial.getStartingPlayerNick() );
@@ -33,6 +35,8 @@ class TrialTest {
     void getFollowingPlayerNick() throws IOException, TimeoutException {
 
         Trial trial = new Trial( dirs );
+        trial.setProcessWakeUpTime( 1.5 );
+        trial.setInputTimeBuffer( 0 );
         trial.initPlayer( "3" , 1 );
 
         assertEquals( "PREDEFINED OUTPUT FINISH2" , trial.getFollowingPlayerNick() );
@@ -44,6 +48,8 @@ class TrialTest {
     void getLastPlayer() throws IOException, TimeoutException {
 
         Trial trial = new Trial( dirs );
+        trial.setProcessWakeUpTime( 1.5 );
+        trial.setInputTimeBuffer( 0 );
         trial.initPlayer( "3" , 0 );
         trial.initPlayer( "3" , 1 );
 
@@ -63,6 +69,8 @@ class TrialTest {
     void getLastMove() throws IOException, TimeoutException {
 
         Trial trial = new Trial( dirs );
+        trial.setProcessWakeUpTime( 1.5 );
+        trial.setInputTimeBuffer( 0 );
         trial.initPlayer( "3" , 0 );
         trial.initPlayer( "3" , 1 );
 
@@ -78,6 +86,8 @@ class TrialTest {
     void initPlayer() throws IOException, TimeoutException {
 
         Trial trial = new Trial( dirs );
+        trial.setProcessWakeUpTime( 1.5 );
+        trial.setInputTimeBuffer( 0 );
         trial.initPlayer( "3" , 0 );
         trial.initPlayer( "3" , 1 );
         trial.close();
@@ -88,6 +98,8 @@ class TrialTest {
     void move() throws IOException, TimeoutException {
 
         Trial trial = new Trial( dirs );
+        trial.setProcessWakeUpTime( 1.5 );
+        trial.setInputTimeBuffer( 0 );
         trial.initPlayer( "3" , 0 );
         trial.initPlayer( "3" , 1 );
 

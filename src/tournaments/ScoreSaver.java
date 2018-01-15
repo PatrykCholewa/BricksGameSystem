@@ -27,7 +27,7 @@ class ScoreSaver {
         Arrays.sort( recordsCopy );
 
         for( ScoreDBRecord record : recordsCopy ){
-            bw.write( record.getPlayer() + " : " + record.getPoints() );
+            bw.write( record.toString() );
             bw.newLine();
         }
         bw.flush();

@@ -1,5 +1,6 @@
 package management;
 
+import enums.FailureReason;
 import tournaments.TournamentScore;
 
 import java.awt.*;
@@ -48,8 +49,7 @@ public class Tournament {
             arena.start();
             arena.finish();
 
-            //TODO
-            if( arena.wasDeadlocked() ){
+            if( arena.getFailureReason() == FailureReason.DEADLOCK ){
                 score.saveError( new TimeoutException( arena.getMessage() ));
             }
 

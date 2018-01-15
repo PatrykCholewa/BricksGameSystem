@@ -44,10 +44,6 @@ class Arena {
         return court.getWinner();
     }
 
-    String getLoser(){
-        return court.getLoser();
-    }
-
     FailureReason getFailureReason() {
         return court.getFailureReason();
     }
@@ -58,10 +54,6 @@ class Arena {
 
     String getMessage(){
         return court.getMessage();
-    }
-
-    Boolean wasDeadlocked(){
-        return court.wasDeadlocked();
     }
 
     void setWatchConstants( double wakeUpTime , double inputBufferTime ){

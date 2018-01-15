@@ -26,8 +26,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="Program">
             <items>
-                  <MenuItem fx:id="setWakeUpTimeMenu" mnemonicParsing="false" onAction="#wakeUpTimePressed" text="Set Wake Up Delay" />
-                  <MenuItem fx:id="setInputBufferTimeMenu" mnemonicParsing="false" onAction="#inputBufferTimePressed" text="Set Max Init Time" />
+                  <MenuItem fx:id="setWakeUpTimeMenu" mnemonicParsing="false" onAction="#wakeUpTimePressed" text="Set Wake Up Time" />
+                  <MenuItem fx:id="setInputBufferTimeMenu" mnemonicParsing="false" onAction="#inputBufferTimePressed" text="Set Input Buffer Time" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="closeMenu" mnemonicParsing="false" onAction="#closePressed" text="Close" />
             </items>

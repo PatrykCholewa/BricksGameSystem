@@ -168,13 +168,13 @@ public class Controller {
 
     @FXML
     void wakeUpTimePressed() {
-        wakeUpTimeMilis = dialog.showIntValueSelectDialog("Set Wake Up Delay", "Set Wake Up Delay [ms]", 1000, 0, 10000);
+        wakeUpTimeMilis = dialog.showIntValueSelectDialog("Set Wake Up Time", "Set Wake Up Time [ms]", 1000, 0, 10000);
         System.out.println("wakeUpTimeMilis = " + wakeUpTimeMilis);
     }
 
     @FXML
     void inputBufferTimePressed() {
-        inputBufferTimeMilis = dialog.showIntValueSelectDialog("Set Max Init Time", "Set  Max Init Time [ms]", 1000, 0, 2000);
+        inputBufferTimeMilis = dialog.showIntValueSelectDialog("Set Input Buffer Time", "Set Input Buffer Time [ms]", 1000, 0, 2000);
         System.out.println("inputBufferTimeMilis = " + inputBufferTimeMilis);
     }
 

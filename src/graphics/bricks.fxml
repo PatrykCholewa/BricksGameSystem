@@ -22,15 +22,13 @@
 
 <AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphics.Controller">
    <children>
-      <AnchorPane layoutY="800.0" prefHeight="25.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-         <children>
-            <Label fx:id="statusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="800.0" textFill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-         </children>
-      </AnchorPane>
       <MenuBar fx:id="menuBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Program">
             <items>
+                  <MenuItem fx:id="setWakeUpTimeMenu" mnemonicParsing="false" onAction="#wakeUpTimePressed" text="Set Wake Up Delay" />
+                  <MenuItem fx:id="setInputBufferTimeMenu" mnemonicParsing="false" onAction="#inputBufferTimePressed" text="Set Max Init Time" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="closeMenu" mnemonicParsing="false" onAction="#closePressed" text="Close" />
             </items>
           </Menu>
@@ -42,7 +40,6 @@
             <Menu mnemonicParsing="false" text="Board">
                <items>
                   <MenuItem fx:id="setSizeMenu" mnemonicParsing="false" onAction="#setSizePressed" text="Set size" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="randomBarrierMenu" mnemonicParsing="false" onAction="#randomBarrierPressed" text="Set Boxes Randomly" />
                   <MenuItem fx:id="manualBarrierMenu" mnemonicParsing="false" onAction="#manualBarrierPressed" text="Set Boxes Manualy" />
                </items>
@@ -60,6 +57,49 @@
           </Menu>
         </menus>
       </MenuBar>
+      <AnchorPane fx:id="tourPane" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #6bff9f;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <Button fx:id="tourStartButton" layoutX="687.0" layoutY="534.0" mnemonicParsing="false" onAction="#tourStartButtonPressed" prefHeight="52.0" prefWidth="79.0" text="Start" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="34.0" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="70.0" prefHeight="42.0" prefWidth="200.0" text="TOURNAMENT" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Label>
+            <TabPane layoutX="12.0" layoutY="42.0" prefHeight="484.0" prefWidth="770.0" style="-fx-background-color: #dddddd;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
+              <tabs>
+                <Tab text="Score">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="tourScoreText" editable="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Duels">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="386.0" prefWidth="780.0">
+                           <children>
+                              <ListView fx:id="tourDuelsLog" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                              <Button fx:id="tourReplayButton" layoutX="687.0" layoutY="401.0" mnemonicParsing="false" onAction="#tourReplayButtonPressed" text="Replay" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="40.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="Errors">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea fx:id="tourErrorsText" editable="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <ProgressBar fx:id="tourProgressBar" layoutX="14.0" layoutY="551.0" prefHeight="18.0" prefWidth="615.0" progress="0.0" visible="false" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="14.0" />
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="uniPane" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
          <children>
             <StackPane alignment="CENTER_LEFT" prefHeight="600.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -77,14 +117,6 @@
                         <Label layoutX="32.0" layoutY="124.0" text="Right Click to Unselect Box" />
                         <Button fx:id="manualClearButton" layoutX="73.0" layoutY="184.0" mnemonicParsing="false" onAction="#manualClearButtonPressed" text="Clear All" />
                      </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
-                     <children>
-                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
                   </AnchorPane>
                   <AnchorPane fx:id="duelPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
                      <children>
@@ -141,6 +173,14 @@
                         <Slider fx:id="replaySlider" blockIncrement="0.0" layoutX="14.0" layoutY="465.0" majorTickUnit="1.0" max="3.0" min="1.0" minorTickCount="0" prefHeight="14.0" prefWidth="120.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="465.0" />
                      </children>
                   </AnchorPane>
+                  <AnchorPane fx:id="startupPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcWidth="5.0" fill="#6bff9f" height="600.0" strokeType="INSIDE" width="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </AnchorPane>
                </children>
             </StackPane>
             <AnchorPane fx:id="boardPane" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -150,47 +190,9 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="tourPane" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #6bff9f;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+      <AnchorPane layoutY="800.0" prefHeight="25.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <Button fx:id="tourStartButton" layoutX="687.0" layoutY="534.0" mnemonicParsing="false" onAction="#tourStartButtonPressed" prefHeight="52.0" prefWidth="79.0" text="Start" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="34.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="2.0" layoutY="70.0" prefHeight="42.0" prefWidth="200.0" text="TOURNAMENT" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font name="System Bold Italic" size="24.0" />
-               </font>
-            </Label>
-            <TabPane layoutX="12.0" layoutY="42.0" prefHeight="484.0" prefWidth="770.0" style="-fx-background-color: #dddddd;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
-              <tabs>
-                <Tab text="Score">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TextArea fx:id="tourScoreText" editable="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab text="Duels">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="386.0" prefWidth="780.0">
-                           <children>
-                              <ListView fx:id="tourDuelsLog" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
-                              <Button fx:id="tourReplayButton" layoutX="687.0" layoutY="401.0" mnemonicParsing="false" onAction="#tourReplayButtonPressed" text="Replay" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="40.0" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </Tab>
-                  <Tab text="Errors">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TextArea fx:id="tourErrorsText" editable="false" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </Tab>
-              </tabs>
-            </TabPane>
-            <ProgressBar fx:id="tourProgressBar" layoutX="14.0" layoutY="551.0" prefHeight="18.0" prefWidth="615.0" progress="0.0" visible="false" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="14.0" />
+            <Label fx:id="statusLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="800.0" textFill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
    </children>

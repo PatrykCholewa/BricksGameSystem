@@ -51,7 +51,7 @@ public class Dialogs {
     private void showErrorValue(String result){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        alert.setHeaderText(result + " is not an number!!!");
+        alert.setHeaderText(result + " is not an number,\nsetting default");
         alert.setContentText("");
         alert.showAndWait();
     }
@@ -60,9 +60,9 @@ public class Dialogs {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         if(tooBig)
-            alert.setHeaderText(String.valueOf(value) + " is too Big");
+            alert.setHeaderText("Value: " + String.valueOf(value) + " is too big,\nsetting default");
         if(tooSmall)
-            alert.setHeaderText(String.valueOf(value)+ " is too small!");
+            alert.setHeaderText("Value: " + String.valueOf(value)+ " is too small,\nsetting default");
         alert.setContentText("");
         alert.showAndWait();
     }

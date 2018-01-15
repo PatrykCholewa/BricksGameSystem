@@ -97,6 +97,10 @@ public class Controller {
     @FXML
     MenuItem setSizeMenu = new MenuItem();
     @FXML
+    MenuItem setWakeUpTimeMenu = new MenuItem();
+    @FXML
+    MenuItem setInputBufferTimeMenu = new MenuItem();
+    @FXML
     MenuItem replayMenu = new MenuItem();
     @FXML
     MenuItem closeMenu = new MenuItem();
@@ -132,6 +136,8 @@ public class Controller {
     private boolean backToTournamentFlag = false;
 
     private int randBoxNumber = 0;
+    private int wakeUpTimeMilis = 1000;
+    private int inputBufferTimeMilis= 1000;
 
     private Timeline timeline;
     private Thread tourThread;
@@ -153,6 +159,23 @@ public class Controller {
         initializeSlider();
 
         setupTimer();
+    }
+
+    @FXML
+    void closePressed() {
+        System.exit(0);
+    }
+
+    @FXML
+    void wakeUpTimePressed() {
+        wakeUpTimeMilis = dialog.showIntValueSelectDialog("Set Wake Up Delay", "Set Wake Up Delay [ms]", 1000, 0, 10000);
+        System.out.println("wakeUpTimeMilis = " + wakeUpTimeMilis);
+    }
+
+    @FXML
+    void inputBufferTimePressed() {
+        inputBufferTimeMilis = dialog.showIntValueSelectDialog("Set Max Init Time", "Set  Max Init Time [ms]", 1000, 0, 2000);
+        System.out.println("inputBufferTimeMilis = " + inputBufferTimeMilis);
     }
 
     @FXML
@@ -306,11 +329,6 @@ public class Controller {
     }
 
     @FXML
-    void closePressed() {
-        System.exit(0);
-    }
-
-    @FXML
     void setSizePressed() {
         setAutoBoardResizing(true);
         duelInitializeUI();
@@ -403,7 +421,6 @@ public class Controller {
         if (playersDir != null && tourResultDir != null) {
             try {
                 tournament = new Tournament(playersDir, tourResultDir);
-
             } catch (IOException e) {
                 dialog.showErrorDialogWithStack(e);
                 tourStartButton.setDisable(true);
@@ -427,6 +444,8 @@ public class Controller {
         tourScoreText.clear();
         tourDuelsLog.getItems().clear();
         tourErrorsText.clear();
+        tournament.setWatchConstants(wakeUpTimeMilis/1000,inputBufferTimeMilis/1000);
+
         tourProgressBar.setVisible(true);
         tourProgressBar.setProgress(0);
         try {
@@ -544,6 +563,8 @@ public class Controller {
 
     @FXML
     void startPressed() {
+        duel.setWatchConstants(wakeUpTimeMilis/1000,inputBufferTimeMilis/1000);
+
         disableDuelButtons(false);
         duelStartButton.setDisable(true);
         try {

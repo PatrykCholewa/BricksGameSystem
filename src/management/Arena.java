@@ -55,6 +55,10 @@ class Arena {
         return court.wasDeadlocked();
     }
 
+    void setWatchConstants( double wakeUpTime , double inputBufferTime ){
+        court.setWatchConstants( wakeUpTime , inputBufferTime );
+    }
+
     void setBoard( int size , ArrayList<Point> boxes ){
         court.setBoard( size , boxes );
     }

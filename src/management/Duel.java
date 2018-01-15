@@ -68,6 +68,15 @@ public class Duel {
         return readable ? duelShow.getMessage() : arena.getMessage();
     }
 
+    public void setWatchConstants( Double wakeUpTime , Double inputBufferTime ){
+
+        if( readable ){
+            throw new UnsupportedOperationException( "Reading does not require any time checking!" );
+        }
+
+        arena.setWatchConstants( wakeUpTime , inputBufferTime );
+    }
+
     public ArrayList<Point> setBoard( int size , int numberOfBoxes ){
 
         if( readable ){

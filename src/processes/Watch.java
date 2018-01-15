@@ -2,6 +2,7 @@ package processes;
 
 /**
  * @author Paweł Zych
+ * @author Patryk Cholewa
  */
 
 
@@ -10,7 +11,8 @@ class Watch {
     //DEFINE
     private long maxInitTime = 1000000000;
     private long maxMoveTime = 500000000;
-    private long bufferTime  = 20000000;
+    private long bufferTime  = 0;
+    private long wakeUpTime  = 0;
 
     private long begin;
     private long elapsedTime;
@@ -49,11 +51,31 @@ class Watch {
     }
 
     /**
+     * Sets time between waking up process and the actual output to it.
+     * @param wakeUpTimeInSeconds time in seconds
+     */
+    void setWakeUpTime( double wakeUpTimeInSeconds ){
+        Double wakeUpTimeInNanos = wakeUpTimeInSeconds;
+        wakeUpTimeInNanos *= 1000000000;
+        wakeUpTime = wakeUpTimeInNanos.longValue();
+    }
+
+    /**
+     * Sets time added to each player's allowed move time.
+     * @param bufferTimeInSeconds time in seconds
+     */
+    void setBufferTime( double bufferTimeInSeconds ){
+        Double bufferTimeInNanos = bufferTimeInSeconds;
+        bufferTimeInNanos *= 1000000000;
+        bufferTime = bufferTimeInNanos.longValue();
+    }
+
+    /**
      * Waits 2s.
      */
     void waitProcessWakeupTime(){
         initTimer();
-        while( elapsedTime < 2000000000){
+        while( elapsedTime < wakeUpTime){
             waitCheckInterval();
             updateElapsedTime();
         }

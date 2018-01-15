@@ -82,6 +82,17 @@ public class Court {
     }
 
     /**
+     * Sets duelling delays.
+     * Params should be given in seconds.
+     * @param wakeUpTime time between waking up a process and the actual output to it
+     * @param inputBufferTime allowed delay of getting input from processes
+     */
+    public void setWatchConstants( double wakeUpTime , double inputBufferTime ){
+        trial.setProcessWakeUpTime( wakeUpTime );
+        trial.setInputTimeBuffer( inputBufferTime );
+    }
+
+    /**
      * Sets board with params got from initData
      * @param initData can be got from getInitData() method
      */

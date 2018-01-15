@@ -45,6 +45,14 @@ class Trial {
         return lastMove;
     }
 
+    void setInputTimeBuffer( double timeInSeconds ){
+        watch.setBufferTime( timeInSeconds );
+    }
+
+    void setProcessWakeUpTime( double timeInSeconds ){
+        watch.setWakeUpTime( timeInSeconds );
+    }
+
     private void nextPlayer( ){
         lastPlayer =  ( lastPlayer + 1 )%2;
     }

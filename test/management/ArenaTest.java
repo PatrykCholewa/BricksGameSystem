@@ -25,6 +25,7 @@ class ArenaTest {
         arena.setLogFile( logWriteFile );
 
         arena.setBoard( "3_1x1" );
+        arena.setWatchConstants( 1.5 , 0 );
 
         arena.start();
         arena.finish();

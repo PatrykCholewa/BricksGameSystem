@@ -1,5 +1,6 @@
 package processes;
 
+import enums.FailureReason;
 import game.Referee;
 import tools.BoxGenerator;
 import tools.Translator;
@@ -24,6 +25,8 @@ public class Court {
     private String initData;
 
     private String winner;
+    private String loser;
+    private FailureReason failureReason;
     private String message = "OK";
     private Boolean wasDeadlocked;
 
@@ -59,6 +62,14 @@ public class Court {
         return winner;
     }
 
+    public String getLoser(){
+        return loser;
+    }
+
+    public FailureReason getFailureReason(){
+        return failureReason;
+    }
+
     public String getLastMove(){
         return trial.getLastMove();
     }
@@ -77,6 +88,7 @@ public class Court {
         return trial.getLastPlayer();
     }
 
+    //TODO
     public Boolean wasDeadlocked(){
         return wasDeadlocked;
     }
@@ -135,22 +147,24 @@ public class Court {
             winner = trial.getLastPlayer();
             trial.close();
             message = "Player " + winner + " won normally!";
+            failureReason = FailureReason.NORMAL;
         }
     }
 
-    private void failure( String message ){
+    private void failure( String message , FailureReason failureReason ){
         winner = trial.getNotLastPlayer();
         trial.close();
+        this.failureReason = failureReason;
         this.message = message;
     }
 
     private void initPlayer( int player ){
         try {
             trial.initPlayer( initData , player );
-        } catch ( IllegalArgumentException | IOException | TimeoutException e ){
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        } catch ( IOException | TimeoutException e ){
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , trial.getFailureReasonEnum() );
         } catch ( SecurityException e ){
-            failure( e.getMessage() );
+            failure( e.getMessage() , trial.getFailureReasonEnum() );
             wasDeadlocked = true;
         }
     }
@@ -174,10 +188,12 @@ public class Court {
         try {
             trial.move("START");
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
-        }catch ( IllegalArgumentException | IOException | TimeoutException e ) {
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+        }catch ( IllegalArgumentException e ){
+            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , FailureReason.INVALIDMOVE );
+        }catch ( IOException | TimeoutException e ) {
+            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , trial.getFailureReasonEnum() );
         }catch ( SecurityException e ){
-            failure( e.getMessage() );
+            failure( e.getMessage() , trial.getFailureReasonEnum() );
             wasDeadlocked = true;
         }
 
@@ -191,12 +207,14 @@ public class Court {
     public void nextMove() {
 
         try {
-            trial.move( trial.getLastMove() );
-            referee.addRectangle(Translator.stringToBoxPair( trial.getLastMove() ) );
-        } catch ( IOException | TimeoutException | IllegalArgumentException e ){
-            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() );
+            trial.move(trial.getLastMove());
+            referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
+        } catch ( IllegalArgumentException e ){
+            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , FailureReason.INVALIDMOVE );
+        } catch ( IOException | TimeoutException e ){
+            failure( "Player " + trial.getLastPlayer() + " : " + e.getMessage() , trial.getFailureReasonEnum() );
         } catch ( SecurityException e  ){
-            failure( e.getMessage() );
+            failure( e.getMessage() , trial.getFailureReasonEnum() );
             wasDeadlocked = true;
         }
 

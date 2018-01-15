@@ -1,5 +1,6 @@
 package tournaments;
 
+import enums.FailureReason;
 import org.junit.jupiter.api.Test;
 import testTools.FileComparator;
 
@@ -27,9 +28,22 @@ class ScoreSaverTest {
         players.add( new ScoreDBRecord( "P2" ) );
         players.add( new ScoreDBRecord( "P3" ) );
 
-        players.get( 0 ).addOnePoint();
-        for( int i = 0 ; i < 4 ; i++ ) players.get( 1 ).addOnePoint();
-        players.get( 2 ).addOnePoint();
+        players.get( 0 ).addOnePointToAllWins();
+        players.get( 0 ).addOnePointToNormalWins();
+        for( int i = 0 ; i < 3 ; i++ ) players.get( 0 ).addOnePointToAllLoses();
+        players.get( 0 ).addErrorFailure( FailureReason.OUTOFTIMEMOVE );
+
+        for( int i = 0 ; i < 4 ; i++ ) players.get( 1 ).addOnePointToAllWins();
+        for( int i = 0 ; i < 1 ; i++ ) players.get( 1 ).addOnePointToNormalWins();
+        for( int i = 0 ; i < 1 ; i++ ) players.get( 1 ).addOnePointToAllLoses();
+        //players.get( 1 ).addErrorFailure( FailureReason.OUTOFTIMEMOVE );
+
+        for( int i = 0 ; i < 1 ; i++ ) players.get( 2 ).addOnePointToAllWins();
+        //for( int i = 0 ; i < 0 ; i++ ) players.get( 2 ).addOnePointToNormalWins();
+        for( int i = 0 ; i < 3 ; i++ ) players.get( 2 ).addOnePointToAllLoses();
+        players.get( 2 ).addErrorFailure( FailureReason.INVALIDMOVE );
+        players.get( 2 ).addErrorFailure( FailureReason.CANTSTART );
+        players.get( 2 ).addErrorFailure( FailureReason.DEADLOCK );
 
         ArrayList<ScoreDBRecord> clone = (ArrayList<ScoreDBRecord>) players.clone();
 

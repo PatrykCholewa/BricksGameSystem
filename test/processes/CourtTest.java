@@ -20,6 +20,7 @@ class CourtTest {
 
         Court court = new Court( get1Dir , get2Dir );
         court.setBoard( 3 , new ArrayList<>() );
+        court.setWatchConstants( 1.5 , 0 );
         court.start();
 
         court.nextMove();
@@ -34,6 +35,7 @@ class CourtTest {
 
         Court court = new Court( get1Dir , get2Dir );
         court.setBoard( 3 , new ArrayList<>() );
+        court.setWatchConstants( 1.5 , 0 );
         court.start();
         court.close();
 
@@ -44,6 +46,7 @@ class CourtTest {
 
         Court court = new Court( get1Dir , get2Dir );
         court.setBoard( 3 , new ArrayList<>() );
+        court.setWatchConstants( 1.5 , 0 );
         court.start();
         court.nextMove();
         court.nextMove();
@@ -65,6 +68,7 @@ class CourtTest {
 
         Court court = new Court( get1Dir , get2Dir );
         court.setBoard( 3 , new ArrayList<>() );
+        court.setWatchConstants( 1.5 , 0 );
         court.start();
         assertFalse( court.isFinished() );
         court.nextMove();
@@ -94,6 +98,7 @@ class CourtTest {
 
         Court court = new Court( get1Dir , get2Dir );
         court.setBoard( 3 , new ArrayList<>() );
+        court.setWatchConstants( 1.5 , 0 );
         court.start();
         assertEquals( "0x0_0x1" , court.getLastMove() );
         court.nextMove();
@@ -123,6 +128,7 @@ class CourtTest {
 
         Court court = new Court( get1Dir , get2Dir );
         court.setBoard( 3 , new ArrayList<>() );
+        court.setWatchConstants( 1.5 , 0 );
         court.start();
         assertEquals( "OK" , court.getMessage() );
         court.nextMove();

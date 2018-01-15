@@ -1,5 +1,7 @@
 package processes;
 
+import enums.FailureReason;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,6 +19,7 @@ class Trial {
     private int lastPlayer = -1;
     private String lastMove;
     private String errorMessage;
+    private FailureReason failureReasonEnum;
 
     Trial( File []playerDirs ) throws FileNotFoundException, ProtocolException {
 
@@ -45,6 +48,10 @@ class Trial {
         return lastMove;
     }
 
+    FailureReason getFailureReasonEnum(){
+        return failureReasonEnum;
+    }
+
     void setInputTimeBuffer( double timeInSeconds ){
         watch.setBufferTime( timeInSeconds );
     }
@@ -69,6 +76,7 @@ class Trial {
             commanders[player].initProcess();
         } catch ( IOException e ){
             lastMove = null;
+            failureReasonEnum = FailureReason.CANTSTART;
             throw e;
         }
 
@@ -82,6 +90,7 @@ class Trial {
 
         lastMove = commanders[player].getInputLine();
         if( !( lastMove.equals( "OK" ) || lastMove.equals( "ok" ) ) ){
+            failureReasonEnum = FailureReason.PROTOCOLERROR;
             throw new ProtocolException( "Player " + commanders[player].getNick() + " should have given \"OK\", but gave \"" + lastMove + "\"!" );
         }
 
@@ -90,6 +99,7 @@ class Trial {
     private void errorCheck( DeadlockProtector deadlockProtector , int player ) throws  TimeoutException , SecurityException {
         if( deadlockProtector.isDeadlockOccurred() ){
             lastMove = "DEADLOCKNORESPONSE";
+            failureReasonEnum = FailureReason.DEADLOCK;
             throw new SecurityException( "Player " + commanders[player].getNick() + " does not answer within 5s!" );
         }
 
@@ -114,6 +124,7 @@ class Trial {
 
                     if(watch.exceededMoveTime()){
                         lastMove = "NORESPONSE";
+                        failureReasonEnum = FailureReason.OUTOFTIMEMOVE;
                         errorMessage = "Player " + commanders[player].getNick() + " is out of time (0.5s)!";
                     }
                 } catch (IOException e) {
@@ -134,6 +145,7 @@ class Trial {
 
                     if(watch.exceededInitTime()){
                         lastMove = "NOOKRESPONSE";
+                        failureReasonEnum = FailureReason.OUTOFTIMEOK;
                         errorMessage = "Player " + commanders[player].getNick() + " does not answer OK within (1s)!";
                     }
                 } catch (IOException e) {
@@ -153,8 +165,6 @@ class Trial {
         while( !lineGetterThread.isInterrupted() && lineGetterThread.isAlive() ){
             watch.waitCheckInterval();
         }
-
-
 
     }
 

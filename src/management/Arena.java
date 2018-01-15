@@ -1,6 +1,7 @@
 package management;
 
 import archiving.Recorder;
+import enums.FailureReason;
 import processes.Court;
 import tools.Translator;
 
@@ -41,6 +42,14 @@ class Arena {
 
     String getWinner(){
         return court.getWinner();
+    }
+
+    String getLoser(){
+        return court.getLoser();
+    }
+
+    FailureReason getFailureReason() {
+        return court.getFailureReason();
     }
 
     String getLastMove(){
@@ -129,7 +138,6 @@ class Arena {
             try {
                 nextMove();
             } catch ( NullPointerException ignored ){
-                ;
             }
         }
 

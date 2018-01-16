@@ -174,7 +174,7 @@ public class Controller {
 
     @FXML
     void inputBufferTimePressed() {
-        inputBufferTimeMilis = dialog.showIntValueSelectDialog("Set Input Buffer Time", "Set Input Buffer Time [ms]", 1000, 0, 2000);
+        inputBufferTimeMilis = dialog.showIntValueSelectDialog("Set Input Buffer Time", "Set Input Buffer Time [ms]", 20, 0, 2000);
         System.out.println("inputBufferTimeMilis = " + inputBufferTimeMilis);
     }
 

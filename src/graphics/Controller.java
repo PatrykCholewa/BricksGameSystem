@@ -136,8 +136,8 @@ public class Controller {
     private boolean backToTournamentFlag = false;
 
     private int randBoxNumber = 0;
-    private int wakeUpTimeMilis = 1000;
-    private int inputBufferTimeMilis= 1000;
+    private int wakeUpTimeMilis = 500;
+    private int inputBufferTimeMilis= 0;
 
     private Timeline timeline;
     private Thread tourThread;

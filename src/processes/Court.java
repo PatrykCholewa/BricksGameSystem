@@ -175,6 +175,8 @@ public class Court {
         try {
             trial.move("START");
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
+        }catch ( ProtocolException e ){
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , FailureReason.PROTOCOLERROR );
         }catch ( IllegalArgumentException e ){
             failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , FailureReason.INVALIDMOVE );
         }catch ( IOException | TimeoutException e ) {
@@ -195,6 +197,8 @@ public class Court {
         try {
             trial.move(trial.getLastMove());
             referee.addRectangle(Translator.stringToBoxPair(trial.getLastMove()));
+        } catch ( ProtocolException e ){
+            failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , FailureReason.PROTOCOLERROR );
         } catch ( IllegalArgumentException e ){
             failure( "Player " + trial.getLastPlayer() + " -> " + e.getMessage() , FailureReason.INVALIDMOVE );
         } catch ( IOException | TimeoutException e ){
